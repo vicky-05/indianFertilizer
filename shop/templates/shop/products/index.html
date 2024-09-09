@@ -1,0 +1,8 @@
+{% extends 'shop/layouts/main.html' %}
+{% block styles %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/collection_product.css' %}">
+{% endblock styles %}
+{% block content %}
+{% include 'shop/inc/collects.html' %}
+{% endblock %}  

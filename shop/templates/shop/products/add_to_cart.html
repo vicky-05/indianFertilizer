@@ -1,0 +1,12 @@
+{% extends 'shop/layouts/main.html' %}
+{% block styles %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
+{% endblock styles %}
+{% block content %}
+{% include 'shop/inc/cart.html' %}
+{% endblock %}
+{% block scripts %}
+{% load static %}
+<script src="{% static 'jss/product-detail.js' %}"></script>
+{% endblock scripts %}

@@ -1,0 +1,115 @@
+{% extends 'shop/layouts/main.html' %}
+{% load static %}
+
+{% block content %}
+<section style="background-color: #eee; margin-top: 50px;">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+
+                        <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                            alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                        <h5 class="my-3">{{request.user}}</h5>
+                        <div class="d-flex justify-content-center mb-2">
+                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary"
+                                id="editProfileButton">Edit
+                                Profile</button>
+                            <button type="button" data-mdb-button-init data-mdb-ripple-init
+                                class="btn btn-primary ms-1">Upload Picture</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Full Name</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control border-0" value="{{request.user}}" id="fullNameInput" disabled>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Email</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control border-0" value="{{user.email}}" id="emailInput"
+                                    disabled>
+                            </div>
+                        </div>
+                        <hr>
+
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Mobile</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control  border-0" value="7598549513" id="mobileInput" disabled>
+
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Address</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control border-0" "
+                                    value="VAHS complex No 2,Batlagundu,TamilNadu 624202." id="addressInput" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    document.getElementById('editProfileButton').addEventListener('click', function () {
+        var inputs = [
+            document.getElementById('fullNameInput'),
+            document.getElementById('emailInput'),
+            document.getElementById('mobileInput'),
+            document.getElementById('addressInput')
+        ];
+
+        var allDisabled = inputs.every(function (input) {
+            return input.disabled;
+        });
+
+        inputs.forEach(function (input) {
+            input.disabled = !allDisabled;
+        });
+
+        if (allDisabled) {
+            this.classList.remove('btn-primary');
+            this.classList.add('btn-success');
+            this.textContent = 'Save Changes';
+        } else {
+            this.classList.remove('btn-success');
+            this.classList.add('btn-primary');
+            this.textContent = 'Edit Profile';
+        }
+    });
+</script>
+{% endblock %}

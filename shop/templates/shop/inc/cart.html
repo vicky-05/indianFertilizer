@@ -1,0 +1,224 @@
+{% load static %}
+<style>
+    @media (min-width: 1025px) {
+.h-custom {
+height: 100vh !important;
+}
+}
+
+.about-heading {
+    color: #000;
+    font-size: 26px;
+    font-weight: 300;
+    text-align: center;
+    text-transform: uppercase;
+    position: relative;
+    /* margin: 45px; */
+  }
+
+  .about-heading b {
+    color: #ffc000;
+  }
+
+.about-heading::after {
+    content: "";
+    width: 100px;
+    position: absolute;
+    margin: 0 auto;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    left: 0;
+    right: 0;
+    bottom: -20px;
+    margin-top:20px ;
+  }
+
+</style>
+<section class="h-100" style=" margin-top: 90px;">
+    <div class="container" style="background-color: rgb(255, 255, 255);">
+        <div class="row">
+            <div class="col">
+                <h4  class="about-heading">Cart <b class="text-uppercase text-success">Items</b></h4>
+                <!-- <hr style="border-color:#b8bfc2;"> -->
+                <div id="no-product" class="text-center">
+                    <img src="{% static '/images/empty-cart-4615794-3822062-removebg-preview.png' %}" alt="">
+                    <h5 class="fw-bold " style="font-size: 40px;">Your Cart is <span style="color: red;">Empty!</span></h5>
+                    <a class="btn btn-primary bold-btn rounded-3 mt-3 mb-5 " href="{% url 'categories' %}">Shop Now<i class="fa-solid fa-cart-plus p-1"></i></a>
+
+                </div>
+            <table class="table table-borderless mb-0 mt-5" id="cartCase">
+                <tr>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Unit Price</th>
+                    <th>Quantity</th>
+                    <th>Discounted Price</th>
+                    <th>Total Price</th>
+                    <th></th>
+                </tr>
+                {% for item in cart %}
+                <div class="col-md-auto">
+                    
+                <tr class="border-bottom ">
+
+                    <td >
+                      <a href="{% url 'product_detailss' item.product.name_product %}"><img class="img-fluid" style="height: 170px; padding-right: 20px;" src="{{item.product.image_product.url}}" alt="product_image">
+                      </a>  
+                    </td>
+                    <td style="padding-top: 50px;" class=" text-uppercase ">
+                     <a class="text-decoration-none text-dark"  href="{% url 'product_detailss' item.product.name_product %}"> {{item.product.name_product}}</a>
+                    </td>
+                    <td style="padding-top: 50px;">{{item.product.discounted_price | stringformat:'d' }}</td>
+                    <td style="padding-top: 50px;">{{item.product_qty}}</td>
+                    <td style="padding-top: 50px;" class="dis">{{item.discounted_total_cost}}</td>
+                    <td style="padding-top: 50px;" class="amt">{{item.total_cost}}</td>
+                    <td style="padding-top: 50px;" class="text-end"><a href="{% url 'remove_cart' item.id %}" onclick="return confirm('Are you sure? to Delete' )" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>Remove</a></td>
+                </tr>
+                </div>
+                {% endfor %}
+
+            </table>
+
+            </div>
+            <div class="col-lg-4 mt-5">
+
+                <div class="card bg-primary text-white rounded-3">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                      <h5 class="mb-0">Card details</h5>
+                      <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp"
+                        class="img-fluid rounded-3" style="width: 45px;" alt="Avatar">
+                    </div>
+
+                    <p class="small mb-2">Card type</p>
+                    <a href="#!" type="submit" class="text-white"><i
+                        class="fab fa-cc-mastercard fa-2x me-2"></i></a>
+                    <a href="#!" type="submit" class="text-white"><i
+                        class="fab fa-cc-visa fa-2x me-2"></i></a>
+                    <a href="#!" type="submit" class="text-white"><i
+                        class="fab fa-cc-amex fa-2x me-2"></i></a>
+                    <a href="#!" type="submit" class="text-white"><i class="fab fa-cc-paypal fa-2x"></i></a>
+
+                    <form class="mt-4">
+                      <div data-mdb-input-init class="form-outline form-white mb-4">
+                        <input type="text" id="typeName" class="form-control form-control-lg" siez="17"
+                          placeholder="Cardholder's Name" />
+                        <label class="form-label" for="typeName">Cardholder's Name</label>
+                      </div>
+
+                      <div data-mdb-input-init class="form-outline form-white mb-4">
+                        <input type="text" id="typeText" class="form-control form-control-lg" siez="17"
+                          placeholder="1234 5678 9012 3457" minlength="19" maxlength="19" />
+                        <label class="form-label" for="typeText">Card Number</label>
+                      </div>
+
+                      <div class="row mb-4">
+                        <div class="col-md-6">
+                          <div data-mdb-input-init class="form-outline form-white">
+                            <input type="text" id="typeExp" class="form-control form-control-lg"
+                              placeholder="MM/YYYY" size="7" id="exp" minlength="7" maxlength="7" />
+                            <label class="form-label" for="typeExp">Expiration</label>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                            
+                          <div data-mdb-input-init class="form-outline form-white">
+                            <input type="password" id="typeText" class="form-control form-control-lg"
+                              placeholder="&#9679;&#9679;&#9679;" size="1" minlength="3" maxlength="3" />
+                            <label class="form-label" for="typeText">Cvv</label>
+                          </div>
+                        </div>
+                      </div>
+
+                    </form>
+
+                    <hr class="">
+                    <h4 class="text-center">Summary</h4>
+                    <div class="d-flex justify-content-between">
+                      <p class="mb-2">Subtotal</p>
+                      <p class="mb-2" id="net"></p>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                      <p class="mb-2">Shipping</p>
+                      <p class="mb-2" id="ship">$20.00</p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p class="mb-2">Discounted Amount</p>
+                        <p class="mb-2" id="nett">$0.00</p>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-4">
+                      <p class="mb-2">Total(Incl. taxes)</p>
+                      <p class="mb-2" id="totals">$4818.00</p>
+                    </div>
+
+                      <div class="d-flex justify-content-center">
+                        <button class="btn btn-info btn-block btn-lg ">Proceed To Checkout</button>
+                      </div>
+
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+        </div>
+        
+
+
+    </div>
+    
+
+
+</section>
+<script>
+    const nodes = document.querySelectorAll('.amt');
+    const arr = Array.from(nodes);
+    const res = arr.reduce((acc, curr) =>{
+        return acc += Number(curr.textContent)
+    },0);
+
+    document.getElementById('net').innerHTML = "₹ "+res;
+
+    const netElement = document.getElementById('net');
+    const shipElement = document.getElementById('ship');
+    const totalElement = document.getElementById('totals');
+    const showMessages = document.getElementById('no-product');
+    const cartCaseOne = document.getElementById('cartCase');
+
+    if (res >0 && res < 500) {
+        netElement.innerHTML = "₹" + res;
+        shipElement.innerHTML = "₹40.00";
+        totalElement.innerHTML = "₹" + (res + 40);
+        showMessages.style.display = "none";
+    } 
+    else if(res == 0) {
+        netElement.innerHTML = "₹" + res;
+        shipElement.innerHTML = "$0.00";
+        totalElement.innerHTML = "₹" + res;
+        cartCaseOne.style.display = "none";
+    }
+    else {
+        netElement.innerHTML = "₹" + res;
+        shipElement.innerHTML = "$0.00";
+        totalElement.innerHTML = "₹" + res;
+        showMessages.style.display = "none";
+    }
+    const nodess = document.querySelectorAll('.dis');
+    const arrs = Array.from(nodess);
+    const ress = arrs.reduce((acc, curr) =>{
+        return acc += Number(curr.textContent)
+    },0);
+
+    document.getElementById('nett').innerHTML = "₹ "+ress;
+
+    
+
+</script>
