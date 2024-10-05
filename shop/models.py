@@ -59,6 +59,7 @@ class productCollection(models.Model):
     demonstration_video = models.URLField(null=True,blank=True,help_text="0=show,1=Hidden")
     status = models.BooleanField(default=False,help_text="0=show,1=Hidden")
     created_at = models.DateTimeField(auto_now_add=True)
+    slug= models.SlugField(max_length=255,null=True,blank=True)
     trending = models.BooleanField(default=False,help_text="0=default,1=trend")
 
     def __str__(self):

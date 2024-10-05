@@ -1,5 +1,7 @@
 {% load static %}
 <style>
+    
+   
     .prices-hp {
         font-size: 15px;
         font-weight: 500;
@@ -80,19 +82,18 @@
         font-weight: bold;
         
     }
-
+    
 </style>
 
-<div class="container-fluid">
     
-    <div class="row d-flex justify-content-start  product-boxing">
+    <div class="row d-flex justify-content-start   product-boxing" style="margin-top:80px; " >
         
         <div class="col">
             
-            <div class="card" style="background-color: white;">
+            <div class="card" style="background-color:rgb(207, 228, 207);">
                 
-                <div class="row">
-                    <div class="col-md-4 d-flex justify-content-center">
+                <div class="row" >
+                    <div class="col-md-4 d-flex justify-content-center" >
                         <div class="images p-3 ">
 
                             <div class="text-center p-4"> <img id="main-image" src="{{products.image_product.url}}"
@@ -102,10 +103,11 @@
                                     src="{{products.image_product_2.url}}" width="70" alt="{% if products.image_product_2 %}Product Image{% else %}No Image Available{% endif %}"> </div>
 
                         </div>
+                        <hr>
                     </div>
                     
-                    <div class="col-md-8 d-flex justify-content-start" >
-                        <div class="product p-4" style="background-color: white;">
+                    <div class="col-md-8 d-flex justify-content-start m-0">
+                        <div class="products" >
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>

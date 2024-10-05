@@ -1,16 +1,14 @@
+
 .product-boxing{
     margin-top: 60px;
 }
-body {
-    background-color: #000
+
+.product-col{
+    border: solid 1px black;
 }
 
 .card {
-    border: none
-}
-
-.product {
-    background-color: #eee
+    border: none;
 }
 
 .brand {
