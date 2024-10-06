@@ -241,7 +241,7 @@
     <div class="col hp">
 
       <div class="card h-100 shadow-sm">
-        <a href="#">
+        <a href="{% url 'product_details' item.group_name item.name_product %}">
           <img src="{{item.image_product.url}}" class="card-img-top card-images" alt="{{item.name_product}}" />
         </a>
 

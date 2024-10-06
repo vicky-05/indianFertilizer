@@ -122,9 +122,12 @@ def product_details(request, cname, pname):
     if Category.objects.filter(product_title=cname, status=1):
         if productCollection.objects.filter(name_product=pname, status=1):
             products = productCollection.objects.filter(name_product=pname, status=1).first()
-            return render(request, "shop/products/products_details.html", {'products': products})
+            sim_product = productCollection.objects.filter(group_name=products.group_name).exclude(id=products.id)
+            return render(request, "shop/products/products_details.html", {'products': products,'sim_product':sim_product})
         else:
             return redirect('collections')
+    
+    
 
 def collections(request):
     # Retrieve distinct brand names

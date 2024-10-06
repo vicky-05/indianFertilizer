@@ -43,7 +43,7 @@ class productCollection(models.Model):
     discounted_price = models.DecimalField(max_digits=10, decimal_places=2)
     discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, editable=False)
     discount_amount = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
-    quantity = models.IntegerField(null=True,blank=True)
+    quantity = models.IntegerField(null=True,blank=True,default=0)
     description = models.TextField(null=True,blank=True)
     benefits = models.TextField(null=True,blank=True)
     recommendations = models.TextField(null=True,blank=True)
