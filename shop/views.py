@@ -16,7 +16,7 @@ from django.shortcuts import render, get_object_or_404
 # Create your views here.
 
 def home(request):
-    trend = trend_products.objects.filter(status=0)
+    trend = productCollection.objects.filter(trending=1, status=1)
     return render(request, "shop/index.html",{'trend':trend})
 
 def logout_page(request):
@@ -98,8 +98,11 @@ def register(request):
             return redirect('login')
     return render(request, "shop/register.html",{'form':form})
 def categories(request):
-    category = Category.objects.filter(status=0)
-    return render(request, "shop/categories.html",{'category':category})
+    category = Category.objects.filter(status=1)
+    context = {
+        'category': category
+    }
+    return render(request, "shop/categories.html",context=context)
 
 # def home(request):
 #     topBrands = TopBrands.objects.filter(status=0)
@@ -109,16 +112,16 @@ def collections(request):
     return render(request, "shop/products/index.html")
 
 def collectionsview(request,group_name):
-    if(Category.objects.filter(product_title=group_name,status=0)):
+    if(Category.objects.filter(product_title=group_name,status=1)):
         productcollection = productCollection.objects.filter(group_name=group_name)
         return render(request, "shop/products/index.html",{'productcollection':productcollection,'group_names':group_name})
     else:
         return redirect('collections')
 
 def product_details(request, cname, pname):
-    if Category.objects.filter(product_title=cname, status=0):
-        if productCollection.objects.filter(name_product=pname, status=0):
-            products = productCollection.objects.filter(name_product=pname, status=0).first()
+    if Category.objects.filter(product_title=cname, status=1):
+        if productCollection.objects.filter(name_product=pname, status=1):
+            products = productCollection.objects.filter(name_product=pname, status=1).first()
             return render(request, "shop/products/products_details.html", {'products': products})
         else:
             return redirect('collections')

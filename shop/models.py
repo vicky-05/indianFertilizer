@@ -32,14 +32,6 @@ class Category(models.Model):
     def __str__(self):
         return self.product_title
 
-class TopBrands(models.Model):
-    product_title = models.CharField(max_length=255,null=False,blank=False)
-    product_img = models.ImageField(upload_to=getFilename,null=True,blank=True)
-    status = models.BooleanField(default=False,help_text="0=show,1=Hidden")
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.product_title
 
 class productCollection(models.Model):
     group_name = models.CharField(max_length=255,null=True,blank=True)
