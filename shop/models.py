@@ -2,7 +2,6 @@ from django.db import models
 import datetime
 import os
 from django.contrib.auth.models import User
-from django.contrib.auth.models import AbstractUser
 
 def getFilename(request, filename): 
     now_time = datetime.datetime.now().strftime('%Y%m%d%H:%M:%S')
