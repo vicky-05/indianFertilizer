@@ -99,3 +99,7 @@ class Cart(models.Model):
     def discounted_total_cost(self):
         return self.product_qty * self.product.discount_amount
 
+
+class Summa():
+    pass
+
