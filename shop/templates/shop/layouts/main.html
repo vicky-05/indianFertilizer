@@ -27,6 +27,13 @@
     body{
       background-color:rgb(207, 228, 207);
     }
+    body,img {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* Internet Explorer/Edge */
+    user-select: none;         /* Non-prefixed version for modern browsers */
+    }
+
   </style>
 
   {% block navbar %}
