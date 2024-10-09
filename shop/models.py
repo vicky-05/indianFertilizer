@@ -1,15 +1,7 @@
 from django.db import models
 from mptt.models import TreeForeignKey, MPTTModel
-from django.contrib.auth.models import AbstractUser
-from django.core.validators import MaxValueValidator, MinValueValidator
-
-
-class User(AbstractUser):
-    mobile_no = models.BigIntegerField(default=0, validators=[MinValueValidator(11111111111), MaxValueValidator(9999999999)])
-    profile_img = models.ImageField(upload_to='customer_profile_images/', default='customer_profile_images/default_img.png')
-
-    def __str__(self):
-        return self.username
+from django.core.validators import MaxValueValidator
+from authendicate.models import User
 
 class Unit(models.Model):
     name = models.CharField(max_length=255)
@@ -37,9 +29,10 @@ class Category(MPTTModel):
 class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
+    image = models.ImageField(upload_to='product_images/', default='product_images/default_product.jpg')
     price_per_unit = models.IntegerField(default=0)
     weight = models.IntegerField(default=0)
-    unit_of_messure = models.ForeignKey(Unit, on_delete=models.SET_NULL)
+    unit_of_messure = models.ForeignKey(Unit, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     is_trend = models.BooleanField(default=False, help_text='0 = Default, 1 = Trend')

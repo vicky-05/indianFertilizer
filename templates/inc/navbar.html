@@ -1,0 +1,284 @@
+{% load static %}
+<style>
+    /* Profile Picture */
+    .profile-pic {
+        display: inline-block;
+        vertical-align: middle;
+        width: 50px;
+        height: 50px;
+        overflow: hidden;
+        border-radius: 50%;
+    }
+
+    .profile-pic img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .profile-menu .dropdown-menu {
+        right: 0;
+        left: unset;
+    }
+
+    .profile-menu .fa-fw {
+        margin-right: 10px;
+    }
+
+    .toggle-change::after {
+        border-top: 0;
+        border-bottom: 0.3em solid;
+    }
+</style>
+
+
+
+<!-- NavBar -->
+
+<nav class="d-none navbar navbar-expand-lg navbar-dark bg-success p-2 fixed-top " id="navbar-example3">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            INDIA FERTILIZER
+        </a>
+        <div>
+            <!-- Toggler Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto">
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">ABOUT</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">CATEGORIES</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#feature">FEATURES</a>
+                    </li>
+                    <li class="nav-item dropdown position-static">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown link
+                        </a>
+
+                        <div class="dropdown-menu  w-100 mt-0" aria-labelledby="navbarDropdownMenuLink" style="border-top-left-radius: 0;
+                        border-top-right-radius: 0;">
+                            <div class="container">
+                                <div class="row my-4">
+                                    <div class="col-md-6 col-lg-3 mb-3 mb-lg-0">
+                                        <div class="list-group list-group-flush">
+                                            <p class="mb-0 list-group-item text-uppercase font-weight-bold">
+                                                Lorem ipsum
+                                            </p>
+                                            <a href="" class="list-group-item list-group-item-action"><i
+                                                    class="fas fa-caret-right pe-2"></i>Dolor sit</a>
+                                            <a href="" class="list-group-item list-group-item-action"><i
+                                                    class="fas fa-caret-right pe-2"></i>Amet consectetur</a>
+                                            <a href="" class="list-group-item list-group-item-action"><i
+                                                    class="fas fa-caret-right pe-2"></i>Cras justo odio</a>
+                                            <a href="" class="list-group-item list-group-item-action"><i
+                                                    class="fas fa-caret-right pe-2"></i>Adipisicing elit</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3 mb-3 mb-lg-0">
+                                        <div class="list-group list-group-flush">
+                                            <p class="mb-0 list-group-item text-uppercase font-weight-bold">
+                                                Explicabo voluptas
+                                            </p>
+                                            <a href="" class="list-group-item list-group-item-action"><i
+                                                    class="fas fa-caret-right pe-2"></i>Perspiciatis quo</a>
+                                            <a href="" class="list-group-item list-group-item-action"><i
+                                                    class="fas fa-caret-right pe-2"></i>Cras justo odio</a>
+                                            <a href="" class="list-group-item list-group-item-action"><i
+                                                    class="fas fa-caret-right pe-2"></i>Laudantium maiores</a>
+                                            <a href="" class="list-group-item list-group-item-action"><i
+                                                    class="fas fa-caret-right pe-2"></i>Provident dolor</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3 mb-3 mb-md-0">
+                                        <div class="list-group list-group-flush">
+                                            <p class="mb-0 list-group-item text-uppercase font-weight-bold">
+                                                Iste quaerato
+                                            </p>
+                                            <a href="" class="list-group-item list-group-item-action"><i
+                                                    class="fas fa-caret-right pe-2"></i>Cras justo odio</a>
+                                            <a href="" class="list-group-item list-group-item-action"><i
+                                                    class="fas fa-caret-right pe-2"></i>Est iure</a>
+                                            <a href="" class="list-group-item list-group-item-action"><i
+                                                    class="fas fa-caret-right pe-2"></i>Praesentium</a>
+                                            <a href="" class="list-group-item list-group-item-action"><i
+                                                    class="fas fa-caret-right pe-2"></i>Laboriosam</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="list-group list-group-flush">
+                                            <p class="mb-0 list-group-item text-uppercase font-weight-bold">
+                                                Cras justo odio
+                                            </p>
+                                            <a href="" class="list-group-item list-group-item-action">Saepe</a>
+                                            <a href="" class="list-group-item list-group-item-action">Vel alias</a>
+                                            <a href="" class="list-group-item list-group-item-action">Sunt doloribus</a>
+                                            <a href="" class="list-group-item list-group-item-action">Cum dolores</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- Search Feild -->
+                    <form class="d-flex ms-auto " style="margin-left: 200px;">
+                        <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn   btn-outline-dark" type="submit">Search</button>
+
+                    </form>
+
+                    <!-- Shoping Cart -->
+                    <div class="d-flex justify-content-end">
+                        <div class="cart ms-5 mt-3 me-3 position-relative">
+                            <a class="text-decoration-none text-dark " href="#"><i
+                                    class="fas fa-shopping-cart fa-2x ms-3"></i></a>
+
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{
+                                cart_count }}</span>
+
+                        </div>
+
+                        <!-- User Profile -->
+                        <ul
+                            class="navbar-nav ms-auto mb-2 mb-lg-0  profile-menu d-flex justify-content-center align-items-center">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="profile-pic">
+                                        <img src="{% static 'images/userprofile.webp' %}" alt="Profile Picture">
+                                    </div>
+
+                                </a>
+                                <ul class="dropdown-menu mt-2" aria-labelledby="navbarDropdown">
+                                    <li><a href="#" class="dropdown-item"><i class="fas fa-user fa-fw"></i>
+                                            {{request.user}}
+                                            <span class="badge bg-success ms-2"></a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog fa-fw"></i> Settings</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt fa-fw"></i>
+                                            Log Out</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {% else %}
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Login</a>
+                    </li>
+                    {% endif %}
+
+                    <!-- <div class="d-flex justify-content-end">
+                        <div class="cart ms-5 mt-3 me-3">
+                            <a class="text-decoration-none text-dark " href="#"><i
+                                    class="fas fa-shopping-cart fa-2x ms-3"></i></a>
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{
+                                cart.count }}</span>
+                        </div>
+                        <ul
+                            class="navbar-nav ms-auto mb-2  mb-lg-0 profile-menu d-flex justify-content-center align-items-center">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="profile-pic">
+                                        <img src="{% static 'images/add-user-vector-icon.jpg' %}" alt="Profile Picture">
+                                    </div>
+
+                                </a>
+                                <ul class="dropdown-menu mt-2 " aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-sliders-h fa-fw"></i>
+                                            Account</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog fa-fw"></i> Settings</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="#"><i
+                                                class="fas fa-user-plus fa-fw"></i>Register</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-sign-in fa-fw"></i> Login
+                                            In</a></li>
+                                </ul>
+                            </li>
+                        </ul> -->
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- End NavBar -->
+
+
+<!-- NavBar -->
+
+<nav class="navbar navbar-expand navbar-dark bg-success shadow">
+    <div class="container">
+        <a href="/" class="navbar-brand">
+            <h4 class='fw-bold'>INDIA FERTILIZER</h4>
+        </a>
+        <ul class="navbar-nav">
+            {% if user.is_authenticated %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-bs-toggle="dropdown">
+                    Hello, {{user}}
+                    {% if user.profile_img %}
+                    <img src="{{user.profile_img.url}}" alt="User Profile..." height="30" width="30"
+                        class="profile mx-2">
+                    {% endif %}
+                </a>
+                <div class="dropdown-menu dropdown-menu-end shadow">
+                    <div class="dropdown-container">
+                        {% if user.profile_img %}
+                        <img src="{{user.profile_img.url}}" alt="User Profile..." height="150" width="150"
+                            class="profile-border">
+                        {% endif %}
+                        <h5 class="fs-4 pt-2">{{user}} </h5>
+                        <hr>
+                        <a class="dropdown-item" href="#"> <i class="fa-solid fa-user-pen px-3"></i> Edit Profile</a>
+                        <a class="dropdown-item text-danger" href="#"><i
+                                class="fa-solid fa-arrow-right-to-bracket px-3"></i> Logout </a>
+                    </div>
+                </div>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a href="#" class="nav-link">Register</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Login</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<!-- End NavBar -->
