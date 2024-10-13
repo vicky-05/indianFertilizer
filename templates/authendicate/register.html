@@ -3,189 +3,178 @@
 
 {% block content %}
 <style>
-  .link-button {
-    background: none;
-    border: none;
-    color: blue;
-    text-decoration: underline;
-    cursor: pointer;
-    padding: 0;
-    font-size: inherit;
-  }
-
-  .link-button:hover {
-    color: darkblue;
+  .section{
+    height: 90vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 </style>
 <section>
-  <div class="container">
-    <div class="row d-flex justify-content-center align-items-center" style="margin-top: 90px;">
-      <div class="col-lg-12 col-xl-12">
-        <div class="row justify-content-center">
-          <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+  <div class="container-fluid container-lg">
+    <div class="row section">
+      {% include 'inc/message.html' %}
+      <form class=" offset-md-1 offset-lg-0 col-sm-8 col-md-4" method="POST" action="#">
+        <h3 class="text-center" style="color: var(--bs-green);">Sign Up</h3>
 
-            <p class="text-center h1 fw-bold mb-3 mx-1 mx-md-4 ">Sign Up</p>
-            {% include 'inc/message.html' %}
-            <form class="mx-1 mx-md-4" method="POST" action="#">
+        {% csrf_token %}
 
-              {% csrf_token %}
+        <style>
+          form {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            border: 1px solid var(--bs-green);
+          }
 
-              <div class="d-flex flex-row align-items-center mb-4">
-                <i class="fas fa-user fa-lg me-2 mt-4 fa-fw"></i>
-                <div class="form-outline flex-fill mb-0">
-                  <div>
-                    <label class="form-label" for="form3Example1c">Enter Your Name</label>
-                  </div>
-                  <!-- <input type="text" id="form3Example1c" class="form-control" /> -->
-                  {{ form.username }}
-                  {% if form.username.errors %}
-                  <label class="text-danger">{{ form.username.errors }}</label>
-                  {% endif %}
-                </div>
-              </div>
+          .form-control {
+            padding-left: 40px;
+            border: 2px solid var(--bs-green);
+            border-radius: 50px;
+          }
 
-              <div class="d-flex flex-row align-items-center mb-4">
-                <i class="fas fa-envelope fa-lg me-2 fa-fw mt-4"></i>
-                <div class="form-outline flex-fill mb-0">
-                  <div>
-                    <label class="form-label" for="form3Example3c">Enter Your Email</label>
-                  </div>
-                  <!-- <input type="email" id="form3Example3c" class="form-control" /> -->
-                  {{ form.email }}
-                  {% if form.email.errors %}
-                  <label class="text-danger">{{ form.email.errors }}</label>
-                  {% endif %}
-                </div>
-              </div>
+          .form-control::placeholder {
+            color: var(--bs-green);
+          }
 
-              <div class="d-flex flex-row align-items-center mb-4">
-                <i class="fas fa-lock fa-lg me-2 fa-fw mt-4"></i>
-                <div class="form-outline flex-fill mb-0">
-                  <!-- <input type="password" id="form3Example4c" class="form-control" /> -->
-                  <div>
-                    <label class="form-label" for="form3Example4c">Enter Your Password</label>
-                  </div>
-                  {{ form.password1 }}
-                  {% if form.password1.errors %}
-                  <label class="text-danger">{{ form.password1.errors }}</label>
-                  {% endif %}
-                </div>
-              </div>
+          .input-field {
+            position: relative;
+          }
 
-              <div class="d-flex flex-row align-items-center mb-4">
-                <i class="fas fa-key fa-lg me-2 fa-fw mt-4"></i>
-                <div class="form-outline flex-fill mb-0">
-                  <!-- <input type="password" id="form3Example4cd" class="form-control" /> -->
-                  <div>
-                    <label class="form-label" for="form3Example4cd">Enter Confirm Password</label>
-                  </div>
-                  {{ form.password2 }}
-                  {% if form.password2.errors %}
-                  <label class="text-danger">{{ form.password2.errors }}</label>
-                  {% endif %}
-                </div>
-              </div>
+          .input-field>i {
+            position: absolute;
+            top: 18px;
+            left: 16px;
+            /* color: rgb(150, 140, 140); */
+            color: var(--bs-green);
+          }
 
-              <div class="form-check d-flex justify-content-center mb-3">
-                <input class="form-check-input me-2" type="checkbox" value="" id="termsCheckbox" />
-                <label id="agree-label" class="form-check-label" for="form2Example3">
-                  I agree all statements in <button type="button" class="link-button" data-bs-toggle="modal"
-                    data-bs-target="#staticBackdrop">Terms of service</button>
-                </label>
+          .errorlist>li::marker {
+            display: none;
+          }
+        </style>
 
-              </div>
-
-              <span class="mb-1 text-center" id="checkbox-error" style="color: red; display: none;">You must Agree to
-                the terms and conditions.</span>
-              <div class="d-flex justify-content-center mx-2 mb-3 mb-lg-3">
-                <button type="submit" class="btn btn-primary btn-lg" id="reg-btn">Register</button>
-              </div>
-              <p class="text-center text-muted mb-5 text-decoration-none">Already have an account? <a
-                  href="#" class="text-decoration-none fw-bold ">Login Now</a></p>
-
-            </form>
-
-          </div>
-          <div class="col-md-10 col-lg-7 col-xl-7  mb-5 d-flex align-items-center  order-1 order-lg-2">
-
-            <img src="{%static 'images/register-new.png' %}" class="img-fluid d-none d-md-block mt-lg-0" alt="Sample image"
-              style="margin-top: 45px; border-radius: 15px; ">
-
-          </div>
+        <div class="input-field">
+          <i class="fas fa-user fa-lg"></i>
+          {{ form.username }}
+          {% if form.username.errors %}
+          <label class="text-danger">{{ form.username.errors }}</label>
+          {% endif %}
         </div>
 
-
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal -->
-  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Terms and Conditions:</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" style="text-align: justify;">
-          <p>1. Acceptance of Terms:</p>
-          <p>By accessing and using Indian Fertilizer's services, you agree to comply with and be bound by the following
-            terms and conditions. If you do not agree to these terms, please do not use our services.</p>
-          <p>2. Registration:</p>
-          <p>To use certain features of our services, you may be required to register for an account. You agree to:</p>
-          <ul>
-            <li>Provide accurate, current, and complete information during the registration process.</li>
-            <li>Maintain and promptly update your account information.</li>
-            <li>Be responsible for safeguarding your password and for any activities or actions under your password.
-            </li>
-          </ul>
-          <p>3. Use of Services:</p>
-          <p>You agree to use our services only for lawful purposes and in accordance with these terms. You are
-            prohibited from using our services:</p>
-          <ul>
-            <li>To impersonate any person or entity or misrepresent your affiliation with any person or entity.</li>
-            <li>To engage in any activity that interferes with or disrupts our services or the servers and networks that
-              support our services.</li>
-          </ul>
-          <p>4. Privacy Policy:</p>
-          <p>Your use of our services is also governed by our Privacy Policy, which describes how we collect, use, and
-            share your personal information.</p>
-          <p>5. Intellectual Property:</p>
-          <p>All content, trademarks, and data on our website, including but not limited to software, databases, text,
-            graphics, icons, hyperlinks, private information, designs, and agreements, are the property of or licensed
-            to Indian Fertilizer and as such are protected from infringement by local and international legislation and
-            treaties.</p>
-          <p>6. Termination:</p>
-          <p>We reserve the right to suspend or terminate your account and access to our services at our sole
-            discretion, without notice, if we determine that you have violated these terms.</p>
-          <p>7. Limitation of Liability:</p>
-          <p>Indian Fertilizer will not be liable for any direct, indirect, incidental, special, consequential, or
-            exemplary damages arising from your use of our services.</p>
-          <p>8. Governing Law:</p>
-          <p>These terms and conditions are governed by and construed in accordance with the laws of [Your
-            Jurisdiction]. Any disputes relating to these terms will be subject to the exclusive jurisdiction of the
-            courts of [Your Jurisdiction].</p>
-          <p>9. Changes to Terms:</p>
-          <p>We reserve the right to modify these terms at any time. Your continued use of our services after any such
-            changes constitutes your acceptance of the new terms.</p>
-          <p>10. Contact Information:</p>
-          <p>For any questions about these terms, please contact us at:</p>
-          <p style="font-weight: bolder;">Indian Fertilizer,<br>VAHS complex No 2,Batlagundu,
-            TamilNadu 624202,<br>indiafertilizer@gmail.com,<br>01 234 567 88.</p>
-          <p>Agreement:</p>
-          <p>By clicking "I Agree," you acknowledge that you have read, understood, and agree to be bound by these terms
-            and conditions.</p>
+        <div class="input-field">
+          <i class="fas fa-envelope fa-lg"></i>
+          {{ form.email }}
+          {% if form.email.errors %}
+          <label class="text-danger">{{ form.email.errors }}</label>
+          {% endif %}
         </div>
 
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-success" id="agreeButton">I Agree</button>
+        <div class="input-field">
+          <i class="fas fa-lock fa-lg"></i>
+          {{ form.password1 }}
+          {% if form.password1.errors %}
+          <label class="text-danger">{{ form.password1.errors }}</label>
+          {% endif %}
         </div>
-      </div>
+
+        <div class="input-field">
+          <i class="fas fa-lock fa-lg"></i>
+          {{ form.password2 }}
+          {% if form.password2.errors %}
+          <label class="text-danger list-none">{{ form.password2.errors }}</label>
+          {% endif %}
+        </div>
+
+        <div class="form-check d-flex justify-content-center">
+          <input class="form-check-input me-2" type="checkbox" value="" id="termsCheckbox" />
+          <label class="form-check-label" for="termsCheckbox">
+            I agree all statements in <a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Terms of
+              service</a>
+          </label>
+        </div>
+
+        <span class="text-center" id="checkbox-error" style="color: red; display: none;">You must Agree to
+          the terms and conditions.</span>
+        <div class="d-flex justify-content-center">
+          <button type="submit" class="btn btn-success btn-lg" id="reg-btn">Register</button>
+        </div>
+        <p class="text-center text-muted text-decoration-none">Already have an account? <a href="#"
+            class="text-decoration-none fw-bold ">Login Now</a></p>
+
+      </form>
+      <img src="{%static 'images/register-new.png' %}" class="bg-success img-fluid d-none d-md-block col-md-7 col-lg-7"
+        alt="Sample image">
     </div>
   </div>
 </section>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Terms and Conditions:</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="text-align: justify;">
+        <p>1. Acceptance of Terms:</p>
+        <p>By accessing and using Indian Fertilizer's services, you agree to comply with and be bound by the following
+          terms and conditions. If you do not agree to these terms, please do not use our services.</p>
+        <p>2. Registration:</p>
+        <p>To use certain features of our services, you may be required to register for an account. You agree to:</p>
+        <ul>
+          <li>Provide accurate, current, and complete information during the registration process.</li>
+          <li>Maintain and promptly update your account information.</li>
+          <li>Be responsible for safeguarding your password and for any activities or actions under your password.
+          </li>
+        </ul>
+        <p>3. Use of Services:</p>
+        <p>You agree to use our services only for lawful purposes and in accordance with these terms. You are
+          prohibited from using our services:</p>
+        <ul>
+          <li>To impersonate any person or entity or misrepresent your affiliation with any person or entity.</li>
+          <li>To engage in any activity that interferes with or disrupts our services or the servers and networks that
+            support our services.</li>
+        </ul>
+        <p>4. Privacy Policy:</p>
+        <p>Your use of our services is also governed by our Privacy Policy, which describes how we collect, use, and
+          share your personal information.</p>
+        <p>5. Intellectual Property:</p>
+        <p>All content, trademarks, and data on our website, including but not limited to software, databases, text,
+          graphics, icons, hyperlinks, private information, designs, and agreements, are the property of or licensed
+          to Indian Fertilizer and as such are protected from infringement by local and international legislation and
+          treaties.</p>
+        <p>6. Termination:</p>
+        <p>We reserve the right to suspend or terminate your account and access to our services at our sole
+          discretion, without notice, if we determine that you have violated these terms.</p>
+        <p>7. Limitation of Liability:</p>
+        <p>Indian Fertilizer will not be liable for any direct, indirect, incidental, special, consequential, or
+          exemplary damages arising from your use of our services.</p>
+        <p>8. Governing Law:</p>
+        <p>These terms and conditions are governed by and construed in accordance with the laws of [Your
+          Jurisdiction]. Any disputes relating to these terms will be subject to the exclusive jurisdiction of the
+          courts of [Your Jurisdiction].</p>
+        <p>9. Changes to Terms:</p>
+        <p>We reserve the right to modify these terms at any time. Your continued use of our services after any such
+          changes constitutes your acceptance of the new terms.</p>
+        <p>10. Contact Information:</p>
+        <p>For any questions about these terms, please contact us at:</p>
+        <p style="font-weight: bolder;">Indian Fertilizer,<br>VAHS complex No 2,Batlagundu,
+          TamilNadu 624202,<br>indiafertilizer@gmail.com,<br>01 234 567 88.</p>
+        <p>Agreement:</p>
+        <p>By clicking "I Agree," you acknowledge that you have read, understood, and agree to be bound by these terms
+          and conditions.</p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" id="agreeButton">I Agree</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   document.getElementById('agreeButton').addEventListener('click', function () {
     document.getElementById('termsCheckbox').checked = true;
@@ -196,15 +185,12 @@
   document.getElementById('reg-btn').addEventListener('click', function (event) {
     var checkbox = document.getElementById('termsCheckbox');
     var errorSpan = document.getElementById('checkbox-error');
-    const agreeLabel = document.getElementById('agree-label');
 
     if (!checkbox.checked) {
       event.preventDefault();
       errorSpan.style.display = 'block';
-      agreeLabel.style.color = 'red';
     } else {
       errorSpan.style.display = 'none';
-      agreeLabel.style.color = 'black';
     }
   });
 
