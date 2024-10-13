@@ -1,0 +1,17 @@
+cd indian_fertilizer/
+
+python -m venv venv
+
+venv/Script/activate  # For wwindows user
+venv/bin/activate # For linux user
+
+pip install -r requirements.txt
+
+python manage.py makemigrations
+
+python manage.py migrate
+
+python manage.py createsuperuser
+
+python manage.py runserver
+

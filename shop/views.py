@@ -1,5 +1,5 @@
 from django.shortcuts import render
-# from .models import *
+from shop.models import *
 # from django.contrib import messages
 # from django.shortcuts import redirect
 # from .models import productCollection
@@ -12,11 +12,20 @@ from django.shortcuts import render
 # import random
 # from .form import ForgotPasswordForm
 # from django.shortcuts import render, get_object_or_404
-# # Create your views here.
 
-# def home(request):
-#     trend = trend_products.objects.filter(status=0)
-#     return render(request, "shop/index.html",{'trend':trend})
+def context_data():
+    context = {
+        'website_name' : 'indian fertilizer',
+        'header' : True,
+        'footer' : True
+    }
+    return context
+
+def home(request):
+    context = context_data()
+    trend_produts = Product.objects.filter(is_trend=1)
+    context['product'] = trend_produts
+    return render(request, "shop/index.html", context=context)
 
 # def add_cart(request):
 #     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
