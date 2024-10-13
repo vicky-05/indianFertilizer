@@ -63,6 +63,3 @@ class Cart(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     qty = models.IntegerField(default=0)
 
-    def __str__(self):
-        return self.id
-    
