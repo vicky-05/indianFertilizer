@@ -24,8 +24,8 @@ def context_data():
 def home(request):
     context = context_data()
     trend_produts = Product.objects.filter(is_trend=1)
-    context['product'] = trend_produts
-    return render(request, "shop/index.html", context=context)
+    context['products'] = trend_produts
+    return render(request, "shop/home.html", context=context)
 
 # def add_cart(request):
 #     if request.headers.get('x-requested-with') == 'XMLHttpRequest':

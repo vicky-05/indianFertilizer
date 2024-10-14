@@ -237,27 +237,27 @@
 <div class="container bg-trasparent my-5 p-3" style="position: relative" id="products" style="margin-top: 60px;">
   <h2 class="about-heading">Trending <b class="text-success">Products</b></h2>
   <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
-    {% for item in trend %}
+    {% for product in products %}
     <div class="col hp">
 
       <div class="card h-100 shadow-sm">
         <a href="#">
-          <img src="{{item.product_img.url}}" class="card-img-top card-images" alt="product.title" />
+          <img src="{{product.image.url}}" class="card-img-top card-images" alt="product.name" />
         </a>
 
 
         <div class="label-top shadow-sm">
-          <a class="text-white" href="#">{{item.product_top_title}}</a>
+          <a class="text-white" href="#">{{product.name}}</a>
         </div>
         <div class="card-body">
-          <h5 class="card-title text-center text-uppercase" style="color: grey;">{{item.product_title}}</h5>
-          <div class="d-flex justify-content-center align-items-center">
+          <h5 class="card-title text-center text-uppercase" style="color: grey;">{{product.name}}</h5>
+          <div class="d-flex justify-content-center align-products-center">
 
-            <h4 class="mb-1 me-1  " style="color: #599847;">₹{{item.disc_price}}</h4>
-            <span class="price-hp"><s>₹{{item.original_price}}</s></span>
+            <h4 class="mb-1 me-1  " style="color: #599847;">₹{{product.discount_price}}</h4>
+            <span class="price-hp"><s>₹{{product.mrp_price}}</s></span>
           </div>
           <h5 class="card-title text-center">
-            <a target="_blank" href="#">{{item.product_decrip}}</a>
+            <a target="_blank" href="#">{{product.description}}</a>
           </h5>
 
           <div class="d-grid gap-2 my-4">

@@ -35,6 +35,7 @@ class Product(models.Model):
     unit_of_messure = models.ForeignKey(Unit, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
+    is_show = models.BooleanField(default=True, help_text='0 = Not show, 1 = Default')
     is_trend = models.BooleanField(default=False, help_text='0 = Default, 1 = Trend')
     application = models.TextField()
     stock_qty = models.IntegerField(default=0)

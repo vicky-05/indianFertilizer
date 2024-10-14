@@ -38,7 +38,7 @@
 <nav class="d-none navbar navbar-expand-lg navbar-dark bg-success p-2 fixed-top " id="navbar-example3">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            INDIA FERTILIZER
+            INDIA FERTILIZER 
         </a>
         <div>
             <!-- Toggler Button -->
@@ -49,7 +49,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto">
-                    {% if request.user.is_authenticated %}
+                    
+                    {% if request.path != 'register' %}
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">HOME</a>
                     </li>
@@ -133,12 +134,6 @@
                         </div>
                     </li>
 
-                    <!-- Search Feild -->
-                    <form class="d-flex ms-auto " style="margin-left: 200px;">
-                        <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn   btn-outline-dark" type="submit">Search</button>
-
-                    </form>
 
                     <!-- Shoping Cart -->
                     <div class="d-flex justify-content-end">
@@ -238,46 +233,92 @@
 <!-- End NavBar -->
 
 
+<style>
+    .nav-head, .navbar-nav{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .icon{
+        color: whitesmoke;
+        font-size: 1.5rem;
+    }
+    .icon:hover{
+        color: whitesmoke;
+    }
+    .cart{
+        position: relative;
+    }
+    .cart > .badge{
+        position: absolute;
+        top: 0;
+        right: -10px;
+    }
+</style>
+
 <!-- NavBar -->
 
 <nav class="navbar navbar-expand navbar-dark bg-success shadow">
-    <div class="container">
-        <a href="/" class="navbar-brand">
-            <h4 class='fw-bold'>INDIA FERTILIZER</h4>
-        </a>
+    <div class="container"> 
+        {% include 'inc/offcanvas.html' %}
+
+        <!-- Navbar Header Section -->
+        <div class="nav-head">
+            <a class="icon" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                <i class="fas fa-bars"></i>
+            </a>
+            <a href="/" class="navbar-brand">
+                <h4 class='fw-bold'>INDIA FERTILIZER</h4>
+            </a>
+        </div>
+        <!-- End Navbar Header Section -->
+        
+        <!-- Navbar Links -->
         <ul class="navbar-nav">
-            {% if user.is_authenticated %}
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-bs-toggle="dropdown">
-                    Hello, {{user}}
-                    {% if user.profile_img %}
-                    <img src="{{user.profile_img.url}}" alt="User Profile..." height="30" width="30"
-                        class="profile mx-2">
-                    {% endif %}
-                </a>
-                <div class="dropdown-menu dropdown-menu-end shadow">
-                    <div class="dropdown-container">
-                        {% if user.profile_img %}
-                        <img src="{{user.profile_img.url}}" alt="User Profile..." height="150" width="150"
-                            class="profile-border">
-                        {% endif %}
-                        <h5 class="fs-4 pt-2">{{user}} </h5>
-                        <hr>
-                        <a class="dropdown-item" href="#"> <i class="fa-solid fa-user-pen px-3"></i> Edit Profile</a>
-                        <a class="dropdown-item text-danger" href="#"><i
-                                class="fa-solid fa-arrow-right-to-bracket px-3"></i> Logout </a>
-                    </div>
-                </div>
-            </li>
-            {% else %}
-            <li class="nav-item">
-                <a href="#" class="nav-link">Register</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">Login</a>
-            </li>
-            {% endif %}
+                {% if 'auth' not in request.path %}
+                <!-- Search Field -->
+                <form class="d-flex">
+                    <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </form>
+                <!-- End Search Field -->
+                
+                    <!-- Shoping Cart -->
+                        <div class="cart">
+                            <a class="icon" href="#"><i
+                                    class="fas fa-shopping-cart"></i></a>
+
+                            <span class="badge rounded-pill bg-danger">
+                                0
+                            </span>
+
+                        </div>
+
+                    <!-- End Shopping Cart -->
+
+                <!-- User -->
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="fas fa-user"></i>
+                    </a>
+                  
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <li><a class="dropdown-item" href="#">Action</a></li>
+                      <li><a class="dropdown-item" href="#">Another action</a></li>
+                      <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                  </div>
+                <!-- End User -->
+                {% else %}
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Login</a>
+                </li>
+                {% endif %}
         </ul>
+        <!-- End Navbar Links -->
     </div>
 </nav>
 
