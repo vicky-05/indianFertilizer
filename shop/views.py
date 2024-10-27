@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from shop.models import *
+from django.db.models import Avg, Count
+import math
 # from django.contrib import messages
 # from django.shortcuts import redirect
 # from .models import productCollection
@@ -23,8 +25,18 @@ def context_data():
 
 def home(request):
     context = context_data()
-    trend_produts = Product.objects.filter(is_trend=1)
-    context['products'] = trend_produts
+    # Fetching trending products
+    trend_produts = Product.objects.filter(is_trend=1, is_show=1).annotate(
+        avg_rating = Avg('reviews__rating'),
+        review_count = Count('reviews')
+    )
+    # Fetching most viewed products
+    most_viewed_products = Product.objects.filter(is_show=1).order_by('-view_count')[:10].annotate(
+        avg_rating = Avg('reviews__rating'),
+        review_count = Count('reviews')
+    )
+    context['trend_products'] = trend_produts
+    context['most_viewed_products'] = most_viewed_products
     return render(request, "shop/home.html", context=context)
 
 # def add_cart(request):
