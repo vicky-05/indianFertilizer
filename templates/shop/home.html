@@ -1,0 +1,100 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+
+{% block title %} Home page | {{website_name}} {% endblock title %}
+
+{% block content %}
+<main>
+
+
+  {% include 'inc/slider.html' %}
+
+  <section class="container-fluid container-lg">
+
+    {% if trend_products %}
+    <!-- Card Collection -->
+    <div class="mt-4 position-relative">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2>Trend Products</h2>
+        <a href="#" class="">View all <i class="fas fa-arrow-right"></i></a>
+      </div>
+
+      <button class="d-none d-sm-block scroll-button left btn btn-success rounded-circle fade-in"
+        onclick="leftScroll()"><i class="fas fa-arrow-left"></i></button>
+      <div class="card-wrapper" id="cardWrapper">
+        {% for product in trend_products %}
+        {% if product.is_show %}
+        {% include 'inc/card.html' %}
+        {% endif %}
+        {% endfor %}
+      </div>
+      <button class="d-none d-sm-block scroll-button right btn btn-success rounded-circle" onclick="rightScroll()"><i
+          class="fas fa-arrow-right"></i></button>
+    </div>
+    <!-- End Card Collection -->
+    {% endif %}
+
+    {% if most_viewed_products %}
+    <!-- Card Collection -->
+    <div class="mt-4 position-relative">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2>Most Viewed Products</h2>
+        <a href="#" class="">View all <i class="fas fa-arrow-right"></i></a>
+      </div>
+
+      <button class="d-none d-sm-block scroll-button left btn btn-success rounded-circle fade-in"
+        onclick="leftScroll()"><i class="fas fa-arrow-left"></i></button>
+      <div class="card-wrapper" id="cardWrapper">
+        {% for product in most_viewed_products %}
+        {% if product.is_show %}
+        {% include 'inc/card.html' %}
+        {% endif %}
+        {% endfor %}
+      </div>
+      <button class="d-none d-sm-block scroll-button right btn btn-success rounded-circle" onclick="rightScroll()"><i
+          class="fas fa-arrow-right"></i></button>
+    </div>
+    <!-- End Card Collection -->
+    {% endif %}
+     
+  </section>
+
+</main>
+
+<script>
+  // When the user scrolls down 20px from the top of the document, slide down the navbar
+  // When the user scrolls to the top of the page, slide up the navbar (50px out of the top view)
+  window.onscroll = function () {
+    scrollFunction();
+  };
+
+  function scrollFunction() {
+    if (
+      document.body.scrollTop > 20 ||
+      document.documentElement.scrollTop > 20
+    ) {
+      document.getElementsByClassName("navbar")[0].style.backgroundColor =
+        "var(--theme-color)";
+    } else {
+      document.getElementsByClassName("navbar")[0].style.backgroundColor =
+        "transparent";
+    }
+  }
+
+  const leftScroll = () => {
+    document.getElementById("cardWrapper").scrollBy({
+      left: -294,
+      behavior: "smooth",
+    });
+  };
+
+  const rightScroll = () => {
+    document.getElementById("cardWrapper").scrollBy({
+      left: 294,
+      behavior: "smooth",
+    });
+  };
+</script>
+
+
+{% endblock %}

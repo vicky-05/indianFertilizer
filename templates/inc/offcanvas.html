@@ -1,0 +1,53 @@
+
+<!-- Offcanvas -->
+<div
+    class="offcanvas offcanvas-start"
+    tabindex="-1"
+    id="offcanvasNavbar"
+    aria-labelledby="offcanvasNavbarLabel"
+>
+    <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Fertilizer</h5>
+    <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+    ></button>
+    </div>
+    <div class="offcanvas-body">
+    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+        <li class="nav-item">
+            <a class="nav-link active" href="#" aria-current="page">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Category</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Products</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+        </li>
+        {% if not user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="#">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Login</a>
+        </li>
+        {% endif %}
+    </ul>
+    <form class="d-flex">
+        <input
+        class="form-control me-2"
+        type="search"
+        placeholder="Search"
+        aria-label="Search"
+        />
+        <button class="btn btn-secondary" type="submit">Search</button>
+    </form>
+    </div>
+</div>
+</div>
+<!-- End Offcanvas -->

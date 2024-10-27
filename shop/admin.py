@@ -8,7 +8,7 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display =  [ 'name', 'parent' ]
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = [ 'name', 'category', 'brand', 'mrp_price', 'stock_qty', 'is_trend' ]
+    list_display = [ 'name', 'category', 'brand', 'mrp_price', 'discount_price', 'selling_price', 'stock_qty', 'is_trend', 'is_show', 'view_count' ]
 
 class ProductReviewAdmin(admin.ModelAdmin):
     list_display = [ 'user', 'product', 'rating', 'review' ]

@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-# from django.conf
 from authendicate.forms import *
+from shop import views
 
 def register(request):
-
+    context = views.context_data()
     form=RegisterForm()
     if request.method=="POST":
         form=RegisterForm(request.POST)
@@ -13,8 +13,8 @@ def register(request):
             form.save()
             messages.success(request, "Registration Successful")
             return redirect('login')
-        
-    return render(request, "authendicate/register.html",{'form':form})
+    context['form'] = form
+    return render(request, "authendicate/register.html", context=context)
 
 def logout_page(request):
     logout(request)
