@@ -1,13 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from shop.models import *
 from django.db.models import Avg, Count
 import math
-# from django.contrib import messages
-# from django.shortcuts import redirect
+from django.contrib import messages
 # from .models import productCollection
 # from django.contrib.auth import authenticate, login, logout
-# from django.http import JsonResponse
-# import json
+from django.http import JsonResponse
+import json
 # from django.conf import settings
 # from django.core.mail import send_mail
 # from django.contrib.auth.models import User
@@ -25,6 +24,9 @@ def context_data():
 
 def home(request):
     context = context_data()
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = Cart.objects.filter(user=request.user).count()
     # Fetching trending products
     trend_produts = Product.objects.filter(is_trend=1, is_show=1).annotate(
         avg_rating = Avg('reviews__rating'),
@@ -35,44 +37,42 @@ def home(request):
         avg_rating = Avg('reviews__rating'),
         review_count = Count('reviews')
     )
+    context['cart_count'] = cart_count
     context['trend_products'] = trend_produts
     context['most_viewed_products'] = most_viewed_products
     return render(request, "shop/home.html", context=context)
 
-# def add_cart(request):
-#     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-#         if request.user.is_authenticated:
-#             data = json.loads(request.body)
-#             product_qty = data['product_qty']
-#             product_id = data['pid']
-#             product_status = productCollection.objects.get(id=product_id)
-#             if product_status:
-#                 if Cart.objects.filter(user=request.user.id, product_id=product_id).exists():
-#                     return JsonResponse({'status': 'Product already in cart'}, status=200)
-                    
-#                 else:
-#                     if product_status.quantity >= product_qty:
-#                         Cart.objects.create(user=request.user, product_id=product_id, product_qty=product_qty)
-#                         return JsonResponse({'status': 'Product added to cart successfully'}, status=200)
-                        
-#                     else:
-#                         return JsonResponse({'status': 'Product out of stock'}, status=200)
-#             else:
-#                 return JsonResponse({'status': 'Product not found'}, status=200)
-#         else:
-#             return JsonResponse({'status': 'Login Required'}, status=200)
-            
-#     else:
-#         return JsonResponse({'status': 'error'}, status=200)
+def add_to_cart(request):
+    if request.user.is_authendicated:
+        if request.method == "POST" and request.is_ajax():
+            product_id = request.POST.get('product_id')
+            product_qty = request.POST.get('product_qty')
+            product = Product.objects.get(id=product_id)
+            # cart, created = Cart.objects.get_or_create(
+            #     user = request.user,
+            #     prodct = product_id,
+            #     qty = product_qty
+            #     )
+
+            return JsonResponse({
+                'message' : 'success'
+            })
+        return JsonResponse({
+            'message' : 'error'
+        })
     
-# def cart_page(request):
-#     if request.user.is_authenticated:
-#         cart = Cart.objects.filter(user=request.user)
-#         cart_count = cart.count()
-#         return render(request, "shop/products/add_to_cart.html",{'cart':cart})
-#     else:
-#         messages.warning(request, "Login Required")
-#         return redirect('login')
+    return redirect('login')
+
+
+    
+def cart_page(request):
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user)
+        cart_count = cart.count()
+        return render(request, "shop/products/add_to_cart.html",{'cart':cart})
+    else:
+        messages.warning(request, "Login Required")
+        return redirect('login')
 
 # # def cart_count(request):
 # #     if request.user.is_authenticated:

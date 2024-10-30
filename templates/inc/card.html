@@ -1,19 +1,14 @@
 <!-- Card -->
-<div class="m-1 mb-4 card col-11 col-sm-4 col-md-3 shadow fade-in">
-  {% if product.discount_percentage != 0 %}
-  <span class="discount-tag">{{product.discount_percentage}}% OFF</span>
-  {% endif %}
-  {% if product.is_trend %}
-  <span class="trending-tag badge">Trending</span>
-  {% endif %}
-  <div class="zoom-hover">
-    <img
-      class="card-img-top mt-4"
-      src="{{product.image.url}}"
-      alt="Title"
-      height="200"
-    />
+<div class="m-1 mb-4 card col-11 col-sm-4 col-md-3  shadow fade-in">
+  <div class="tags m-2">
+    {% if product.discount_percentage != 0 %}
+    <span class="discount-tag">{{product.discount_percentage}}% OFF</span>
+    {% endif %}
+    {% if product.is_trend %}
+    <span class="trending-tag badge">Trending</span>
+    {% endif %}
   </div>
+  <img class="card-img-top" src="{{product.image.url}}" alt="Title" height="200" />
   <div class="card-body">
     <h4 class="card-title">{{product.name}}</h4>
     <span class="category badge">{{product.category}}</span>
@@ -41,7 +36,7 @@
 
 
     <div class="d-flex my-2">
-      <button class="btn btn-success w-100">
+      <button class="btn btn-success w-100" onclick="addToCart(event)" data-product-id={{product.id}}>
         Add to cart
         <i class="fas fa-shopping-cart"></i>
       </button>

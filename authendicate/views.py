@@ -23,7 +23,6 @@ def logout_page(request):
 
 def login_page(request):
     if request.user.is_authenticated:
-        
         return redirect('home')
     else:
 
