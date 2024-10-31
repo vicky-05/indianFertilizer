@@ -20,7 +20,7 @@
       <span class="mrp">&#8377;&nbsp;{{product.mrp_price}}</span>
     </div>
 
-    <div class="ratings">
+    <div class="ratings mb-2">
       <span>{{product.avg_rating | floatformat:1}} &nbsp;</span>
       {% with product.avg_rating|floatformat:1 as rating %}
       {% for i in "12345" %}
@@ -35,13 +35,17 @@
     </div>
 
 
-    <div class="d-flex my-2">
-      <button class="btn btn-success w-100" onclick="addToCart(event)" data-product-id={{product.id}}>
+    <!-- <div class="d-flex my-2"> -->
+      <button class="add-to-cart btn btn-success w-100" data-product-id={{product.id}} onclick="addToCart(event.target)">
         Add to cart
-        <i class="fas fa-shopping-cart"></i>
+        <i class="fas fa-shopping-cart" onclick="addToCart(event.target.parentElement)"></i>
       </button>
-    </div>
-    <center>
+      <a class="go-to-cart btn btn-success w-100 d-none" href="{% url 'cart' %}">
+        Go to cart
+        <i class="fas fa-shopping-cart"></i>
+      </a>
+    <!-- </div> -->
+    <center class="mt-2">
       <a href="#">More Details...</a>
     </center>
   </div>

@@ -43,25 +43,27 @@ def home(request):
     return render(request, "shop/home.html", context=context)
 
 def add_to_cart(request):
-    if request.user.is_authendicated:
-        if request.method == "POST" and request.is_ajax():
-            product_id = request.POST.get('product_id')
-            product_qty = request.POST.get('product_qty')
+    data = {}
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            product_id = request.POST['product_id']
             product = Product.objects.get(id=product_id)
-            # cart, created = Cart.objects.get_or_create(
-            #     user = request.user,
-            #     prodct = product_id,
-            #     qty = product_qty
-            #     )
-
-            return JsonResponse({
-                'message' : 'success'
-            })
-        return JsonResponse({
-            'message' : 'error'
-        })
+            if product:
+                cart, created = Cart.objects.get_or_create(user=request.user, product=product)
+                if not created:
+                    if cart.qty <= 9:
+                        cart.qty += 1
+                        cart.save()
+                        data['count'] = Cart.objects.filter(user=request.user).count()
+                        return JsonResponse({'status' : 'success', 'message' : 'Cart added successfully.', 'data' : data}, status=200)
+                    
+                    return JsonResponse({'status': 'error', 'message' : 'Only 10 products added.'})
+            
+            return JsonResponse({'status' : 'error', 'message' : "Product doesn't exsist."}, status=200)
+        
+        return JsonResponse({'status': 'error', 'message' : 'Only post method.'}, status=200)
     
-    return redirect('login')
+    return JsonResponse({'status' : 'error', 'message' : "Please Login.", 'url' : '/login/'}, status=200)
 
 
     

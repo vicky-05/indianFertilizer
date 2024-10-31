@@ -260,10 +260,15 @@ input[type="number"] {
   text-transform: capitalize;
 }
 
-.btn-success,
-.btn-success:hover {
+.btn-success{
   background-color: var(--primary-color);
-  border: none;
+  border: 2px solid var(--primary-color);
+}
+
+.btn-success:hover{
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  background-color: var(--bg-color);
 }
 
 .price-details {

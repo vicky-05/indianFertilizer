@@ -1,58 +1,124 @@
-{% extends 'layouts/main.html' %}
-{% load static %}
+{% extends 'layouts/main.html' %} {% load static %} {% block title %} Home page
+| {{website_name}} {% endblock title %} {% block content %}
+<style>
+  /* Keyframes for bounce effect */
+  @keyframes bounce {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-20px);
+    }
+    60% {
+      transform: translateY(-10px);
+    }
+  }
 
-{% block title %} Home page | {{website_name}} {% endblock title %}
+  /* Keyframes for fade-in effect */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 
-{% block content %}
+  /* Apply bounce effect to the icon */
+  .animated-icon {
+    animation: bounce 1s ease;
+  }
+
+  /* Apply fade-in effect to the modal content */
+  .animated-modal-content {
+    animation: fadeIn 0.5s ease;
+    border-radius: 10px;
+    padding: 20px;
+  }
+</style>
 <header>
   {% include 'inc/carousel.html' %}
   <div class="d-flex d-md-none slogan-card">
-    <span> Welcome Better Fertilizer,<br> Bigger Harvests!</span>
+    <span>
+      Welcome Better Fertilizer,<br />
+      Bigger Harvests!</span
+    >
   </div>
 </header>
 <main>
-
-
   <section class="container-fluid container-lg">
-
-
     <!-- Top Brands Sliding Animation -->
     <div class="slider">
       <div class="list">
-        <div class="item" style="--position: 1"><img src="{% static 'images/agtech.png' %}" alt=""></div>
-        <div class="item" style="--position: 2"><img src="{% static 'images/OIP.png' %}" alt=""></div>
-        <div class="item" style="--position: 3"><img src="{% static 'images/tata-brand.png' %}" alt=""></div>
-        <div class="item" style="--position: 4"><img src="{% static 'images/rasi-brand.png' %}" alt=""></div>
-        <div class="item" style="--position: 5"><img src="{% static 'images/spic-brand.png' %}" alt=""></div>
-        <div class="item" style="--position: 6"><img src="{% static 'images/agtech.png' %}" alt=""></div>
-        <div class="item" style="--position: 7"><img src="{% static 'images/OIP.png' %}" alt=""></div>
-        <div class="item" style="--position: 8"><img src="{% static 'images/tata-brand.png' %}" alt=""></div>
-        <div class="item" style="--position: 9"><img src="{% static 'images/rasi-brand.png' %}" alt=""></div>
-        <div class="item" style="--position: 10"><img src="{% static 'images/spic-brand.png' %}" alt=""></div>
+        <div class="item" style="--position: 1">
+          <img src="{% static 'images/agtech.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 2">
+          <img src="{% static 'images/OIP.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 3">
+          <img src="{% static 'images/tata-brand.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 4">
+          <img src="{% static 'images/rasi-brand.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 5">
+          <img src="{% static 'images/spic-brand.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 6">
+          <img src="{% static 'images/agtech.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 7">
+          <img src="{% static 'images/OIP.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 8">
+          <img src="{% static 'images/tata-brand.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 9">
+          <img src="{% static 'images/rasi-brand.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 10">
+          <img src="{% static 'images/spic-brand.png' %}" alt="" />
+        </div>
       </div>
     </div>
     <!-- End Top Brands Sliding Animation -->
-
 
     {% if trend_products %}
     <!-- Card Collection -->
     <div class="mt-4 position-relative">
       <div class="d-flex justify-content-between align-items-center">
-        <h3 class="about-heading">Trend <b class="text-success">Products</b></h3>
-        <a href="#" class="text-success">View all <i class="fas fa-angle-right"></i></a>
+        <h3 class="about-heading">
+          Trend <b class="text-success">Products</b>
+        </h3>
+        <a href="#" class="text-success"
+          >View all <i class="fas fa-angle-right"></i
+        ></a>
       </div>
 
-      <button class="d-none d-sm-block scroll-button left btn btn-success rounded-circle fade-in"
-        onclick="leftScroll('cardWrapper1')"><i class="fas fa-arrow-left"></i></button>
+      <button
+        class="d-none d-sm-block scroll-button left btn btn-success rounded-circle fade-in"
+        onclick="leftScroll('cardWrapper1')"
+      >
+        <i class="fas fa-arrow-left"></i>
+      </button>
       <div class="card-wrapper" id="cardWrapper1">
-        {% for product in trend_products %}
+        {% for product in trend_products %} 
         {% if product.is_show %}
-        {% include 'inc/card.html' %}
-        {% endif %}
-        {% endfor %}
+         {% include 'inc/card.html' %} 
+         {% endif %} 
+         {% endfor %}
       </div>
-      <button class="d-none d-sm-block scroll-button right btn btn-success rounded-circle fade-in"
-        onclick="rightScroll('cardWrapper1')"><i class="fas fa-arrow-right"></i></button>
+      <button
+        class="d-none d-sm-block scroll-button right btn btn-success rounded-circle fade-in"
+        onclick="rightScroll('cardWrapper1')"
+      >
+        <i class="fas fa-arrow-right"></i>
+      </button>
     </div>
     <!-- End Card Collection -->
     {% endif %}
@@ -61,73 +127,105 @@
 
     <div class="slider-container">
       <div>
-        <h3 class="about-heading text-uppercase">Our <b class="text-success">Categories</b></h3>
+        <h3 class="about-heading text-uppercase">
+          Our <b class="text-success">Categories</b>
+        </h3>
       </div>
-      <div id="productCarousel" class="carousel slide mt-5" data-ride="carousel">
+      <div
+        id="productCarousel"
+        class="carousel slide mt-5"
+        data-ride="carousel"
+      >
         <!-- The slideshow -->
         <div class="carousel-inner">
           <div class="carousel-item active">
             <div class="image-container">
-              <img src="{% static 'images/hdepbag.png' %}">
+              <img src="{% static 'images/hdepbag.png' %}" />
             </div>
             <p class="product-title">HDEP Bags</p>
           </div>
           <div class="carousel-item">
             <div class="image-container">
-              <img src="{% static 'images/sprayer.png' %}" alt="Watermelon">
+              <img src="{% static 'images/sprayer.png' %}" alt="Watermelon" />
             </div>
             <p class="product-title">Power Sprayer</p>
           </div>
           <div class="carousel-item">
             <div class="image-container">
-              <img src="{% static 'images/insecticides.png' %}" alt="Tomato">
+              <img src="{% static 'images/insecticides.png' %}" alt="Tomato" />
             </div>
             <p class="product-title">Insecticides</p>
           </div>
         </div>
 
         <!-- Left and right controls inside the box -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-          <span class="btn btn-success rounded-circle fade-in"><i class="fas fa-arrow-left"></i></span>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#productCarousel"
+          data-bs-slide="prev"
+        >
+          <span class="btn btn-success rounded-circle fade-in"
+            ><i class="fas fa-arrow-left"></i
+          ></span>
           <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#productCarousel"
+          data-bs-slide="next"
+        >
           <!-- <i class="fas fa-arrow-right btn btn-success rounded-circle" aria-hidden="true"></i> -->
-          <span class="btn btn-success rounded-circle fade-in"><i class="fas fa-arrow-right"></i></span>
+          <span class="btn btn-success rounded-circle fade-in"
+            ><i class="fas fa-arrow-right"></i
+          ></span>
           <span class="visually-hidden">Next</span>
         </button>
       </div>
     </div>
     <!-- End Category Slider -->
 
-
     {% if most_viewed_products %}
     <div class="mt-4 position-relative">
       <div class="d-flex justify-content-between align-items-center">
-        <h3 class="about-heading">Most Vie<b class="text-success">wed Products</b></h3>
-        <a href="#" class="text-success">View all <i class="fas fa-angle-right"></i></a>
+        <h3 class="about-heading">
+          Most Vie<b class="text-success">wed Products</b>
+        </h3>
+        <a href="#" class="text-success"
+          >View all <i class="fas fa-angle-right"></i
+        ></a>
       </div>
 
-      <button class="d-none d-sm-block scroll-button left btn btn-success rounded-circle fade-in"
-        onclick="leftScroll('cardWrapper2')"><i class="fas fa-arrow-left"></i></button>
+      <button
+        class="d-none d-sm-block scroll-button left btn btn-success rounded-circle fade-in"
+        onclick="leftScroll('cardWrapper2')"
+      >
+        <i class="fas fa-arrow-left"></i>
+      </button>
       <div class="card-wrapper" id="cardWrapper2">
-
         {% for product in most_viewed_products %}
-        {% if product.is_show %}
-        {% include 'inc/card.html' %}
-        {% endif %}
+         {% if product.is_show %} 
+        {% include 'inc/card.html' %} 
+        {% endif %} 
         {% endfor %}
       </div>
-      <button class="d-none d-sm-block scroll-button right btn btn-success rounded-circle fade-in"
-        onclick="rightScroll('cardWrapper2')"><i class="fas fa-arrow-right"></i></button>
+      <button
+        class="d-none d-sm-block scroll-button right btn btn-success rounded-circle fade-in"
+        onclick="rightScroll('cardWrapper2')"
+      >
+        <i class="fas fa-arrow-right"></i>
+      </button>
     </div>
     <!-- End Card Collection -->
     {% endif %}
 
     <!-- Signup Now Card -->
-    <div class="card mb-4 shadow fade-in" style="font-family: Poppins, sans-serif;">
+    <div
+      class="card mb-4 shadow fade-in"
+      style="font-family: Poppins, sans-serif"
+    >
       <div class="row g-0">
-
         <!-- Card Content -->
         <div class="col-md-8 p-4">
           <h2 class="card-title">Ready to Grow with Us? Register Now!</h2>
@@ -144,43 +242,59 @@
 
         <!-- Card Image -->
         <div class="col-md-4 position-relative">
-          <img src="{% static 'images/login-now.jpg' %}" alt="Supplier Image" class="img-fluid rounded-end h-100">
-          <div class="overlay" style="background-color: rgb(0, 0, 0, .2);"></div>
+          <img
+            src="{% static 'images/login-now.jpg' %}"
+            alt="Supplier Image"
+            class="img-fluid rounded-end h-100"
+          />
+          <div
+            class="overlay"
+            style="background-color: rgb(0, 0, 0, 0.2)"
+          ></div>
         </div>
-
       </div>
     </div>
     <!-- End Signup Now Card -->
 
     <!-- Thirukural Card -->
-    <div class="card mb-4 shadow fade-in d-flex d-md-none" style="font-family: Poppins, sans-serif;">
+    <div
+      class="card mb-4 shadow fade-in d-flex d-md-none"
+      style="font-family: Poppins, sans-serif"
+    >
       <div class="row g-0">
-
         <!-- Card Image -->
         <div class="col-md-4 position-relative">
-          <img src="{% static 'images/thiruvalluvar.png' %}" alt="Supplier Image" class="img-fluid rounded-end h-100"
-            style="filter: drop-shadow(-4px 4px 6px #25252d)">
+          <img
+            src="{% static 'images/thiruvalluvar.png' %}"
+            alt="Supplier Image"
+            class="img-fluid rounded-end h-100"
+            style="filter: drop-shadow(-4px 4px 6px #25252d)"
+          />
         </div>
 
         <!-- Card Content -->
         <div class="col-md-8 pt-4 px-2">
-          <p class="thirukural text-dark" style="font-size: 0.9rem; word-spacing: 0;">
-            உழுதுண்டு வாழ்வாரே வாழ்வார்மற் றெல்லாம்<br>
-            தொழுதுண்டு பின்செல் பவர். (குறள்-1033)<br>
+          <p
+            class="thirukural text-dark"
+            style="font-size: 0.9rem; word-spacing: 0"
+          >
+            உழுதுண்டு வாழ்வாரே வாழ்வார்மற் றெல்லாம்<br />
+            தொழுதுண்டு பின்செல் பவர். (குறள்-1033)<br />
           </p>
-          <p class="thirukural text-muted" style="font-size: 0.9rem; word-spacing: 0;">
-            விளக்கம் :<br>
-            &nbsp; &nbsp; &nbsp; உழவு செய்து அதனால்‌ கிடைத்ததை உண்டு வாழ்கின்றவரே உரிமையோடு
-            வாழ்கின்றவர்‌; மற்றவர்‌
-            எல்லோரும்‌ பிறரைத்‌ தொழுது உண்டு பின்‌ செல்கின்றவரே.
+          <p
+            class="thirukural text-muted"
+            style="font-size: 0.9rem; word-spacing: 0"
+          >
+            விளக்கம் :<br />
+            &nbsp; &nbsp; &nbsp; உழவு செய்து அதனால்‌ கிடைத்ததை உண்டு
+            வாழ்கின்றவரே உரிமையோடு வாழ்கின்றவர்‌; மற்றவர்‌ எல்லோரும்‌ பிறரைத்‌
+            தொழுது உண்டு பின்‌ செல்கின்றவரே.
           </p>
         </div>
       </div>
     </div>
     <!-- End Thirukural Card -->
-
   </section>
-
 </main>
 
 <script>
@@ -217,25 +331,49 @@
     });
   };
 </script>
-<script>
-  const addToCart = (e) => {
-    console.dir(e.target.dataset.productId);
-    $.ajax({
-      url : "{% url 'add_to_cart' %}",
-      type :  'POST',
-      data : {
-        'product_id' : e.target.data-product-id,
-        'csrfmiddlewaretoken' : '{{ csrf_token }}'
-      },
-      success : (res) => {
-        console.log('data ;', res);
-      },
-      error : () => {
-        console.log('error ocured');
-      }
-    })
-  }
-</script>
 
+<script>
+  const addToCart = (addBtn) => {
+    const cartCount = document.getElementById("cart-count");
+    const myToast = document.getElementById("myToast");
+    const toast = new bootstrap.Toast(myToast);
+    const toastBody = myToast.querySelector(".toast-body");
+    const productId = addBtn.dataset.productId;
+    toast.hide()
+
+    $.ajax({
+      url: "{% url 'add_to_cart' %}",
+      type: "POST",
+      data: {
+        product_id: productId,
+        csrfmiddlewaretoken: "{{ csrf_token }}",
+      },
+      success: (res) => {
+        if (res.status == "error") {
+        }
+
+        if (res.status == "success") {
+          if (res.data) {
+            cartCount.innerText = res.data.count;
+          }
+
+          addBtn.classList.add("d-none");
+          addBtn.nextElementSibling.classList.remove("d-none");
+        }
+
+        toastBody.innerText = res.message
+        toast.show();
+
+        if (res.url) {
+          window.location = res.url;
+          return;
+        }
+      },
+      error: () => {
+        console.log("error ocured");
+      },
+    });
+  };
+</script>
 
 {% endblock %}
