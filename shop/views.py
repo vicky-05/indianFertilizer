@@ -116,7 +116,6 @@ def product_details(request, product_id=None):
         cart_product = Cart.objects.get(user=request.user, product=product_id)
         product = Product.objects.get(id=product_id)
         reviews = ProductReview.objects.filter(product=product_id)
-        print('product :', reviews)
         context['product'] = product
         context['reviews'] = reviews
         context['product_qty'] = cart_product.qty if request.user.is_authenticated else 0
