@@ -111,11 +111,16 @@ def cart_page(request):
 #         return redirect('collections')
 
 def product_details(request, product_id=None):
-    context = context_data(request.user)
-    product = Product.objects.filter(id=product_id)
-    print('product :', product)
-    context['product'] = product
-    return render(request, "shop/product_details.html", context=context)
+    if product_id:
+        context = context_data(request.user)
+        cart_product = Cart.objects.get(user=request.user, product=product_id)
+        product = Product.objects.get(id=product_id)
+        reviews = ProductReview.objects.filter(product=product_id)
+        print('product :', reviews)
+        context['product'] = product
+        context['reviews'] = reviews
+        context['product_qty'] = cart_product.qty if request.user.is_authenticated else 0
+        return render(request, "shop/product_details.html", context=context)
 
 # def collections(request):
 #     # Retrieve distinct brand names
