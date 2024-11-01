@@ -1,0 +1,49 @@
+        /* Custom styling */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .about-section {
+            background-color: #0a9548;
+            color: white;
+            padding: 50px 0;
+        }
+        .mission-vision-section {
+            padding: 30px 0;
+        }
+        .mission-vision-section h2, .story-section h2 {
+            color: #004d00;
+        }
+        .story-section {
+            background-color: #f0f0f0;
+            padding: 30px 0;
+        }
+        .card-custom {
+            border: none;
+            border-radius: 8px;
+            background-color: #e0ffe0;
+            padding: 20px;
+        }
+        .card-custom h5 {
+            color: #004d00;
+        }
+        .founder-section, .co-founder-section {
+            padding: 30px 0;
+            text-align: center;
+        }
+        .staff-section {
+            background-color: #f0f0f0;
+            padding: 30px 0;
+        }
+        .about-heading {
+            color: #000;
+            font-size: 26px;
+            font-weight: 300;
+            text-transform: uppercase;
+            position: relative;
+            /* margin: 45px; */
+        }
+
+    .about-heading b {
+        color: #ffc000;
+    }
+        

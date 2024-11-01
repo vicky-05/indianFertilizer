@@ -42,9 +42,17 @@ def home(request):
         avg_rating = Avg('reviews__rating'),
         review_count = Count('reviews')
     )
+    # Fetching category list
+    category_list = Category.objects.all()
+
+    context['category_list'] = category_list
     context['trend_products'] = trend_produts
     context['most_viewed_products'] = most_viewed_products
     return render(request, "shop/home.html", context=context)
+
+def about(request):
+    context = context_data(request.user)
+    return render(request,"shop/about.html",context=context)
 
 def add_to_cart(request, product_id=None):
     data = {}

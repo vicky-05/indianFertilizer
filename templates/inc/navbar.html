@@ -46,7 +46,7 @@
         <a class="nav-link" href="#">Products</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">About</a>
+        <a class="nav-link" href="{% url 'about' %}">About</a>
       </li>
     </ul>
     <ul class="nav">
@@ -58,7 +58,7 @@
          <div id="search-results"></div>
       </li>
       <li class="nav-item">
-        <a class="nav-link position-relative" href="#" aria-current="page">
+        <a class="nav-link position-relative" href="{% url 'cart' %}" aria-current="page">
           <p class="badge cart-badge rounded-circle" id="cart-count">{{cart_count}}</p>
           <i class="fas fa-shopping-cart"></i>
         </a>
