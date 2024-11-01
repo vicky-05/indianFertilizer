@@ -1,0 +1,70 @@
+{% extends 'layouts/main.html' %} 
+{% load static %} 
+{% block title %} 
+Cart page | {{website_name}} 
+{% endblock title %} 
+{% block styles %} 
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<main class="mt-5">
+    <h4 class="about-heading">Cart <b class="text-uppercase text-success">Items</b></h4>
+
+<div class="container my-5">
+
+    <div class="row">
+        <!-- Cart Items (Left Column) -->
+        <div class="col-lg-8" id="productSection">
+            <div class="empty-cart d-none" id="emptyCartMessage">
+                <img src="empty-cart-4615794-3822062-removebg-preview.png" alt="Empty Cart Image">
+                <h4>Your cart is currently empty.</h4>
+                <p>Browse our products and add items to your cart!</p>
+                <a href="products.html" class="btn btn-primary">Continue Shopping</a>
+            </div>
+
+            <div id="cartItems">
+                {% for p in cart_products %}
+                <div class="row cart-item align-items-center">
+                    <div class="col-md-2">
+                        <img src="{{ p.product.image.url }}" alt="Product Image" class="img-fluid">
+                    </div>
+                    <div class="col-md-3">
+                        <h5>{{p.product.name}}</h5>
+                        <p>₹{{p.product.selling_price}}</p>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" class="form-control quantity" value="{{p.qty}}" min="1"
+                            onchange="updateTotal()" >
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <span class="item-total">₹{{p.qty}}</span>
+                    </div>
+                    <form action="/cart" method="POST" class="col-md-2 text-center">
+                        {% csrf_token %}
+                        <button class="btn btn-danger btn-sm" type="submit" onclick="removeItem(this)"><i class="fas fa-trash me-2"></i>Remove</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Cart Summary (Right Column) -->
+        <div class="col-lg-4 mb-4">
+            <div class="cart-summary">
+                <h4 class="summary-title">Cart Summary</h4>
+                <p>Subtotal: 
+                <span id="subtotal">
+                $99.99
+                </span></p>
+                <p>Tax: <span id="tax">$0.00</span></p>
+                <p class="cart-total">Total: <span id="total">$99.99</span></p>
+                <button class="btn btn-success btn-lg w-100 mt-3">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+<script src="{% static 'js/cart.js' %}"></script>
+
+{% endblock content %}

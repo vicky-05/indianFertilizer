@@ -1,22 +1,43 @@
+{% load static %}
+<style>
+  #search-results{
+    color: var(--primary-font-color);
+    width: 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    border: 1px solid var(--primary-font-color);
+    border-radius: 4px;
+    background-color: var(--primary-color);
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+  }
+  #search-results > a{
+    color: var(--primary-font-color);
+    text-decoration: none;
+  }
+  #search-results > a:hover{
+    background-color: var(--primary-font-color);
+    color: var(--primary-color);
+  }
+</style>
 <!-- NavBar -->
 
-<nav class="navbar navbar-dark fixed-top">
-  <div class="container-fluid container-xl ">
+<nav class="navbar navbar-dark fixed-top ">
+  <div class="container-fluid container-lg">
     <div class="navbar-head">
-      <a
-        class="btn"
-        type="button"
-        data-bs-toggle="offcanvas"
-        data-bs-target="#offcanvasNavbar"
-        aria-controls="offcanvasNavbar"
-      >
+      <a class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+        aria-controls="offcanvasNavbar">
         <span class="navbar-toggler-icon"></span>
       </a>
-      <a class="fs-6 navbar-brand " href="#"> Fertilizer</a>
+      <a href="{% url 'home' %}" class="brand">
+        <img src="{% static 'images/website name.png' %}" alt="india fertilizer" class="brand-img">
+      </a>
     </div>
-    <ul class="d-none d-lg-flex nav justify-content-center">
+    <ul class="d-none d-lg-flex nav">
       <li class="nav-item">
-        <a class="nav-link active" href="#" aria-current="page">Home</a>
+        <a class="nav-link active" href="{% url 'home' %}" aria-current="page">Home</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">Category</a>
@@ -28,26 +49,23 @@
         <a class="nav-link" href="#">About</a>
       </li>
     </ul>
-    <ul class="nav justify-content-center">
-      <li class="d-none d-md-flex search-group">
-        <i class="fas fa-magnifying-glass text-light search-icon"></i>
-        <input
-          type="text"
-          name="search"
-          class="search-input"
-          placeholder="Search products..."
-        />
+    <ul class="nav">
+      <li class="position-relative">
+          <div name="search-form" class="d-none d-md-flex search-group">
+            <i class="fas fa-magnifying-glass text-light search-icon"></i>
+            <input type="text" name="search" class="search-input" id="search-query" placeholder="Search products...">
+          </div>
+         <div id="search-results"></div>
       </li>
       <li class="nav-item">
         <a class="nav-link position-relative" href="#" aria-current="page">
-          <p class="badge cart-badge rounded-circle">0</p>
+          <p class="badge cart-badge rounded-circle" id="cart-count">{{cart_count}}</p>
           <i class="fas fa-shopping-cart"></i>
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">
           {% if user.is_authenticated %}
-          Hii, {{user.username}}
           <i class="fas fa-user"></i>
           {% else %}
           <i class="fas fa-user-plus"></i>
@@ -56,5 +74,44 @@
       </li>
     </ul>
     {% include 'inc/offcanvas.html' %}
+
+  </div>
 </nav>
 <!-- End NavBar -->
+
+<script>let timer;
+
+document.getElementById('search-query').addEventListener('input', function() {
+    clearTimeout(timer);  // Clear any existing timer to prevent multiple requests
+    
+    const query = this.value;
+    
+    // Delay the fetch request by 300ms to wait until typing stops
+    timer = setTimeout(() => {
+        if (query.trim()) {
+            fetch(`/search/?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    const resultsContainer = document.getElementById('search-results');
+                    console.log(data)
+                    resultsContainer.innerHTML = '';  // Clear previous results
+
+                    if (data.products_list.length > 0) {
+                        data.products_list.forEach(item => {
+                            const resultItem = document.createElement('a');
+                            resultItem.href = `/product_details/${item.id}`
+                            resultItem.textContent = item.name;  // Replace 'name' with the relevant field
+                            resultsContainer.appendChild(resultItem);
+                        });
+                    } else {
+                        resultsContainer.textContent = 'No results found.';
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        } else {
+            document.getElementById('search-results').innerHTML = '';
+        }
+    }, 300);  // Delay in milliseconds
+});
+
+</script>

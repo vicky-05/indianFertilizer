@@ -1,64 +1,265 @@
-{% extends 'layouts/main.html' %}
-{% load static %}
-
-{% block title %} Home page | {{website_name}} {% endblock title %}
-
-{% block content %}
+{% extends 'layouts/main.html' %} {% load static %} {% block title %} Home page
+| {{website_name}} {% endblock title %} {% block content %}
+<style>
+  .navbar {
+    background-color: transparent;
+  }
+</style>
+<header>
+  {% include 'inc/carousel.html' %}
+  <div class="d-flex d-md-none slogan-card">
+    <span>
+      Welcome Better Fertilizer,<br />
+      Bigger Harvests!</span
+    >
+  </div>
+</header>
 <main>
-
-
-  {% include 'inc/slider.html' %}
-
   <section class="container-fluid container-lg">
+    <!-- Top Brands Sliding Animation -->
+    <div class="slider">
+      <div class="list">
+        <div class="item" style="--position: 1">
+          <img src="{% static 'images/agtech.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 2">
+          <img src="{% static 'images/OIP.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 3">
+          <img src="{% static 'images/tata-brand.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 4">
+          <img src="{% static 'images/rasi-brand.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 5">
+          <img src="{% static 'images/spic-brand.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 6">
+          <img src="{% static 'images/agtech.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 7">
+          <img src="{% static 'images/OIP.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 8">
+          <img src="{% static 'images/tata-brand.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 9">
+          <img src="{% static 'images/rasi-brand.png' %}" alt="" />
+        </div>
+        <div class="item" style="--position: 10">
+          <img src="{% static 'images/spic-brand.png' %}" alt="" />
+        </div>
+      </div>
+    </div>
+    <!-- End Top Brands Sliding Animation -->
 
     {% if trend_products %}
     <!-- Card Collection -->
     <div class="mt-4 position-relative">
       <div class="d-flex justify-content-between align-items-center">
-        <h2>Trend Products</h2>
-        <a href="#" class="">View all <i class="fas fa-arrow-right"></i></a>
+        <h3 class="about-heading">
+          Trend <b class="text-success">Products</b>
+        </h3>
+        <a href="#" class="text-success"
+          >View all <i class="fas fa-angle-right"></i
+        ></a>
       </div>
 
-      <button class="d-none d-sm-block scroll-button left btn btn-success rounded-circle fade-in"
-        onclick="leftScroll()"><i class="fas fa-arrow-left"></i></button>
-      <div class="card-wrapper" id="cardWrapper">
-        {% for product in trend_products %}
+      <button
+        class="d-none d-sm-block scroll-button left btn btn-success rounded-circle fade-in"
+        onclick="leftScroll('cardWrapper1')"
+      >
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="card-wrapper" id="cardWrapper1">
+        {% for product in trend_products %} 
         {% if product.is_show %}
-        {% include 'inc/card.html' %}
-        {% endif %}
-        {% endfor %}
+         {% include 'inc/card.html' %} 
+         {% endif %} 
+         {% endfor %}
       </div>
-      <button class="d-none d-sm-block scroll-button right btn btn-success rounded-circle" onclick="rightScroll()"><i
-          class="fas fa-arrow-right"></i></button>
+      <button
+        class="d-none d-sm-block scroll-button right btn btn-success rounded-circle fade-in"
+        onclick="rightScroll('cardWrapper1')"
+      >
+        <i class="fas fa-arrow-right"></i>
+      </button>
     </div>
     <!-- End Card Collection -->
     {% endif %}
+
+    <!-- Category Slider -->
+
+    <div class="slider-container">
+      <div>
+        <h3 class="about-heading text-uppercase">
+          Our <b class="text-success">Categories</b>
+        </h3>
+      </div>
+      <div
+        id="productCarousel"
+        class="carousel slide mt-5"
+        data-ride="carousel"
+      >
+        <!-- The slideshow -->
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="image-container">
+              <img src="{% static 'images/hdepbag.png' %}" />
+            </div>
+            <p class="product-title">HDEP Bags</p>
+          </div>
+          <div class="carousel-item">
+            <div class="image-container">
+              <img src="{% static 'images/sprayer.png' %}" alt="Watermelon" />
+            </div>
+            <p class="product-title">Power Sprayer</p>
+          </div>
+          <div class="carousel-item">
+            <div class="image-container">
+              <img src="{% static 'images/insecticides.png' %}" alt="Tomato" />
+            </div>
+            <p class="product-title">Insecticides</p>
+          </div>
+        </div>
+
+        <!-- Left and right controls inside the box -->
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#productCarousel"
+          data-bs-slide="prev"
+        >
+          <span class="btn btn-success rounded-circle fade-in"
+            ><i class="fas fa-arrow-left"></i
+          ></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#productCarousel"
+          data-bs-slide="next"
+        >
+          <!-- <i class="fas fa-arrow-right btn btn-success rounded-circle" aria-hidden="true"></i> -->
+          <span class="btn btn-success rounded-circle fade-in"
+            ><i class="fas fa-arrow-right"></i
+          ></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+    <!-- End Category Slider -->
 
     {% if most_viewed_products %}
-    <!-- Card Collection -->
     <div class="mt-4 position-relative">
       <div class="d-flex justify-content-between align-items-center">
-        <h2>Most Viewed Products</h2>
-        <a href="#" class="">View all <i class="fas fa-arrow-right"></i></a>
+        <h3 class="about-heading">
+          Most Vie<b class="text-success">wed Products</b>
+        </h3>
+        <a href="#" class="text-success"
+          >View all <i class="fas fa-angle-right"></i
+        ></a>
       </div>
 
-      <button class="d-none d-sm-block scroll-button left btn btn-success rounded-circle fade-in"
-        onclick="leftScroll()"><i class="fas fa-arrow-left"></i></button>
-      <div class="card-wrapper" id="cardWrapper">
+      <button
+        class="d-none d-sm-block scroll-button left btn btn-success rounded-circle fade-in"
+        onclick="leftScroll('cardWrapper2')"
+      >
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="card-wrapper" id="cardWrapper2">
         {% for product in most_viewed_products %}
-        {% if product.is_show %}
-        {% include 'inc/card.html' %}
-        {% endif %}
+         {% if product.is_show %} 
+        {% include 'inc/card.html' %} 
+        {% endif %} 
         {% endfor %}
       </div>
-      <button class="d-none d-sm-block scroll-button right btn btn-success rounded-circle" onclick="rightScroll()"><i
-          class="fas fa-arrow-right"></i></button>
+      <button
+        class="d-none d-sm-block scroll-button right btn btn-success rounded-circle fade-in"
+        onclick="rightScroll('cardWrapper2')"
+      >
+        <i class="fas fa-arrow-right"></i>
+      </button>
     </div>
     <!-- End Card Collection -->
     {% endif %}
-     
-  </section>
 
+    <!-- Signup Now Card -->
+    <div
+      class="card mb-4 shadow fade-in"
+      style="font-family: Poppins, sans-serif"
+    >
+      <div class="row g-0">
+        <!-- Card Content -->
+        <div class="col-md-8 p-4">
+          <h2 class="card-title">Ready to Grow with Us? Register Now!</h2>
+          <p class="card-text">Discover Quality Products for Every Harvest!</p>
+
+          <ul class="list-unstyled">
+            <li class="mb-2">✅ Better Fertilizer, Bigger Harvests!</li>
+            <li class="mb-2">✅ Grow More with Less Effort!</li>
+            <li class="mb-2">✅ Fertilizer That Makes a Difference!</li>
+          </ul>
+
+          <a href="#" class="btn btn-theme">Signup now</a>
+        </div>
+
+        <!-- Card Image -->
+        <div class="col-md-4 position-relative">
+          <img
+            src="{% static 'images/login-now.jpg' %}"
+            alt="Supplier Image"
+            class="img-fluid rounded-end h-100"
+          />
+          <div
+            class="overlay"
+            style="background-color: rgb(0, 0, 0, 0.2)"
+          ></div>
+        </div>
+      </div>
+    </div>
+    <!-- End Signup Now Card -->
+
+    <!-- Thirukural Card -->
+    <div
+      class="card mb-4 shadow fade-in d-flex d-md-none"
+      style="font-family: Poppins, sans-serif"
+    >
+      <div class="row g-0">
+        <!-- Card Image -->
+        <div class="col-md-4 position-relative">
+          <img
+            src="{% static 'images/thiruvalluvar.png' %}"
+            alt="Supplier Image"
+            class="img-fluid rounded-end h-100"
+            style="filter: drop-shadow(-4px 4px 6px #25252d)"
+          />
+        </div>
+
+        <!-- Card Content -->
+        <div class="col-md-8 pt-4 px-2">
+          <p
+            class="thirukural text-dark"
+            style="font-size: 0.9rem; word-spacing: 0"
+          >
+            உழுதுண்டு வாழ்வாரே வாழ்வார்மற் றெல்லாம்<br />
+            தொழுதுண்டு பின்செல் பவர். (குறள்-1033)<br />
+          </p>
+          <p
+            class="thirukural text-muted"
+            style="font-size: 0.9rem; word-spacing: 0"
+          >
+            விளக்கம் :<br />
+            &nbsp; &nbsp; &nbsp; உழவு செய்து அதனால்‌ கிடைத்ததை உண்டு
+            வாழ்கின்றவரே உரிமையோடு வாழ்கின்றவர்‌; மற்றவர்‌ எல்லோரும்‌ பிறரைத்‌
+            தொழுது உண்டு பின்‌ செல்கின்றவரே.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- End Thirukural Card -->
+  </section>
 </main>
 
 <script>
@@ -74,27 +275,62 @@
       document.documentElement.scrollTop > 20
     ) {
       document.getElementsByClassName("navbar")[0].style.backgroundColor =
-        "var(--theme-color)";
+        "var(--primary-color)";
     } else {
       document.getElementsByClassName("navbar")[0].style.backgroundColor =
         "transparent";
     }
   }
 
-  const leftScroll = () => {
-    document.getElementById("cardWrapper").scrollBy({
+  const leftScroll = (id) => {
+    document.getElementById(id).scrollBy({
       left: -294,
       behavior: "smooth",
     });
   };
 
-  const rightScroll = () => {
-    document.getElementById("cardWrapper").scrollBy({
+  const rightScroll = (id) => {
+    document.getElementById(id).scrollBy({
       left: 294,
       behavior: "smooth",
     });
   };
 </script>
 
+<script>
+  const addToCart = (addBtn) => {
+    if(addBtn.classList[0] == 'add-to-cart'){
+      const myToast = document.getElementById("myToast");
+      const toast = new bootstrap.Toast(myToast);
+      const url = addBtn.dataset.url;
+      toast.hide()
+      fetch(url, {
+        method: "POST",
+        headers: {
+          'X-CSRFToken': '{{csrf_token}}'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+          const cartCount = document.getElementById("cart-count");
+          const toastBody = myToast.querySelector(".toast-body");
+          if (data.status == "success") {
+            if (data.data) {
+              cartCount.innerText = data.data.count;
+            }
+            addBtn.classList.add("d-none");
+            addBtn.nextElementSibling.classList.remove("d-none");
+            }
+            toastBody.innerText = data.message
+            toast.show();
+            if (data.url) {
+              window.location = data.url;
+              return;
+            }
+          })
+      .catch(error => console.error('Error:', error));
+      }
+  };
+</script>
 
 {% endblock %}
