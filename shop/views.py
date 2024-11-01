@@ -14,19 +14,24 @@ import json
 # from .form import ForgotPasswordForm
 # from django.shortcuts import render, get_object_or_404
 
-def context_data():
+def context_data(user=None):
     context = {
         'website_name' : 'indian fertilizer',
         'header' : True,
-        'footer' : True
+        'footer' : True,
     }
+    if user:
+        context['cart_count'] = Cart.objects.filter(user=user).count() if user.is_authenticated else 0
     return context
 
+def search_view(request):
+    query = request.GET.get('query', '')
+    products = Product.objects.filter(name__icontains=query)
+    products_list = list(products.values('id', 'name'))
+    return JsonResponse({'products_list': products_list})
+
 def home(request):
-    context = context_data()
-    cart_count = 0
-    if request.user.is_authenticated:
-        cart_count = Cart.objects.filter(user=request.user).count()
+    context = context_data(request.user)
     # Fetching trending products
     trend_produts = Product.objects.filter(is_trend=1, is_show=1).annotate(
         avg_rating = Avg('reviews__rating'),
@@ -37,27 +42,27 @@ def home(request):
         avg_rating = Avg('reviews__rating'),
         review_count = Count('reviews')
     )
-    context['cart_count'] = cart_count
     context['trend_products'] = trend_produts
     context['most_viewed_products'] = most_viewed_products
     return render(request, "shop/home.html", context=context)
 
-def add_to_cart(request):
+def add_to_cart(request, product_id=None):
     data = {}
     if request.user.is_authenticated:
         if request.method == 'POST':
-            product_id = request.POST['product_id']
+            print(product_id)
             product = Product.objects.get(id=product_id)
             if product:
                 cart, created = Cart.objects.get_or_create(user=request.user, product=product)
-                if not created:
-                    if cart.qty <= 9:
+                if cart.qty <= 9:
+                    if not created:
                         cart.qty += 1
                         cart.save()
-                        data['count'] = Cart.objects.filter(user=request.user).count()
-                        return JsonResponse({'status' : 'success', 'message' : 'Cart added successfully.', 'data' : data}, status=200)
-                    
-                    return JsonResponse({'status': 'error', 'message' : 'Only 10 products added.'})
+
+                    data['count'] = Cart.objects.filter(user=request.user).count()
+                    return JsonResponse({'status' : 'success', 'message' : 'Cart added successfully.', 'data' : data}, status=200)
+
+                return JsonResponse({'status': 'error', 'message' : 'Only 10 products added.'}, status=200)
             
             return JsonResponse({'status' : 'error', 'message' : "Product doesn't exsist."}, status=200)
         
@@ -68,10 +73,13 @@ def add_to_cart(request):
 
     
 def cart_page(request):
+    context = context_data(request.user)
     if request.user.is_authenticated:
+        if request.method == 'POST':
+            print('delete')
         cart = Cart.objects.filter(user=request.user)
-        cart_count = cart.count()
-        return render(request, "shop/products/add_to_cart.html",{'cart':cart})
+        context['cart_products'] = cart
+        return render(request, "shop/cart.html", context=context)
     else:
         messages.warning(request, "Login Required")
         return redirect('login')
@@ -102,13 +110,12 @@ def cart_page(request):
 #     else:
 #         return redirect('collections')
 
-# def product_details(request, cname, pname):
-#     if Category.objects.filter(product_title=cname, status=0):
-#         if productCollection.objects.filter(name_product=pname, status=0):
-#             products = productCollection.objects.filter(name_product=pname, status=0).first()
-#             return render(request, "shop/products/products_details.html", {'products': products})
-#         else:
-#             return redirect('collections')
+def product_details(request, product_id=None):
+    context = context_data(request.user)
+    product = Product.objects.filter(id=product_id)
+    print('product :', product)
+    context['product'] = product
+    return render(request, "shop/product_details.html", context=context)
 
 # def collections(request):
 #     # Retrieve distinct brand names

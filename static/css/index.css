@@ -33,7 +33,7 @@ body {
 }
 
 .navbar {
-  background-color: transparent;
+  background-color: var(--primary-color);
 }
 
 .navbar-head {

@@ -35,10 +35,10 @@
     </div>
 
 
-    <!-- <div class="d-flex my-2"> -->
-      <button class="add-to-cart btn btn-success w-100" data-product-id={{product.id}} onclick="addToCart(event.target)">
+    <!-- <div class="position-relative"> -->
+      <button class="add-to-cart btn btn-success w-100" data-product-id={{product.id}} data-url="{% url 'add_to_cart' product.id %}" onclick="addToCart(event.target)">
         Add to cart
-        <i class="fas fa-shopping-cart" onclick="addToCart(event.target.parentElement)"></i>
+        <i class="fas fa-shopping-cart"></i>
       </button>
       <a class="go-to-cart btn btn-success w-100 d-none" href="{% url 'cart' %}">
         Go to cart

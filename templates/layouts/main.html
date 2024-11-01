@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- Bootstrsap Files -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+    <!-- Bootstrap Icons CSS -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css">
     <!-- Icon -->
     <link rel="icon" href="{% static 'images/favicon.ico.ico' %}" />
     <!-- Fontawsome CDN -->
@@ -31,7 +34,6 @@
     {% block content %} 
     {% include 'inc/message.html' %} 
     {% endblock content %} 
-    {% include 'inc/modal.html' %} 
     {% include 'inc/toast.html' %} 
     
     {% if footer %}

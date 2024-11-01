@@ -1,43 +1,8 @@
 {% extends 'layouts/main.html' %} {% load static %} {% block title %} Home page
 | {{website_name}} {% endblock title %} {% block content %}
 <style>
-  /* Keyframes for bounce effect */
-  @keyframes bounce {
-    0%,
-    20%,
-    50%,
-    80%,
-    100% {
-      transform: translateY(0);
-    }
-    40% {
-      transform: translateY(-20px);
-    }
-    60% {
-      transform: translateY(-10px);
-    }
-  }
-
-  /* Keyframes for fade-in effect */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  /* Apply bounce effect to the icon */
-  .animated-icon {
-    animation: bounce 1s ease;
-  }
-
-  /* Apply fade-in effect to the modal content */
-  .animated-modal-content {
-    animation: fadeIn 0.5s ease;
-    border-radius: 10px;
-    padding: 20px;
+  .navbar {
+    background-color: transparent;
   }
 </style>
 <header>
@@ -334,45 +299,37 @@
 
 <script>
   const addToCart = (addBtn) => {
-    const cartCount = document.getElementById("cart-count");
-    const myToast = document.getElementById("myToast");
-    const toast = new bootstrap.Toast(myToast);
-    const toastBody = myToast.querySelector(".toast-body");
-    const productId = addBtn.dataset.productId;
-    toast.hide()
-
-    $.ajax({
-      url: "{% url 'add_to_cart' %}",
-      type: "POST",
-      data: {
-        product_id: productId,
-        csrfmiddlewaretoken: "{{ csrf_token }}",
-      },
-      success: (res) => {
-        if (res.status == "error") {
+    if(addBtn.classList[0] == 'add-to-cart'){
+      const myToast = document.getElementById("myToast");
+      const toast = new bootstrap.Toast(myToast);
+      const url = addBtn.dataset.url;
+      toast.hide()
+      fetch(url, {
+        method: "POST",
+        headers: {
+          'X-CSRFToken': '{{csrf_token}}'
         }
-
-        if (res.status == "success") {
-          if (res.data) {
-            cartCount.innerText = res.data.count;
-          }
-
-          addBtn.classList.add("d-none");
-          addBtn.nextElementSibling.classList.remove("d-none");
-        }
-
-        toastBody.innerText = res.message
-        toast.show();
-
-        if (res.url) {
-          window.location = res.url;
-          return;
-        }
-      },
-      error: () => {
-        console.log("error ocured");
-      },
-    });
+      })
+      .then(response => response.json())
+      .then(data => {
+          const cartCount = document.getElementById("cart-count");
+          const toastBody = myToast.querySelector(".toast-body");
+          if (data.status == "success") {
+            if (data.data) {
+              cartCount.innerText = data.data.count;
+            }
+            addBtn.classList.add("d-none");
+            addBtn.nextElementSibling.classList.remove("d-none");
+            }
+            toastBody.innerText = data.message
+            toast.show();
+            if (data.url) {
+              window.location = data.url;
+              return;
+            }
+          })
+      .catch(error => console.error('Error:', error));
+      }
   };
 </script>
 
