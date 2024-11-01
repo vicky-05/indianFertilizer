@@ -1,0 +1,117 @@
+{% extends 'layouts/main.html' %} 
+{% load static %} 
+{% block title %} 
+About Us | {{website_name}} 
+{% endblock title %} 
+{% block styles %} 
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<main class="mt-4">
+
+    <!-- About Us Section -->
+    <section class="about-section text-center">
+        <div class="container">
+            <h1>About Us</h1>
+            <p class="lead mt-3">Welcome to India Fertilizer! We are committed to providing quality products with
+                exceptional service to enhance your shopping experience.</p>
+        </div>
+    </section>
+    <!-- Mission and Vision Section -->
+    <section class="mission-vision-section">
+        <div class="container">
+            <div class="row">
+                <!-- Mission -->
+                <div class="col-md-6 mb-4">
+                    <div class="card card-custom">
+                        <div class="card-body">
+                            <h4 class="about-heading">Our <b class="text-uppercase text-success">Mission</b></h4>
+                            <p class="card-text">To deliver the finest products that enrich our customers' lives and to
+                                foster an engaging, sustainable community through innovation and excellence.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Vision -->
+                <div class="col-md-6 mb-4">
+                    <div class="card card-custom">
+                        <div class="card-body">
+                            <h4 class="about-heading">Our <b class="text-uppercase text-success">Vision</b></h4>
+                            <p class="card-text">To be a leading eCommerce platform known for quality, sustainability,
+                                and customer-first values, transforming lives through inspired shopping experiences.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Our Story Section -->
+    <section class="story-section">
+        <div class="container text-center">
+            <h4 class="about-heading">Our <b class="text-uppercase text-success">Story</b></h4>
+            <p class="mt-4">India Fertilizer began with a simple idea: to bring the best products to our customers with
+                care and dedication. Founded in 1987, we started with a small team and a big dream. Today, we have grown
+                into a trusted brand, known for our commitment to quality and service.</p>
+            <p class="mt-2">Every step of the way, we have stayed true to our roots, ensuring that our values of
+                integrity, innovation, and community shine through. We believe that shopping should be an experience—one
+                that brings joy, convenience, and trust. Thank you for being part of our journey!</p>
+        </div>
+    </section>
+    <!-- Founder Section -->
+    <section class="founder-section">
+        <div class="container">
+            <h4 class="about-heading">Our <b class="text-uppercase text-success">Founder</b></h4>
+            <img src="static/images/owner-removebg-preview.png" alt="Founder and Parents"
+                class="img-fluid mt-4 rounded-circle" style="max-width: 300px;">
+            <p class="mt-3">"Our founder established India Fertilizer with a vision and dedication that has blessed every step of our journey. His legacy inspires us to carry forward his commitment to quality, innovation, and service in all that we do."</p>
+        </div>
+    </section>
+    <!-- Co-Founder Section -->
+    <section class="co-founder-section">
+        <div class="container">
+            <h4 class="about-heading">Co-<b class="text-uppercase text-success">Founder</b></h4>
+            <img src="static/images/OIP.jfif" alt="Co-Founder" class="img-fluid mt-4 rounded-circle" style="max-width: 300px;">
+            <p class="mt-3">Our co-founder has been instrumental in shaping the vision and strategy of India Fertilizer,
+                ensuring that we maintain our commitment to quality and sustainability.</p>
+        </div>
+    </section>
+    <!-- Staff Section -->
+    <section class="staff-section">
+        <div class="container text-center">
+            <h4 class="about-heading">Meet Our <b class="text-uppercase text-success">Team</b></h4>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card card-custom">
+                        <div class="card-body">
+                            <img src="static/images/redhead-man-laughing_1368-37169.avif" alt="Staff Member 1" class="img-fluid"
+                                style="max-width: 100%;">
+                            <h5 class="card-title mt-2">Staff Member 1</h5>
+                            <p class="card-text">Role: [Role Description]</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card card-custom">
+                        <div class="card-body">
+                            <img src="static/images/OIP (1).jfif" alt="Staff Member 2" class="img-fluid" style="max-width: 100%;">
+                            <h5 class="card-title mt-2">Staff Member 2</h5>
+                            <p class="card-text">Role: [Role Description]</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card card-custom">
+                        <div class="card-body">
+                            <img src="static/images/ai-generated-happy-woman-thumbs-up-with-white-background-photo.jpg"
+                                alt="Staff Member 3" class="img-fluid" style="max-width: 100%;">
+                            <h5 class="card-title mt-2">Staff Member 3</h5>
+                            <p class="card-text">Role: [Role Description]</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+{% endblock content %}

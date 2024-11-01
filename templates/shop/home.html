@@ -89,7 +89,7 @@
     {% endif %}
 
     <!-- Category Slider -->
-
+    {% if category_list %}
     <div class="slider-container">
       <div>
         <h3 class="about-heading text-uppercase">
@@ -100,29 +100,20 @@
         id="productCarousel"
         class="carousel slide mt-5"
         data-ride="carousel"
+        data-bs-ride="carousel" data-bs-interval="3000"
       >
         <!-- The slideshow -->
         <div class="carousel-inner">
-          <div class="carousel-item active">
+          {% for category in category_list %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
             <div class="image-container">
-              <img src="{% static 'images/hdepbag.png' %}" />
+              <img src="{{ category.image.url }}" />
             </div>
-            <p class="product-title">HDEP Bags</p>
+            <p class="product-title">{{ category.name }}</p>
           </div>
-          <div class="carousel-item">
-            <div class="image-container">
-              <img src="{% static 'images/sprayer.png' %}" alt="Watermelon" />
-            </div>
-            <p class="product-title">Power Sprayer</p>
-          </div>
-          <div class="carousel-item">
-            <div class="image-container">
-              <img src="{% static 'images/insecticides.png' %}" alt="Tomato" />
-            </div>
-            <p class="product-title">Insecticides</p>
-          </div>
+          {% endfor %}
         </div>
-
+        
         <!-- Left and right controls inside the box -->
         <button
           class="carousel-control-prev"
@@ -149,6 +140,7 @@
         </button>
       </div>
     </div>
+    {% endif %}
     <!-- End Category Slider -->
 
     {% if most_viewed_products %}
