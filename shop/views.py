@@ -100,9 +100,11 @@ def cart_page(request):
 # #     return {'cart_count': cart_count}   
 
 
-# def categories(request):
-#     category = Category.objects.filter(status=0)
-#     return render(request, "shop/categories.html",{'category':category})
+def categories(request):
+    context = context_data(request.user)
+    category = Category.objects.all()
+    context['category'] = category
+    return render(request, "shop/categories.html",context=context)
 
 # # def home(request):
 # #     topBrands = TopBrands.objects.filter(status=0)
