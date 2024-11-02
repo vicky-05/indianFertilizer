@@ -26,22 +26,71 @@
     {% block styles %} {% endblock styles %}
   </head>
 
+  <style>
+    #spinner-container{
+      background-color: rgba(255, 255, 255, 0.5);
+      width: 100vw;
+      height: 100vh;
+      z-index: 5000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+
+    .btn-outline-success{
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+      background-color: var(--bg-color);
+    }
+
+    .btn-outline-success:hover{
+      background-color: var(--primary-color);
+      color: var(--primary-font-color);
+      border: 1px solid var(--primary-color);
+    }
+
+    .product-card:hover{
+      cursor: pointer;
+    }
+  </style>
+
   <body>
     {% if header %}
     <header>{% include 'inc/navbar.html' %}</header>
     {% endif %}
+
+
     
     {% block content %} 
     {% include 'inc/message.html' %} 
     {% endblock content %} 
     {% include 'inc/toast.html' %} 
+    <div class="d-none" id="spinner-container">
+      <div class="spinner-border text-success" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div> 
     
     {% if footer %}
     <footer>{% include 'inc/footer.html' %}</footer>
     {% endif %} 
     <script type="text/javascript">
 
+      const start_loading = () => {
+        let spinnerContainer = document.getElementById('spinner-container');
+        spinnerContainer.classList.remove('d-none');
+      }
+
+      const end_loading = () => {
+        let spinnerContainer = document.getElementById('spinner-container');
+        spinnerContainer.classList.add('d-none');
+      }
+
       const addToCart = (addBtn) => {
+        start_loading()
         const myToast = document.getElementById("myToast");
         const toast = new bootstrap.Toast(myToast);
         const url = addBtn.dataset.url;
@@ -54,6 +103,7 @@
         })
         .then(response => response.json())
         .then(data => {
+            end_loading()
             const cartCount = document.getElementById("cart-count");
             const toastBody = myToast.querySelector(".toast-body");
             if (data.status == "success") {
@@ -70,8 +120,15 @@
                 return;
               }
             })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+          end_loading()
+          console.error('Error:', error);
+          });
       };
+
+      const redirect = (url) => {
+        window.location = url;
+      }
 
     </script>
 

@@ -1,8 +1,8 @@
-document.getElementById('viewAllReviewsBtn').addEventListener('click', function () {
-    const hiddenReviews = document.querySelectorAll('.hidden-review');
-    hiddenReviews.forEach(review => review.style.display = 'block');
-    this.style.display = 'none'; // Hide the button after showing all reviews
-});
+// document.getElementById('viewAllReviewsBtn').addEventListener('click', function () {
+//     const hiddenReviews = document.querySelectorAll('.hidden-review');
+//     hiddenReviews.forEach(review => review.style.display = 'block');
+//     this.style.display = 'none'; // Hide the button after showing all reviews
+// });
 function changeImage(thumbnail) {
     document.getElementById('mainImage').src = thumbnail.src;
 }

@@ -20,11 +20,13 @@ def get_context_data(user=None):
         'header' : True,
         'footer' : True,
         'cart_products' : None,
-        'cart_count' : 0
+        'cart_count' : 0,
+        'cart_product_ids' : set()
     }
     if user.is_authenticated:
         cart_products = Cart.objects.filter(user=user)
         context['cart_products'] = cart_products
+        context['cart_product_ids'] = set(context['cart_products'].values_list('product', flat=True))
         context['cart_count'] = cart_products.count()
     return context
 
@@ -152,14 +154,10 @@ def product_details(request, product_id=None):
         reviews = ProductReview.objects.filter(product=product_id)
         same_products = Product.objects.filter(name__iexact=product.name)
 
-        print()
-        print('same products : ', same_products)
-        print()
-
         context['product'] = product
         context['reviews'] = reviews[:3]
         context['same_products'] = same_products
-        context['has_review'] = reviews.filter(user=request.user).count() == 0
+        context['has_review'] = reviews.filter(user=request.user).count() == 0 if request.user.is_authenticated else False
         try:
             context['cart_product'] = Cart.objects.get(user=request.user, product=product_id)
         except Exception:
@@ -258,10 +256,41 @@ def product_details(request, product_id=None):
 
 
 
+# def load_more_reviews(request):
+#     product_id = request.GET.get('product_id')
+#     offset = int(request.GET.get('offset', 3))
+#     limit = 3  # Number of reviews to load each time
+
+#     reviews = list(ProductReview.objects.filter(product_id=product_id)[offset:offset + limit].values())
+#     return JsonResponse({'reviews': reviews})
+
+
+
 def load_more_reviews(request):
     product_id = request.GET.get('product_id')
     offset = int(request.GET.get('offset', 3))
     limit = 3  # Number of reviews to load each time
 
-    reviews = list(ProductReview.objects.filter(product_id=product_id)[offset:offset + limit].values())
-    return JsonResponse({'reviews': reviews})
+    try:
+        product = Product.objects.get(id=product_id)
+    except Product.DoesNotExist:
+        return JsonResponse({'error': 'Product not found'}, status=404)
+
+    # Fetch reviews with user details, using pagination
+    reviews = ProductReview.objects.filter(product=product).select_related('user')[offset:offset + limit]
+    print(reviews)
+    
+    # Prepare the response data with specific user fields
+    review_data = [
+        {
+            'review': review.review,
+            'rating': review.rating,
+            'user': {
+                'username': review.user.username,
+                'profile_image_url': review.user.profile_img.url  # Add more fields as needed
+            }
+        }
+        for review in reviews
+    ]
+
+    return JsonResponse({'reviews': review_data})

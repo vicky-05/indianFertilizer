@@ -1,5 +1,7 @@
 <!-- Card -->
-<div class="m-1 mb-4 card col-11 col-sm-4 col-md-3  shadow fade-in">
+<div class="product-card m-1 mb-4 card col-11 col-sm-4 col-md-3 shadow fade-in" 
+data-url="{% url 'product_details' product.id %}"
+onclick="redirect(`{% url 'product_details' product.id %}`)">
   <div class="tags m-2">
     {% if product.discount_percentage != 0 %}
     <span class="discount-tag">{{product.discount_percentage}}% OFF</span>
@@ -35,19 +37,16 @@
     </div>
 
 
-    <!-- <div class="position-relative"> -->
-      <button class="add-to-cart btn btn-success w-100" data-url="{% url 'add_to_cart' product.id %}"
-       onclick="addToCart(event.target)">
-        Add to cart
-        <!-- <i class="fas fa-shopping-cart"></i> -->
-      </button>
-      <a class="go-to-cart btn btn-success w-100 d-none" href="{% url 'cart' %}">
-        Go to cart
-        <i class="fas fa-shopping-cart"></i>
-      </a>
-    <!-- </div> -->
+    {% if product.id not in cart_product_ids  %}
+    <button class="btn btn-success w-100 mb-2" onclick="addToCart(event.target)" 
+    data-url="{% url 'add_to_cart' product.id %}">Add to Cart</button>
+    <a href="{% url 'cart' %}" class="btn btn-success w-100 mb-2 d-none">Go to Cart</a>
+    {% else %}
+    <a href="{% url 'cart' %}" class="btn btn-success w-100 mb-2">Go to Cart</a>
+    {% endif %}
+
     <center class="mt-2">
-      <a href="#">More Details...</a>
+      <a href="{% url 'product_details' product.id %}">More Details...</a>
     </center>
   </div>
 </div>

@@ -82,10 +82,10 @@ Product details page | {{website_name}}
         /* Light green background on hover */
     }
 
-    .size-box.selected {
-        background-color: green;
+    .selected {
+        background-color: var(--primary-color);
         /* Fill color for selected box */
-        color: #fff;
+        color: var(--primary--font-color);
         /* Text color for selected box */
     }
 
@@ -161,6 +161,18 @@ Product details page | {{website_name}}
         background-color: #f9f9f9;
     }
 
+    .review-head{
+        display: flex;
+        align-items: center;   
+    }
+
+    .review-card > .review-head > img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50px;
+        margin-right: 20px;
+    }
+
     /* Star Rating Styling */
     .star-rating {
         color: #ffc107;
@@ -199,9 +211,9 @@ Product details page | {{website_name}}
         color: #ffc000;
     }
 
-
     #mainImage {
-        max-height: 500px;
+        height: 500px;
+        object-fit: contain;
     }
 </style>
 <main class="mt-5">
@@ -257,9 +269,11 @@ Product details page | {{website_name}}
                         >
                             <button 
                                 type="submit"
-                                class="size-box
+                                class="btn 
                                 {% if same_product.id == product.id %} 
-                                selected
+                                btn-success
+                                {% else %}
+                                btn-outline-success
                                 {% endif %}
                                 "
                             >
@@ -295,6 +309,7 @@ Product details page | {{website_name}}
                 {% if cart_product.product.id != product.id %}
                 <button class="btn btn-success w-100 mb-2" onclick="addToCart(event.target)" 
                 data-url="{% url 'add_to_cart' product.id %}">Add to Cart</button>
+                <a href="{% url 'cart' %}" class="btn btn-success w-100 mb-2 d-none">Go to Cart</a>
                 {% else %}
                 <a href="{% url 'cart' %}" class="btn btn-success w-100 mb-2">Go to Cart</a>
                 {% endif %}
@@ -359,14 +374,11 @@ Product details page | {{website_name}}
                             {% endif %}
                         </div>
 
-                        {% include 'inc/review modal.html' %}
-
                         <!-- Review Card -->
                         {% for review in reviews %}
-                        <div class="review-card mt-4 p-3 border rounded">
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="{{review.user.profile_img.url}}" alt="Customer Image" class="rounded-circle me-3" width="50"
-                                    height="50">
+                        <div class="review-card mt-2 rounded shadow px-4 pb-2 pt-3" id="review-card">
+                            <div class="review-head">
+                                <img src="{{review.user.profile_img.url}}" alt="Customer Image">
                                 <div>
                                     <h6 class="mb-0">{{review.user.username}}</h6>  
                                     <div class="star-rating">          
@@ -388,74 +400,62 @@ Product details page | {{website_name}}
                         <!-- End Review Card -->
                         {% endfor %}
 
-                      <!--   <div class="review-card mt-4 p-3 border rounded">
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="OIP (1).jfif" alt="Customer Image" class="rounded-circle me-3" width="50"
-                                    height="50">
-                                <div>
-                                    <h6 class="mb-0">Jane Smith</h6>
-                                    <div class="star-rating">
-                                        ★★★☆☆
-                                    </div>
-                                </div>
-                            </div>
-                            <p>"Good product, but the packaging could be improved. Overall, satisfied with my purchase."
-                            </p>
-                        </div> -->
-                        <!-- <div class="hidden-review">
-                            <div class="review-card mt-4 p-3 border rounded">
-                                <div class="d-flex align-items-center mb-3">
-                                    <img src="ai-generated-happy-woman-thumbs-up-with-white-background-photo.jpg"
-                                        alt="Customer Image" class="rounded-circle me-3" width="50" height="50">
-                                    <div>
-                                        <h6 class="mb-0">Alice Johnson</h6>
-                                        <div class="star-rating">★★★★★</div>
-                                    </div>
-                                </div>
-                                <p>"Amazing quality and value for money. Highly recommend this product!"</p>
-                            </div>
-                            <div class="review-card mt-4 p-3 border rounded ">
-                                <div class="d-flex align-items-center mb-3">
-                                    <img src="redhead-man-laughing_1368-37169.avif" alt="Customer Image"
-                                        class="rounded-circle me-3" width="50" height="50">
-                                    <div>
-                                        <h6 class="mb-0">Michael Brown</h6>
-                                        <div class="star-rating">★★★★☆</div>
-                                    </div>
-                                </div>
-                                <p>"The product is really good but took a while to arrive. Overall, happy with it."</p>
-                            </div>
-                        </div>
-                        <button id="viewAllReviewsBtn" class="btn btn-link mt-3">View All Reviews</button> -->
+                        {% include 'inc/review modal.html' %}
 
-                        <!-- reviews.html -->
                         <div id="reviews-container">
-                            {% for review in initial_reviews %}
-                                <p>{{ review.text }}</p>
-                            {% endfor %}
                         </div>
-                        <button id="load-more-btn">Load More</button>
-
+                        {% if reviews %}
+                        <button id="load-more-btn" class="btn btn-success rounded mt-3">Load More</button>
                         <script>
-                            const productId = "{{ product_id }}";
+                            const productId = "{{ product.id }}";
                             let offset = 3;  // Starting point after initial reviews
 
                             document.getElementById('load-more-btn').addEventListener('click', function() {
+                                start_loading()
                                 fetch(`/load_more_reviews/?product_id=${productId}&offset=${offset}`)
                                     .then(response => response.json())
                                     .then(data => {
-                                        data.reviews.forEach(review => {
-                                            let reviewElement = document.createElement('p');
-                                            reviewElement.textContent = review.text;
-                                            document.getElementById('reviews-container').appendChild(reviewElement);
-                                        });
-                                        offset += data.reviews.length;
-                                        if (data.reviews.length < 3) {
-                                            document.getElementById('load-more-btn').style.display = 'none';
+                                        end_loading()
+                                        if (data.reviews) {
+                                            data.reviews.forEach(review => {
+                                                let stars='';
+                                                for (var i=1 ; i<=5; i++) {
+                                                    if (i<=review.rating) {
+                                                        stars += '★'
+                                                    } else{
+                                                        stars += '☆'
+                                                    }
+                                                }
+
+                                                review_card = `<div class="review-card mt-2 rounded shadow px-4 pb-2 pt-3" id="review-card">
+                                                    <div class="review-head">
+                                                        <img src="${review.user.profile_image_url}" alt="Customer Image">
+                                                        <div>
+                                                            <h6 class="mb-0">${review.user.username}</h6>  
+                                                            <div class="star-rating"> 
+                                                            ${stars}             
+                                                            </div>
+                                                            <p>(${review.rating})</p>
+                                                        </div>
+                                                    </div>
+                                                    <p>"${review.review}"</p>
+                                                </div>`
+                                                document.getElementById('reviews-container').innerHTML += review_card
+                                            });
+                                            offset += data.reviews.length;
+                                            if (data.reviews.length < 3) {
+                                                document.getElementById('load-more-btn').style.display = 'none';
+                                            }
+                                        } else if (data.error) {
+                                            alert(data.error);
                                         }
                                     });
                             });
                         </script>
+                        {% else %}
+                        <p>No Reviews</p>
+                        {% endif %}
+
 
                     </div>
                     <!-- End Review Part -->
