@@ -61,7 +61,7 @@
             <input type="text" name="search" class="search-input" id="search-query" placeholder="Search products..." autocomplete=false>
           </div>
          <div class="result-box">
-           <div id="search-results">
+           <div id="search-results" class="shadow">
            </div>
          </div>
       </li>
@@ -100,6 +100,7 @@ document.getElementById('search-query').addEventListener('input', function() {
             fetch(`/search/?query=${query}`)
                 .then(response => response.json())
                 .then(data => {
+                  console.log(data)
                     const resultsContainer = document.getElementById('search-results');
                     resultsContainer.innerHTML = '';  // Clear previous results
                     const noResultItem = document.createElement('a');
@@ -107,6 +108,7 @@ document.getElementById('search-query').addEventListener('input', function() {
                         data.products_list.forEach(item => {
                             const resultItem = document.createElement('a');
                             resultItem.href = `/product_details/${item.id}`
+                            // resultItem.textContent = `$(item.name) - $(item.brand)`;  // Replace 'name' with the relevant field
                             resultItem.textContent = item.name;  // Replace 'name' with the relevant field
                             resultsContainer.appendChild(resultItem);
                         });

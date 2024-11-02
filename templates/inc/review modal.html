@@ -1,0 +1,73 @@
+
+<!-- Rating Product Modal -->
+<div class="modal fade" id="rateProductModal" tabindex="-1"
+    aria-labelledby="rateProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rateProductModalLabel">Rate This Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="ratingForm" method="POST" action="/add_review/{{product.id}}/">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="starRating" class="form-label">Rating</label>
+                        <div id="starRating">
+                            <span class="star" onclick="setRating(1)">★</span>
+                            <span class="star" onclick="setRating(2)">★</span>
+                            <span class="star" onclick="setRating(3)">★</span>
+                            <span class="star" onclick="setRating(4)">★</span>
+                            <span class="star" onclick="setRating(5)">★</span>
+                        </div>
+                        <input type="hidden" id="ratingValue" name="ratingValue" value="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="feedback" class="form-label">Feedback</label>
+                        <textarea class="form-control" id="feedback" rows="3" name="feedback" 
+                            required></textarea>
+                    </div>
+                    <!-- <div class="mb-3">
+                        <label for="productImage" class="form-label">Upload an Image
+                            (optional)</label>
+                        <input type="file" class="form-control" id="productImage"
+                            accept="image/*">
+                    </div> -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success text-uppercase fw-bold"
+                            onclick="submitRating(event)">Submit</button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<!-- End Rating Product Modal -->
+
+<script type="text/javascript">
+    
+function submitRating(e) {
+    e.preventDefault();
+    const feedback = document.getElementById('feedback').value;
+    const imageInput = document.getElementById('productImage').files[0];
+
+    if (selectedRating === 0 || !feedback) {
+        alert('Please provide a rating and feedback.');
+        return;
+    }
+
+    // Here you can handle form submission, e.g., send data to a server or store it
+    alert(`Rating: ${selectedRating} stars\nFeedback: ${feedback}\nImage: ${imageInput ? imageInput.name : 'No image uploaded'}`);
+
+    // Close the modal after submission
+    $('#rateProductModal').modal('hide');
+    document.getElementById('ratingForm').reset();
+    selectedRating = 0; // Reset rating
+    setRating(0); // Reset stars
+}
+
+</script>

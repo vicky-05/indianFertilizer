@@ -289,40 +289,5 @@
   };
 </script>
 
-<script>
-  const addToCart = (addBtn) => {
-    if(addBtn.classList[0] == 'add-to-cart'){
-      const myToast = document.getElementById("myToast");
-      const toast = new bootstrap.Toast(myToast);
-      const url = addBtn.dataset.url;
-      toast.hide()
-      fetch(url, {
-        method: "POST",
-        headers: {
-          'X-CSRFToken': '{{csrf_token}}'
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-          const cartCount = document.getElementById("cart-count");
-          const toastBody = myToast.querySelector(".toast-body");
-          if (data.status == "success") {
-            if (data.data) {
-              cartCount.innerText = data.data.count;
-            }
-            addBtn.classList.add("d-none");
-            addBtn.nextElementSibling.classList.remove("d-none");
-            }
-            toastBody.innerText = data.message
-            toast.show();
-            if (data.url) {
-              window.location = data.url;
-              return;
-            }
-          })
-      .catch(error => console.error('Error:', error));
-      }
-  };
-</script>
 
 {% endblock %}

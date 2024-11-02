@@ -39,10 +39,44 @@
     {% if footer %}
     <footer>{% include 'inc/footer.html' %}</footer>
     {% endif %} 
+    <script type="text/javascript">
+
+      const addToCart = (addBtn) => {
+        const myToast = document.getElementById("myToast");
+        const toast = new bootstrap.Toast(myToast);
+        const url = addBtn.dataset.url;
+        toast.hide()
+        fetch(url, {
+          method: "POST",
+          headers: {
+            'X-CSRFToken': '{{csrf_token}}'
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const cartCount = document.getElementById("cart-count");
+            const toastBody = myToast.querySelector(".toast-body");
+            if (data.status == "success") {
+              if (data.data) {
+                cartCount.innerText = data.data.count;
+              }
+              addBtn.classList.add("d-none");
+              addBtn.nextElementSibling.classList.remove("d-none");
+              }
+              toastBody.innerText = data.message
+              toast.show();
+              if (data.url) {
+                window.location = data.url;
+                return;
+              }
+            })
+        .catch(error => console.error('Error:', error));
+      };
+
+    </script>
+
     {% block scripts %}
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'js/index.js' %}"></script>
 
     {% endblock scripts %}

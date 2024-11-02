@@ -1,11 +1,3 @@
-function selectUnit(button) {
-    // Remove 'selected' class from all buttons
-    const unitButtons = document.querySelectorAll('.unit-btn');
-    unitButtons.forEach(btn => btn.classList.remove('selected'));
-
-    // Add 'selected' class to the clicked button
-    button.classList.add('selected');
-}
 document.getElementById('viewAllReviewsBtn').addEventListener('click', function () {
     const hiddenReviews = document.querySelectorAll('.hidden-review');
     hiddenReviews.forEach(review => review.style.display = 'block');
