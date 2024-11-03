@@ -194,6 +194,8 @@ input[type="number"]::-webkit-outer-spin-button {
 /* For Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
+  -webkit-appearance: none;
+  appearance: none;
   text-align: center;
 }
 
@@ -368,6 +370,9 @@ input[type="number"] {
 .card-title {
   font-size: 1.5em;
   font-weight: bold;
+  white-space: nowrap; /* Prevents wrapping */
+  text-overflow: ellipsis; /* Adds ellipsis */
+  max-width: 100%; /* Ensures it doesn't exceed the card width */
 }
 
 .card-text {
