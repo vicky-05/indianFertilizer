@@ -14,26 +14,33 @@ import json
 # from .form import ForgotPasswordForm
 # from django.shortcuts import render, get_object_or_404
 
-def context_data(user=None):
+def get_context_data(user=None):
     context = {
         'website_name' : 'indian fertilizer',
         'header' : True,
         'footer' : True,
+        'cart_products' : None,
+        'cart_count' : 0,
+        'cart_product_ids' : set()
     }
-    if user:
-        context['cart_count'] = Cart.objects.filter(user=user).count() if user.is_authenticated else 0
+    if user.is_authenticated:
+        cart_products = Cart.objects.filter(user=user)
+        context['cart_products'] = cart_products
+        context['cart_product_ids'] = set(context['cart_products'].values_list('product', flat=True))
+        context['cart_count'] = cart_products.count()
     return context
 
 def search_view(request):
     query = request.GET.get('query', '')
     products = Product.objects.filter(name__icontains=query)
-    products_list = list(products.values('id', 'name'))
+    # products = Product.objects.filter(Q(name__icontains=query) | Q(brand__icontains=query))
+    products_list = list(products.values('id', 'name', 'brand'))
     return JsonResponse({'products_list': products_list})
 
 def home(request):
-    context = context_data(request.user)
+    context = get_context_data(request.user)
     # Fetching trending products
-    trend_produts = Product.objects.filter(is_trend=1, is_show=1).annotate(
+    trend_produts = Product.objects.filter(is_trend=1, is_show=1)[:10].annotate(
         avg_rating = Avg('reviews__rating'),
         review_count = Count('reviews')
     )
@@ -42,6 +49,7 @@ def home(request):
         avg_rating = Avg('reviews__rating'),
         review_count = Count('reviews')
     )
+
     # Fetching category list
     category_list = Category.objects.all()
 
@@ -51,14 +59,15 @@ def home(request):
     return render(request, "shop/home.html", context=context)
 
 def about(request):
-    context = context_data(request.user)
+    context = get_context_data(request.user)
     return render(request,"shop/about.html",context=context)
 
 def add_to_cart(request, product_id=None):
     data = {}
     if request.user.is_authenticated:
         if request.method == 'POST':
-            print(product_id)
+            product_qty = request.POST.get('product_qty', None)
+            print(request.body)
             product = Product.objects.get(id=product_id)
             if product:
                 cart, created = Cart.objects.get_or_create(user=request.user, product=product)
@@ -79,9 +88,29 @@ def add_to_cart(request, product_id=None):
     return JsonResponse({'status' : 'error', 'message' : "Please Login.", 'url' : '/login/'}, status=200)
 
 
+
+def add_review(request, product_id=None):
+    if request.user.is_authenticated:
+        if product_id:
+            if request.method == 'POST':
+                if ProductReview.objects.filter(user=request.user, product=product_id).count() == 0:
+                    feedback = request.POST.get('feedback', None)
+                    rating_value = request.POST.get('ratingValue', None)
+                    product = Product.objects.get(id=product_id)
+                    if feedback and rating_value:
+                        review, created = ProductReview.objects.get_or_create(user=request.user, product=product, review=feedback, rating=rating_value)
+                        if created:
+                            review.save()
+
+            return redirect('/product_details/' + str(product_id))
+
+        return redirect('home')
+
+    return redirect('login')
+
     
 def cart_page(request):
-    context = context_data(request.user)
+    context = get_context_data(request.user)
     if request.user.is_authenticated:
         if request.method == 'POST':
             print('delete')
@@ -101,7 +130,7 @@ def cart_page(request):
 
 
 def categories(request):
-    context = context_data(request.user)
+    context = get_context_data(request.user)
     category = Category.objects.all()
     context['category'] = category
     return render(request, "shop/categories.html",context=context)
@@ -122,13 +151,19 @@ def categories(request):
 
 def product_details(request, product_id=None):
     if product_id:
-        context = context_data(request.user)
-        cart_product = Cart.objects.get(user=request.user, product=product_id)
+        context = get_context_data(request.user)
         product = Product.objects.get(id=product_id)
         reviews = ProductReview.objects.filter(product=product_id)
+        same_products = Product.objects.filter(name__iexact=product.name)
+
         context['product'] = product
-        context['reviews'] = reviews
-        context['product_qty'] = cart_product.qty if request.user.is_authenticated else 0
+        context['reviews'] = reviews[:3]
+        context['same_products'] = same_products
+        context['has_review'] = reviews.filter(user=request.user).count() == 0 if request.user.is_authenticated else False
+        try:
+            context['cart_product'] = Cart.objects.get(user=request.user, product=product_id)
+        except Exception:
+            context['cart_product'] = None
         return render(request, "shop/product_details.html", context=context)
 
 # def collections(request):
@@ -220,3 +255,44 @@ def product_details(request, product_id=None):
 #             messages.error(request, 'Session expired. Please try the forgot password process again.')
 #             return redirect('forgot_pass')
 #     return render(request, 'shop/products/reset_password.html')
+
+
+
+# def load_more_reviews(request):
+#     product_id = request.GET.get('product_id')
+#     offset = int(request.GET.get('offset', 3))
+#     limit = 3  # Number of reviews to load each time
+
+#     reviews = list(ProductReview.objects.filter(product_id=product_id)[offset:offset + limit].values())
+#     return JsonResponse({'reviews': reviews})
+
+
+
+def load_more_reviews(request):
+    product_id = request.GET.get('product_id')
+    offset = int(request.GET.get('offset', 3))
+    limit = 3  # Number of reviews to load each time
+
+    try:
+        product = Product.objects.get(id=product_id)
+    except Product.DoesNotExist:
+        return JsonResponse({'error': 'Product not found'}, status=404)
+
+    # Fetch reviews with user details, using pagination
+    reviews = ProductReview.objects.filter(product=product).select_related('user')[offset:offset + limit]
+    print(reviews)
+    
+    # Prepare the response data with specific user fields
+    review_data = [
+        {
+            'review': review.review,
+            'rating': review.rating,
+            'user': {
+                'username': review.user.username,
+                'profile_image_url': review.user.profile_img.url  # Add more fields as needed
+            }
+        }
+        for review in reviews
+    ]
+
+    return JsonResponse({'reviews': review_data})
