@@ -1,5 +1,6 @@
 {% extends 'layouts/main.html' %} 
 {% load static %} 
+{% load custom_tags %} 
 {% block title %} 
 Cart page | {{website_name}} 
 {% endblock title %} 
@@ -14,37 +15,51 @@ Cart page | {{website_name}}
 <div class="container my-5">
 
     <div class="row">
+        
         <!-- Cart Items (Left Column) -->
         <div class="col-lg-8" id="productSection">
             <div class="empty-cart d-none" id="emptyCartMessage">
-                <img src="empty-cart-4615794-3822062-removebg-preview.png" alt="Empty Cart Image">
+                <img src="{% static 'images/empty-cart-image.png' %}" alt="Empty Cart Image">
                 <h4>Your cart is currently empty.</h4>
                 <p>Browse our products and add items to your cart!</p>
-                <a href="products.html" class="btn btn-primary">Continue Shopping</a>
+                <a href="#" class="btn btn-primary">Continue Shopping</a>
             </div>
 
             <div id="cartItems">
-                {% for p in cart_products %}
-                <div class="row cart-item align-items-center">
+                {% for cart_product in cart_products %}
+                <form action="/cart" method="POST" class="row cart-item align-items-center">
                     <div class="col-md-2">
-                        <img src="{{ p.product.image.url }}" alt="Product Image" class="img-fluid">
+                        <img src="{{ cart_product.product.image.url }}" alt="Product Image" 
+                            class="img-fluid">
                     </div>
                     <div class="col-md-3">
-                        <h5>{{p.product.name}}</h5>
-                        <p>₹{{p.product.selling_price}}</p>
+                        <h5>{{cart_product.product.name}}</h5>
+                        <p>{{cart_product.product.weight}}{{cart_product.product.unit_of_messure}}</p>
+                        <p>₹{{cart_product.product.selling_price}}</p>
                     </div>
-                    <div class="col-md-2">
-                        <input type="number" class="form-control quantity" value="{{p.qty}}" min="1"
-                            onchange="updateTotal()" >
+                    <input type="number" class="d-none" value="{{cart_product.product.id}}" 
+                        name="product_id">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <button type="button" class="btn btn-secondary input-group-text">-</button>
+                            <input type="number" class="form-control bg-light" name="product_quantity" 
+                             value="{{cart_product.qty}}" min="1" disabled=true>
+                            <button type="button" class="btn btn-secondary input-group-text">+</button>
+                        </div>
                     </div>
                     <div class="col-md-2 text-center">
-                        <span class="item-total">₹{{p.qty}}</span>
+                        <span class="item-total">
+                            ₹{{cart_product.product.selling_price |multiply:cart_product.qty}}
+                        </span>
                     </div>
-                    <form action="/cart" method="POST" class="col-md-2 text-center">
+                    <div class="col-md-2 text-center">
                         {% csrf_token %}
-                        <button class="btn btn-danger btn-sm" type="submit" onclick="removeItem(this)"><i class="fas fa-trash me-2"></i>Remove</button>
-                    </form>
-                </div>
+                        <button class="btn btn-danger btn-sm" type="submit">
+                            <!-- <i class="fas fa-trash me-2"></i> -->
+                            Remove
+                        </button>
+                    </div>
+                </form>
                 {% endfor %}
             </div>
         </div>
@@ -55,10 +70,15 @@ Cart page | {{website_name}}
                 <h4 class="summary-title">Cart Summary</h4>
                 <p>Subtotal: 
                 <span id="subtotal">
-                $99.99
+                    ₹{{cart_products | calculate_total_price}}
                 </span></p>
                 <p>Tax: <span id="tax">$0.00</span></p>
-                <p class="cart-total">Total: <span id="total">$99.99</span></p>
+                <p class="cart-total">
+                    Total: 
+                    <span id="total">
+                        ₹{{cart_products | calculate_total_price}}
+                    </span>
+                </p>
                 <button class="btn btn-success btn-lg w-100 mt-3">Proceed to Checkout</button>
             </div>
         </div>

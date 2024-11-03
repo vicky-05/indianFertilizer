@@ -113,9 +113,12 @@ def cart_page(request):
     context = get_context_data(request.user)
     if request.user.is_authenticated:
         if request.method == 'POST':
-            print('delete')
-        cart = Cart.objects.filter(user=request.user)
-        context['cart_products'] = cart
+            product_id = request.POST.get('product_id', None)
+            if product_id:
+                product = Product.objects.get(id=product_id)
+                cart_product = Cart.objects.get(user=request.user, product=product)
+                cart_product.delete()
+                return redirect('cart')
         return render(request, "shop/cart.html", context=context)
     else:
         messages.warning(request, "Login Required")
@@ -130,7 +133,7 @@ def cart_page(request):
 
 
 def categories(request):
-    context = context_data(request.user)
+    context = get_context_data(request.user)
     category = Category.objects.all()
     context['category'] = category
     return render(request, "shop/categories.html",context=context)
