@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from shop.models import *
-from django.db.models import Avg, Count
+from django.db.models import Avg, Count, IntegerField, Value
 import math
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 import json
+from django.db.models.functions import Cast, Coalesce
 # from django.conf import settings
 # from django.core.mail import send_mail
 # from .form import ForgotPasswordForm
@@ -133,19 +134,17 @@ def categories(request):
 
 def products(request):
     context = get_context_data(request.user)
-    products = Product.objects.filter(is_show=1)  # Replace Product with your model name
-    paginator = Paginator(products, 2)  # Show 10 products per page
-
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)  # Get the specific page requested
-
+    products = Product.objects.filter(is_show=1)[:2].annotate(
+        avg_rating = Avg('reviews__rating'),
+        review_count = Count('reviews')
+        )
     product_prices = products.values_list('selling_price')
 
     context['categories'] = Category.objects.all()
     context['brands'] = Brand.objects.all()
     context['product_max_price'] = max(product_prices)
     context['product_min_price'] = min(product_prices)
-    context['page_obj'] = page_obj
+    context['products'] = products
     return render(request, 'shop/products.html', context=context)
 
 
@@ -266,30 +265,33 @@ def get_products(request):
 
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         brand_ids = request.GET.getlist('brands[]', None)
-        # rating = request.GET.get('rating', None)
+        rating = request.GET.get('rating', None)
         category = request.GET.get('category', None)
         price_range = request.GET.get('price_range', None)
         offset = int(request.GET.get('offset', 0))
         limit = int(request.GET.get('limit', 2))  # Number of products to load each time
 
-        print(brand_ids, category, price_range)
-
-        products = Product.objects.filter(is_show=1)
+        products = Product.objects.filter(is_show=1).annotate(
+            avg_rating = Coalesce(Cast(Avg('reviews__rating'), IntegerField()), Value(0)),
+            review_count = Count('reviews')
+        )
+        print(products)
 
 
         if brand_ids:
             products = products.filter(brand__id__in=brand_ids)
 
-        # if rating == '1':
-        #     products = products.filter(product__reviews__rating=1)
-        # elif rating == '2':
-        #     products = products.filter(product__reviews__rating=2)
-        # elif rating == '3':
-        #     products = products.filter(product__reviews__rating=3)
-        # elif rating == '4':
-        #     products = products.filter(product__reviews__rating=4)
-        # elif rating == '5':
-        #     products = products.filter(product__reviews__rating=5)
+        if rating == '1':
+            products = products.filter(avg_rating__gte=1)
+            print(products)
+        elif rating == '2':
+            products = products.filter(avg_rating__gte=2)
+        elif rating == '3':
+            products = products.filter(avg_rating__gte=3)
+        elif rating == '4':
+            products = products.filter(avg_rating__gte=4)
+        elif rating == '5':
+            products = products.filter(avg_rating=5)
 
         if category:
             products = products.filter(category=category)
@@ -302,49 +304,7 @@ def get_products(request):
             products = products.filter(selling_price__gt=100)
 
         # Apply pagination by slicing the queryset
-        products = products[offset:offset + limit]        
+        products = products[offset:offset + limit]    
 
-        products_data = list(products.values('id', 'name', 'category__name', 'brand__name', 'image', 'discount_price', 'discount_percentage', 'mrp_price', 'selling_price'))
-
+        products_data = list(products.values('id', 'name', 'category__name', 'brand__name', 'image', 'discount_price', 'discount_percentage', 'mrp_price', 'selling_price', 'avg_rating', 'review_count'))
         return JsonResponse({'products': products_data})
-
-
-
-
-def demo(request):
-    categories = Category.objects.all()
-
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        category_ids = request.GET.getlist('categories[]')
-        price_range = request.GET.get('price_range')
-        offset = int(request.GET.get('offset', 0))
-        limit = int(request.GET.get('limit', 2))  # Number of products to load each time
-
-        products = Product.objects.all()
-
-        if category_ids:
-            products = products.filter(category__id__in=category_ids)
-
-        if price_range == 'low':
-            products = products.filter(selling_price__lt=50)
-        elif price_range == 'medium':
-            products = products.filter(selling_price__range=(50, 100))
-        elif price_range == 'high':
-            products = products.filter(selling_price__gt=100)
-
-        # Apply pagination by slicing the queryset
-        products = products[offset:offset + limit]
-
-        # Prepare product data with categories included
-        products_data = []
-        for product in products:
-            products_data.append({
-                'name': product.name,
-                'description': product.description,
-                'price': product.selling_price,
-                # 'categories': [category.name for category in product.category.all()]
-            })
-
-        return JsonResponse({'products': products_data})
-    
-    return render(request, 'demo.html', {'categories': categories})

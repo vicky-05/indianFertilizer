@@ -13,5 +13,4 @@ urlpatterns = [
     path('cart', views.cart_page,name='cart'),
     path('add_review/<int:product_id>/', views.add_review, name='add_review'),
     path('load_more_reviews/', views.load_more_reviews, name='load_more_reviews'),
-    path('demo', views.demo)
 ]

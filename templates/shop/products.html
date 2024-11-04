@@ -88,7 +88,7 @@
 
     <div class="row">
         <!-- Sidebar Filters Column for Desktop View -->
-        <div class="col-md-3 d-none d-md-block">
+        <div class="col-md-3 d-none d-md-block p-3 bg-light shadow">
             <h5 class="text-center">Filter By</h5>
             <hr>
             <!-- Price Filter -->
@@ -161,7 +161,7 @@
             <div class="row" id="product-container">
 
                 <!-- Product Card -->
-                {% for product in page_obj %}
+                {% for product in products %}
                 <div class="col-6 col-md-4 mb-4">
                     <div class="card position-relative">
                         <div class="offer-badge">{{product.discount_percentage}}% OFF
@@ -170,6 +170,19 @@
                         <div class="card-body">
                             <h5 class="card-title mb-0 ">{{product.name}}</h5>
                             <p class="card-text mb-1 text-muted">{{product.brand}}</p>
+                            <div class="ratings mb-2">
+                              <span>{{product.avg_rating | floatformat:1}} &nbsp;</span>
+                              {% with product.avg_rating|floatformat:1 as rating %}
+                              {% for i in "12345" %}
+                              {% if rating|floatformat:1 >= i %}
+                              <span class="star">&#9733;</span>
+                              {% else %}
+                              <span class="star">&#9734;</span>
+                              {% endif %}
+                              {% endfor %}
+                              {% endwith %}
+                              <span>({{product.review_count}})</span>
+                            </div>
                             <p class="card-price mb-2">
                                 <span class="current-price">₹{{product.selling_price}}</span>
                                 <span class="original-price">₹{{product.mrp_price}}</span>
@@ -212,7 +225,6 @@
         const priceFilter = document.getElementById('price-filter');
         const productContainer = document.getElementById('product-container');
         const BrandFilter = document.querySelectorAll('input[name="brand"]');
-        const RatingFilter = document.querySelectorAll('input[name="rating"]:checked');
         const loadMoreBtn = document.getElementById('load-more-btn');
         const noMoreProducts = document.getElementById('no-more-products');
 
@@ -224,7 +236,9 @@
         categoryFilter.addEventListener('change', resetAndLoadProducts);
         priceFilter.addEventListener('change', resetAndLoadProducts);
 
+
         function resetAndLoadProducts() {
+
             if(loadMoreBtn.style.display = 'none'){
                 loadMoreBtn.style.display = 'block';
                 noMoreProducts.style.display = 'none';
@@ -237,6 +251,8 @@
         
     // });
     async function loadMoreProducts() {
+        const RatingFilter = document.querySelectorAll('input[name="rating"]:checked');
+        console.log(RatingFilter[RatingFilter.length-1])
             start_loading()
             const selectedBrands = Array.from(BrandFilter)
                 .filter(checkbox => checkbox.checked)
@@ -245,13 +261,13 @@
 
             const category = categoryFilter.selectedOptions[0].value;
             const price_range = priceFilter.value;
-            const rating = RatingFilter.value;
-        
+            const rating = 
+                RatingFilter[0] ? RatingFilter[0].value : 'None';        
             const url = new URL(window.location.origin + '/get_products');
-            console.log(category, price_range, selectedBrands)
+
 
             selectedBrands.forEach(brand => url.searchParams.append('brands[]', brand));
-            // url.searchParams.append('rating', rating);
+            url.searchParams.append('rating', rating);
             url.searchParams.set('category', category);
             url.searchParams.set('price_range', price_range);
             url.searchParams.set('offset', offset);
@@ -267,6 +283,14 @@
                     console.log('Data : ', data)  // Clear previous products
                     if (data.products.length > 0) {
                         data.products.forEach(product => {
+                            let stars='';
+                            for (var i=1 ; i<=5; i++) {
+                                if (i<=product.avg_rating) {
+                                    stars += '★';
+                                } else{
+                                    stars += '☆';
+                                }
+                            }
                             productContainer.innerHTML += `
                                 <div class="col-6 col-md-4 mb-4">
                                     <div class="card position-relative">
@@ -276,6 +300,13 @@
                                         <div class="card-body">
                                             <h5 class="card-title mb-0 ">${product.name}</h5>
                                             <p class="card-text mb-1 text-muted">${product.brand__name}</p>
+                                            <div class="rating">
+                                                <span>
+                                                    ${product.avg_rating}
+                                                </span>
+                                                <span class='star'> ${stars}</span>
+                                                <span>(${product.review_count})</span>
+                                            </div>
                                             <p class="card-price mb-2">
                                                 <span class="current-price">₹${product.selling_price}</span>
                                                 <span class="original-price">₹${product.mrp_price}</span>
