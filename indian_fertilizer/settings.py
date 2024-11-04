@@ -111,6 +111,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+SESSION_COOKIE_AGE = 86400  # Session expires in 1 day (24 hours)
+
 # Set default user model
 AUTH_USER_MODEL  = 'authendicate.User'
 
