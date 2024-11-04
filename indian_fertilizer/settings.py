@@ -17,6 +17,9 @@ ALLOWED_HOSTS = [ '*' ]
 # Application definition
 
 INSTALLED_APPS = [
+    # Third party apps
+    'jazzmin',
+    'mptt',
     # Bulid in apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -27,10 +30,7 @@ INSTALLED_APPS = [
     # Primary apps
     'shop',  
     'authendicate',
-    # Third party apps
-    'jazzmin',
-    'mptt',
-]
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
