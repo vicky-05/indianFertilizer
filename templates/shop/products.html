@@ -68,7 +68,7 @@
         .original-price {
             text-decoration: line-through;
             color: #888;
-            margin-left: 8px;
+            /* margin-left: 8px; */
             font-size: 0.8rem;
         }
         .save-amount {
@@ -110,31 +110,19 @@
 
              <!-- Rating Filter -->
              <h6 class="mt-4">Rating</h6>
+             {% for rating in products_common_ratings %}
              <div class="form-check">
-                 <input type="checkbox" class="form-check-input" id="rating1" value="1" 
+                 <input type="checkbox" class="form-check-input" id="rating{{rating}}" value="{{rating}}" 
                     name="rating" onchange="resetAndLoadProducts()">
-                 <label class="form-check-label" for="rating1">1 Star & Above</label>
+                 <label class="form-check-label" for="rating{{rating}}">
+                    {% if rating == 5 %}
+                    {{rating}} Star only
+                    {% else %}
+                    {{rating}} Star & Above
+                    {% endif %}
+                </label>
              </div>
-             <div class="form-check">
-                 <input type="checkbox" class="form-check-input" id="rating2" value="2" 
-                    name="rating" onchange="resetAndLoadProducts()">
-                 <label class="form-check-label" for="rating2">2 Stars & Above</label>
-             </div>
-             <div class="form-check">
-                 <input type="checkbox" class="form-check-input" id="rating3" value="3" 
-                    name="rating" onchange="resetAndLoadProducts()">
-                 <label class="form-check-label" for="rating3">3 Stars & Above</label>
-             </div>
-             <div class="form-check">
-                 <input type="checkbox" class="form-check-input" id="rating4" value="4" 
-                    name="rating" onchange="resetAndLoadProducts()">
-                 <label class="form-check-label" for="rating4">4 Stars & Above</label>
-             </div>
-             <div class="form-check">
-                 <input type="checkbox" class="form-check-input" id="rating5" value="5" 
-                    name="rating" onchange="resetAndLoadProducts()">
-                 <label class="form-check-label" for="rating5">5 Stars Only</label>
-             </div>
+             {% endfor %}
  
 
             <!-- Brand Filter -->
@@ -170,7 +158,8 @@
                         <div class="card-body">
                             <h5 class="card-title mb-0 ">{{product.name}}</h5>
                             <p class="card-text mb-1 text-muted">{{product.brand}}</p>
-                            <div class="ratings mb-2">
+
+                            <div class="ratings">
                               <span>{{product.avg_rating | floatformat:1}} &nbsp;</span>
                               {% with product.avg_rating|floatformat:1 as rating %}
                               {% for i in "12345" %}
@@ -187,18 +176,19 @@
                                 <span class="current-price">₹{{product.selling_price}}</span>
                                 <span class="original-price">₹{{product.mrp_price}}</span>
                             </p>
-                            <p class="save-amount">You Save ₹{{product.discount_price}}</p>
+                            <p class="save-amount text-danger">Save ₹{{product.discount_price}}</p>
+                            <!-- <p class="save-amount text-danger">Save ₹{{product.discount_price}}</p> -->
                             {% if product.id not in cart_product_ids  %}
-                            <button class="btn btn-success w-100 mb-2" 
+                            <button class="btn btn-success w-100 " 
                                 onclick="addToCart(event.target)" 
                                 data-url="{% url 'add_to_cart' product.id %}">
                                 Add to Cart
                             </button>
-                            <a href="{% url 'cart' %}" class="btn btn-success w-100 mb-2 d-none">
+                            <a href="{% url 'cart' %}" class="btn btn-success w-100 d-none">
                                 Go to Cart
                             </a>
                             {% else %}
-                            <a href="{% url 'cart' %}" class="btn btn-success w-100 mb-2">
+                            <a href="{% url 'cart' %}" class="btn btn-success w-100">
                                 Go to Cart
                             </a>
                             {% endif %}
@@ -311,13 +301,15 @@
                                                 <span class="current-price">₹${product.selling_price}</span>
                                                 <span class="original-price">₹${product.mrp_price}</span>
                                             </p>
-                                            <p class="save-amount">You Save ₹${product.discount_price}</p>
-                                            <button class="btn btn-success w-100 mb-2" 
+                                            <p class="save-amount text-danger">
+                                                Save ₹${product.discount_price}
+                                            </p>
+                                            <button class="btn btn-success w-100" 
                                                 onclick="" 
                                                 data-url="">
                                                 Add to Cart
                                             </button>
-                                            <a href="#" class="btn btn-success w-100 mb-2 d-none">
+                                            <a href="#" class="btn btn-success w-100 d-none">
                                                 Go to Cart
                                             </a>
                                         </div>

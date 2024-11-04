@@ -140,6 +140,7 @@ def products(request):
         )
     product_prices = products.values_list('selling_price')
 
+    context['products_common_ratings'] = ProductReview.objects.order_by('rating').values_list('rating', flat=True).distinct()
     context['categories'] = Category.objects.all()
     context['brands'] = Brand.objects.all()
     context['product_max_price'] = max(product_prices)

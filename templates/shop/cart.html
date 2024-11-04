@@ -9,80 +9,100 @@ Cart page | {{website_name}}
 {% endblock styles %}
 
 {% block content %}
-<main>
+<style>
+    .empty-cart img{
+        max-width: 400px;
+        width: 100%;
+        margin-bottom: 0px;
+    }
+    .empty-cart{
+        padding: 0px;
+    }
+
+    .empty-cart .btn:hover{
+        background-color: white;
+        font-weight:800;
+    }
+    .empty-cart .btn{
+        font-weight: 700;
+    }
+
+    
+
+</style>
+<main style="margin-top: 80px;">
+
+<div class="container my-5">
     <h4 class="about-heading">Cart <b class="text-uppercase text-success">Items</b></h4>
-    <div class="container">
-
-        <div class="row">
-            
-            <!-- Cart Items (Left Column) -->
-            <div class="col-lg-8" id="productSection">
-                <div class="empty-cart d-none" id="emptyCartMessage">
-                    <img src="{% static 'images/empty-cart-image.png' %}" alt="Empty Cart Image">
-                    <h4>Your cart is currently empty.</h4>
-                    <p>Browse our products and add items to your cart!</p>
-                    <a href="#" class="btn btn-primary">Continue Shopping</a>
-                </div>
-
-                <div id="cartItems">
-                    {% for cart_product in cart_products %}
-                    <form action="/cart" method="POST" class="row cart-item align-items-center">
-                        <div class="col-md-2">
-                            <img src="{{ cart_product.product.image.url }}" alt="Product Image" 
-                                class="img-fluid">
-                        </div>
-                        <div class="col-md-3">
-                            <h5>{{cart_product.product.name}}</h5>
-                            <p>{{cart_product.product.weight}}{{cart_product.product.unit_of_messure}}</p>
-                            <p>₹{{cart_product.product.selling_price}}</p>
-                        </div>
-                        <input type="number" class="d-none" value="{{cart_product.product.id}}" 
-                            name="product_id">
-                        <div class="col-md-3">
-                            <div class="input-group">
-                                <button type="button" class="btn btn-secondary input-group-text">-</button>
-                                <input type="number" class="form-control bg-light" name="product_quantity" 
-                                 value="{{cart_product.qty}}" min="1" disabled=true>
-                                <button type="button" class="btn btn-secondary input-group-text">+</button>
-                            </div>
-                        </div>
-                        <div class="col-md-2 text-center">
-                            <span class="item-total">
-                                ₹{{cart_product.product.selling_price |multiply:cart_product.qty}}
-                            </span>
-                        </div>
-                        <div class="col-md-2 text-center">
-                            {% csrf_token %}
-                            <button class="btn btn-danger btn-sm" type="submit">
-                                <!-- <i class="fas fa-trash me-2"></i> -->
-                                Remove
-                            </button>
-                        </div>
-                    </form>
-                    {% endfor %}
-                </div>
+    <div class="row">
+        
+        <!-- Cart Items (Left Column) -->
+        <div class="col-lg-8 mb-5" id="productSection">
+            <div class="empty-cart d-none" id="emptyCartMessage">
+                <img src="{% static 'images/empty-cart-image.png' %}" alt="Empty Cart Image">
+                <h4>Your cart is currently empty.</h4>
+                <p>Browse our products and add items to your cart!</p>
+                <a href="#" class="btn btn-success ">Continue Shopping</a>
             </div>
 
-            <!-- Cart Summary (Right Column) -->
-            <div class="col-lg-4 mb-4">
-                <div class="cart-summary">
-                    <h4 class="summary-title">Cart Summary</h4>
-                    <p>Subtotal: 
-                    <span id="subtotal">
-                        ₹{{cart_products | calculate_total_price}}
-                    </span></p>
-                    <p>Tax: <span id="tax">$0.00</span></p>
-                    <p class="cart-total">
-                        Total: 
-                        <span id="total">
-                            ₹{{cart_products | calculate_total_price}}
+            <div id="cartItems">
+                {% for cart_product in cart_products %}
+                <form action="/cart" method="POST" class="row cart-item align-items-center">
+                    <div class="col-md-2">
+                        <img src="{{ cart_product.product.image.url }}" alt="Product Image" 
+                            class="img-fluid">
+                    </div>
+                    <div class="col-md-3">
+                        <h5>{{cart_product.product.name}}</h5>
+                        <p>{{cart_product.product.weight}}{{cart_product.product.unit_of_messure}}</p>
+                        <p>₹{{cart_product.product.selling_price}}</p>
+                    </div>
+                    <input type="number" class="d-none" value="{{cart_product.product.id}}" 
+                        name="product_id">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <button type="button" class="btn btn-secondary input-group-text">-</button>
+                            <input type="number" class="form-control bg-light" name="product_quantity" 
+                             value="{{cart_product.qty}}" min="1" disabled=true>
+                            <button type="button" class="btn btn-secondary input-group-text">+</button>
+                        </div>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <span class="item-total">
+                            ₹{{cart_product.product.selling_price |multiply:cart_product.qty}}
                         </span>
-                    </p>
-                    <button class="btn btn-success btn-lg w-100 mt-3">Proceed to Checkout</button>
-                </div>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        {% csrf_token %}
+                        <button class="btn btn-danger btn-sm" type="submit">
+                            <!-- <i class="fas fa-trash me-2"></i> -->
+                            Remove
+                        </button>
+                    </div>
+                </form>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Cart Summary (Right Column) -->
+        <div class="col-lg-4 mb-4">
+            <div class="cart-summary">
+                <h4 class="about-heading">Cart <b class="text-uppercase text-success">Summary</b></h4>
+                <p>Subtotal: 
+                <span id="subtotal">
+                    ₹{{cart_products | calculate_total_price}}
+                </span></p>
+                <p class="cart-total">
+                    Total: 
+                    <span id="total">
+                        ₹{{cart_products | calculate_total_price}}
+                    </span>
+                </p>
+                <button class="btn btn-success btn-lg w-100 mt-3">Proceed to Checkout</button>
             </div>
         </div>
     </div>
+</div>
 </main>
 <script src="{% static 'js/cart.js' %}"></script>
 

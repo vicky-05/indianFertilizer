@@ -45,16 +45,3 @@
         .about-heading b {
             color: #ffc000;
         }
-
-        .about-heading::after {
-            content: "";
-            width: 100px;
-            position: absolute;
-            margin: 0 auto;
-            height: 4px;
-            background: rgba(0, 0, 0, 0.2);
-            left: 0;
-            right: 0;
-            bottom: -20px;
-            margin-top: 20px;
-        }

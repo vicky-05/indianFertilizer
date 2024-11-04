@@ -215,15 +215,61 @@ Product details page | {{website_name}}
         height: 500px;
         object-fit: contain;
     }
+    .product-units .btn-success:hover, .btn-success:focus {
+        background-color: green; /* Reset to default button color */
+        color: white; /* Reset to default text color */
+        /* Remove box shadow if there is any */
+        box-shadow: none;
+        font-weight: 700;
+    }
+    .product-units .btn-success{
+        font-weight: 700;
+        
+    }
+    .product-units .btn-outline-success{
+        border: 2px solid grey;
+        color: grey;
+    }
+    .product-details {
+    margin: 1.5rem 0;
+}
+
+.product-name {
+    font-size: 1.5rem; /* Adjust as needed */
+    font-weight: bold;
+}
+
+.badge {
+    margin-right: 0.5rem; /* Space between badges */
+}
+.brand-name {
+    font-weight: bold; /* Makes the brand name bold */
+    color: #333; /* Dark color for the brand */
+}
+
+    @media (max-width: 576px) {
+    .breadcrumb-m {
+        display: none !important;
+    }
+}
+
+
 </style>
-<main>
-    <div class="container my-5">
+<main style="margin-top: 60px;">
+    <div class="container ">
         <div class="row">
             <!-- Product Image Secti
                 on -->
-            <div class="col-md-6">
+            <div class="col-md-6 mb-3">
+                <nav class="d-md-none" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
+                    aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item "><a class="text-decoration-none text-success" href="#">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Product</li>
+                    </ol>
+                </nav>
                 <img id="mainImage" src="{{product.image.url}}" class="img-fluid" alt="Product Image">
-                <div class="mt-3">
+                <div class="mt-3 d-flex justify-content-center">
                     {% if product.image %}
                     <img src="{{product.image.url}}" class="img-thumbnail product-thumbnail me-2" 
                         onclick="changeImage(this)" alt="Thumbnail 1">
@@ -241,16 +287,18 @@ Product details page | {{website_name}}
 
             <!-- Product Detail Section -->
             <div class="col-md-6">
-                <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
+                <nav class="breadcrumb-m" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
                     aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item "><a href="#">Home</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Product</li>
                     </ol>
                 </nav>
                 <h2 class="product-name">{{product.name}}</h2>
-                <span class="badge bg-secondary">{{product.category}}</span>
+                <span class="badge bg-secondary mb-1">{{product.category}}</span>
+                <p class="mb-1 fw-bold text-muted">Company: <span class="brand-name">{{ product.brand }}</span></p>
                 <h4 class="selling-price">₹{{product.selling_price}}</h4>
+                <span class="offer-badge badge bg-danger">{{product.discount_percentage}}% OFF</span> 
                 <s class="mrp-prices">M.R.P:₹{{product.mrp_price}}</s>
                 <br>
                 {% if product.stock_qty > 0 %}
@@ -285,11 +333,11 @@ Product details page | {{website_name}}
                 </div>
 
                 <!-- Shipping and Return Policy -->
-                <div class="d-flex mx-4 mb-4 mt-4">
+                <div class="d-flex  mb-4 mt-4">
                     <!-- Visit Our Store -->
                     <div class="text-center me-5">
-                        <i class="bi bi-geo-alt"></i> <!-- Larger Icon -->
-                        <p class="mb-0 fw-bold ">Visit Our Store</p> <!-- Larger Title -->
+                        <i class="bi bi-award" style="font-size: 2rem; color: #ffc907;"></i> <!-- Larger yellow icon -->
+                        <p class="mb-0 fw-bold">Quality Products</p> <!-- Larger Title -->
                     </div>
 
                     <!-- In-Store Assistance -->
@@ -354,7 +402,9 @@ Product details page | {{website_name}}
                     <div class="tab-pane fade show active" id="description" role="tabpanel"
                         aria-labelledby="description-tab">
                         <h4 class="about-heading">Product <b class="text-uppercase text-success">Description</b></h4>
-                        <p>{{product.description}}</p>
+                        <ul id="description-list">
+
+                        </ul>
                     </div>
                     <!-- End Deccription Part -->
 
@@ -368,7 +418,7 @@ Product details page | {{website_name}}
 
                             {% if user.is_authenticated %}
                             {% if has_review %}
-                            <button class="btn btn-success rate" data-bs-toggle="modal"
+                            <button class="btn btn-success rate btn-sm" data-bs-toggle="modal"
                                 data-bs-target="#rateProductModal">Rate Product</button>
                             {% endif %}
                             {% endif %}
@@ -402,10 +452,10 @@ Product details page | {{website_name}}
 
                         {% include 'inc/review modal.html' %}
 
-                        <div id="reviews-container">
+                        <div id="reviews-container mb-5">
                         </div>
                         {% if reviews %}
-                        <button id="load-more-btn" class="btn btn-success rounded mt-3">Load More</button>
+                        <button id="load-more-btn" class="btn btn-success rounded mt-3 mb-3">Load More</button>
                         <script>
                             const productId = "{{ product.id }}";
                             let offset = 3;  // Starting point after initial reviews
@@ -463,8 +513,8 @@ Product details page | {{website_name}}
                     <!-- Product Demonstration Part -->
                     <div class="tab-pane fade" id="video" role="tabpanel" aria-labelledby="video-tab">
                         <h4 class="about-heading">Product <b class="text-uppercase text-success">Demonstration</b></h4>
-                        <div class="video-container">
-                            <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" frameborder="0"
+                        <div class="video-container mb-4">
+                            <iframe src="{{ product.demo_url }}" frameborder="0"
                                 allowfullscreen></iframe>
                         </div>
                     </div>
@@ -472,21 +522,43 @@ Product details page | {{website_name}}
 
                     <div class="tab-pane fade" id="features" role="tabpanel" aria-labelledby="features-tab">
                         <h4 class="about-heading">Feature & <b class="text-uppercase text-success">Benefits</b></h4>
-                        <ul>
-                            <li>Feature 1: Brief description of feature 1.</li>
-                            <li>Feature 2: Brief description of feature 2.</li>
-                            <li>Benefit 1: Brief description of benefit 1.</li>
+                        <ul id="features-list">
+                            
                         </ul>
                     </div>
                     <div class="tab-pane fade" id="recommendations" role="tabpanel"
                         aria-labelledby="recommendations-tab">
                         <h4 class="about-heading">Recommen<b class="text-uppercase text-success">dations</b></h4>
-                        <p>We recommend pairing this product with:</p>
-                        <ul>
-                            <li>Recommended Product 1</li>
-                            <li>Recommended Product 2</li>
+                        <ul id="recommendations-list">
+                            
                         </ul>
                     </div>
+                    <script>
+                        // Sample data from your database (replace with actual data)
+                        const descriptionParagraph = "{{ product.description }}"; // Product description
+                        const featuresParagraph = "{{ product.benifits_and_features }}"; // Features and benefits
+                        const recommendationsParagraph = "{{ product.recommandation }}"; // Recommendations
+                        
+                        // Function to populate a list from a paragraph
+                        function populateList(paragraph, listId) {
+                            const items = paragraph.split('.'); // Split by newline character
+                            const listElement = document.getElementById(listId);
+                        
+                            items.forEach(item => {
+                                if (item.trim() !== "") { // Check if the item is not empty
+                                    
+                                    const listItem = document.createElement('li'); // Create a new list item
+                                    listItem.textContent = item.trim(); // Set the text of the list item
+                                    listElement.appendChild(listItem); // Append it to the list
+                                }
+                            });
+                        }
+                        
+                        // Populate each list with corresponding data
+                        populateList(descriptionParagraph, 'description-list');
+                        populateList(featuresParagraph, 'features-list');
+                        populateList(recommendationsParagraph, 'recommendations-list');
+                    </script>
                 </div>
             </div>
         </div>
