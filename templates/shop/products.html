@@ -1,0 +1,403 @@
+{% extends 'layouts/main.html' %} 
+{% load static %} 
+{% block title %} Products page| {{website_name}} {% endblock title %} 
+{% block content %}
+<style>
+    
+        .form-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background-color: #08d108;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .form-range::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background-color: #004d00;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .card  {
+            /* overflow: hidden; */
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: visible;
+        }
+
+    /* Hover effect: Scale and shadow increase */
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .card-img-top {
+            width: 100%;
+            height: 150px; /* Adjust height to your preference */
+            object-fit: contain;
+            
+        }
+        .offer-badge {
+        position: absolute;
+        top: -10px; /* Positioning it above the image */
+        left: 15px; /* Adjust to your preference */
+        background-color: #ff5733;
+        color: #fff;
+        padding: 5px 10px; /* Padding for better fit */
+        font-size: 12px;
+        font-weight: bold;
+        border-radius: 12px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        z-index: 20; /* Ensures the badge is above the image */
+        }
+        .card-title {
+        white-space: nowrap; /* Prevents wrapping */
+        overflow: hidden; /* Hides overflow */
+        text-overflow: ellipsis; /* Adds ellipsis */
+        max-width: 100%; /* Ensures it doesn't exceed the card width */
+        }
+       
+
+        .current-price {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #28a745; /* Green color */
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #888;
+            margin-left: 8px;
+            font-size: 0.8rem;
+        }
+        .save-amount {
+            color: #28a745;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+</style>
+<div class="container-lg container-fluid" style="margin-top: 5rem;">
+    <div class="d-md-none text-end mb-3">
+        <!-- Button to open off-canvas sidebar on mobile view -->
+        <button class="btn btn-success" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFilter">
+            <i class="bi bi-funnel"></i> Filter & Sort
+        </button>
+    </div>
+
+    <div class="row">
+        <!-- Sidebar Filters Column for Desktop View -->
+        <div class="col-md-3 d-none d-md-block">
+            <h5 class="text-center">Filter By</h5>
+            <hr>
+            <!-- Price Filter -->
+            <!-- <h6>Price</h6>
+             <input type="range" class="form-range" min="{{product_min_price}}" max="{{product_max_price}}" 
+            id="priceRangeMobile">
+            <span>Under ₹500</span> -->
+
+            <!-- Additional Price Range Options -->
+            <div class="mt-3">
+                <h6 class="mt-4">Price Range</h6>
+                <select class="form-select" id="price-filter">
+                    <option value="">All Prices</option>
+                    <option value="low">Below $50</option>
+                    <option value="medium">$50 - $100</option>
+                    <option value="high">Above $100</option>
+                </select>                  
+            </div>
+
+             <!-- Rating Filter -->
+             <h6 class="mt-4">Rating</h6>
+             <div class="form-check">
+                 <input type="checkbox" class="form-check-input" id="rating1" value="1" 
+                    name="rating" onchange="resetAndLoadProducts()">
+                 <label class="form-check-label" for="rating1">1 Star & Above</label>
+             </div>
+             <div class="form-check">
+                 <input type="checkbox" class="form-check-input" id="rating2" value="2" 
+                    name="rating" onchange="resetAndLoadProducts()">
+                 <label class="form-check-label" for="rating2">2 Stars & Above</label>
+             </div>
+             <div class="form-check">
+                 <input type="checkbox" class="form-check-input" id="rating3" value="3" 
+                    name="rating" onchange="resetAndLoadProducts()">
+                 <label class="form-check-label" for="rating3">3 Stars & Above</label>
+             </div>
+             <div class="form-check">
+                 <input type="checkbox" class="form-check-input" id="rating4" value="4" 
+                    name="rating" onchange="resetAndLoadProducts()">
+                 <label class="form-check-label" for="rating4">4 Stars & Above</label>
+             </div>
+             <div class="form-check">
+                 <input type="checkbox" class="form-check-input" id="rating5" value="5" 
+                    name="rating" onchange="resetAndLoadProducts()">
+                 <label class="form-check-label" for="rating5">5 Stars Only</label>
+             </div>
+ 
+
+            <!-- Brand Filter -->
+            <h6 class="mt-4">Brand</h6>
+            {% for brand in brands %}
+            <div>
+                <input type="checkbox" id="brand{{brand.id}}" name="brand" value="{{brand.id}}" 
+                onchange="resetAndLoadProducts()">
+                <label for="brand{{brand.id}}">{{brand.name}}</label>
+            </div>
+            {% endfor %}
+            <!-- Category Filter -->
+            <h6 class="mt-4">Category</h6>
+            <select class="form-select" id="category-filter">
+                <option value="" selected>All Categories</option>
+                {% for category in categories %}
+                <option value="{{category.id}}">{{category.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Products Column -->
+        <div class="col-md-9 mb-3">
+            <div class="row" id="product-container">
+
+                <!-- Product Card -->
+                {% for product in page_obj %}
+                <div class="col-6 col-md-4 mb-4">
+                    <div class="card position-relative">
+                        <div class="offer-badge">{{product.discount_percentage}}% OFF
+                        </div>
+                        <img src="{{product.image.url}}" class="card-img-top" alt="Product Image">
+                        <div class="card-body">
+                            <h5 class="card-title mb-0 ">{{product.name}}</h5>
+                            <p class="card-text mb-1 text-muted">{{product.brand}}</p>
+                            <p class="card-price mb-2">
+                                <span class="current-price">₹{{product.selling_price}}</span>
+                                <span class="original-price">₹{{product.mrp_price}}</span>
+                            </p>
+                            <p class="save-amount">You Save ₹{{product.discount_price}}</p>
+                            {% if product.id not in cart_product_ids  %}
+                            <button class="btn btn-success w-100 mb-2" 
+                                onclick="addToCart(event.target)" 
+                                data-url="{% url 'add_to_cart' product.id %}">
+                                Add to Cart
+                            </button>
+                            <a href="{% url 'cart' %}" class="btn btn-success w-100 mb-2 d-none">
+                                Go to Cart
+                            </a>
+                            {% else %}
+                            <a href="{% url 'cart' %}" class="btn btn-success w-100 mb-2">
+                                Go to Cart
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div> 
+                </div>
+                {% endfor %}
+                <!--  End Product Card -->
+
+            </div>
+            <button type="button" class="btn btn-success" id="load-more-btn" onclick="loadMoreProducts()">
+                Load More
+            </button>
+            <p id="no-more-products" style="display: none;">No More Products.</p>
+        </div>
+        
+    </div>
+</div>
+
+
+<script>
+    // document.addEventListener('DOMContentLoaded', () => {
+        const categoryFilter = document.getElementById('category-filter');
+        const priceFilter = document.getElementById('price-filter');
+        const productContainer = document.getElementById('product-container');
+        const BrandFilter = document.querySelectorAll('input[name="brand"]');
+        const RatingFilter = document.querySelectorAll('input[name="rating"]:checked');
+        const loadMoreBtn = document.getElementById('load-more-btn');
+        const noMoreProducts = document.getElementById('no-more-products');
+
+        
+        let offset = 2;
+        const limit = 2;  // Number of products to load each time
+
+        // Attach event listeners to filters 
+        categoryFilter.addEventListener('change', resetAndLoadProducts);
+        priceFilter.addEventListener('change', resetAndLoadProducts);
+
+        function resetAndLoadProducts() {
+            if(loadMoreBtn.style.display = 'none'){
+                loadMoreBtn.style.display = 'block';
+                noMoreProducts.style.display = 'none';
+            }
+            offset = 0;  // Reset offset when filters change
+            productContainer.innerHTML = '';  // Clear previous products
+            loadMoreProducts();
+        }
+
+        
+    // });
+    async function loadMoreProducts() {
+            start_loading()
+            const selectedBrands = Array.from(BrandFilter)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value);
+
+
+            const category = categoryFilter.selectedOptions[0].value;
+            const price_range = priceFilter.value;
+            const rating = RatingFilter.value;
+        
+            const url = new URL(window.location.origin + '/get_products');
+            console.log(category, price_range, selectedBrands)
+
+            selectedBrands.forEach(brand => url.searchParams.append('brands[]', brand));
+            // url.searchParams.append('rating', rating);
+            url.searchParams.set('category', category);
+            url.searchParams.set('price_range', price_range);
+            url.searchParams.set('offset', offset);
+            url.searchParams.set('limit', limit);
+
+            try {
+                const response = await fetch(url, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                if (response.ok) {
+                    end_loading()
+                    const data = await response.json();
+                    console.log('Data : ', data)  // Clear previous products
+                    if (data.products.length > 0) {
+                        data.products.forEach(product => {
+                            productContainer.innerHTML += `
+                                <div class="col-6 col-md-4 mb-4">
+                                    <div class="card position-relative">
+                                        <div class="offer-badge">${product.discount_percentage}% OFF
+                                        </div>
+                                        <img src="/media/${product.image}" class="card-img-top" alt="Product Image">
+                                        <div class="card-body">
+                                            <h5 class="card-title mb-0 ">${product.name}</h5>
+                                            <p class="card-text mb-1 text-muted">${product.brand__name}</p>
+                                            <p class="card-price mb-2">
+                                                <span class="current-price">₹${product.selling_price}</span>
+                                                <span class="original-price">₹${product.mrp_price}</span>
+                                            </p>
+                                            <p class="save-amount">You Save ₹${product.discount_price}</p>
+                                            <button class="btn btn-success w-100 mb-2" 
+                                                onclick="" 
+                                                data-url="">
+                                                Add to Cart
+                                            </button>
+                                            <a href="#" class="btn btn-success w-100 mb-2 d-none">
+                                                Go to Cart
+                                            </a>
+                                        </div>
+                                    </div> 
+                                </div>
+                            `;
+                        });
+                        offset += data.products.length;
+                    }
+                    else {
+                        loadMoreBtn.style.display = 'none';  // Hide button if no more products
+                        noMoreProducts.style.display = 'block';
+
+                    }
+                } else {
+                    end_loading()
+                    console.error('Failed to fetch products:', response.statusText);
+                }
+            } catch (error) {
+                end_loading()
+                console.error('Error:', error);
+            }
+    }
+</script>
+
+
+
+<!-- Off-canvas Filter Sidebar for Mobile View -->
+<div class="offcanvas offcanvas-start bg-light text-dark" tabindex="-1" id="offcanvasFilter">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Filter & Sort</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        
+        <!-- Price Filter -->
+        <h6>Price</h6>
+        <input type="range" class="form-range" min="{{product_min_price}}" max="{{product_max_price}}" 
+            id="priceRangeMobile">
+        <span>Under ₹500</span>
+        {{product_min_price}}
+        {{product_max_price}}
+        <!-- Additional Price Range Options -->
+        <div class="mt-3">
+            <h6 class="mt-4">Price Range</h6>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" name="priceRange" id="range1" value="0-100">
+                <label class="form-check-label" for="range1">₹0 - ₹100</label>
+            </div>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" name="priceRange" id="range2" value="100-250">
+                <label class="form-check-label" for="range2">₹100 - ₹250</label>
+            </div>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" name="priceRange" id="range3" value="250-500">
+                <label class="form-check-label" for="range3">₹250 - ₹500</label>
+            </div>
+        </div>
+
+        <h6 class="mt-4">Rating</h6>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="rating1Mobile" value="1">
+            <label class="form-check-label" for="rating1Mobile">1 Star & Above</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="rating2Mobile" value="2">
+            <label class="form-check-label" for="rating2Mobile">2 Stars & Above</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="rating3Mobile" value="3">
+            <label class="form-check-label" for="rating3Mobile">3 Stars & Above</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="rating4Mobile" value="4">
+            <label class="form-check-label" for="rating4Mobile">4 Stars & Above</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="rating5Mobile" value="5">
+            <label class="form-check-label" for="rating5Mobile">5 Stars Only</label>
+        </div>
+
+        <!-- Brand Filter -->
+        <h6 class="mt-4">Brand</h6>
+        <div>
+            <input type="checkbox" id="brand1Mobile">
+            <label for="brand1Mobile">Brand A</label>
+        </div>
+        <div>
+            <input type="checkbox" id="brand2Mobile">
+            <label for="brand2Mobile">Brand B</label>
+        </div>
+
+        <!-- Brand Filter -->
+        <h6 class="mt-4">Brand</h6>
+        <div>
+            <input type="checkbox" id="brand1Mobile">
+            <label for="brand1Mobile">Brand A</label>
+        </div>
+        <div>
+            <input type="checkbox" id="brand2Mobile">
+            <label for="brand2Mobile">Brand B</label>
+        </div>
+
+        <!-- Category Filter -->
+        <h6 class="mt-4">Category</h6>
+        <select class="form-select">
+            <option selected>All Categories</option>
+            <option>Category 1</option>
+            <option>Category 2</option>
+        </select>
+    </div>
+</div>
+
+{% endblock content %}
