@@ -9,20 +9,40 @@ Cart page | {{website_name}}
 {% endblock styles %}
 
 {% block content %}
+<style>
+    .empty-cart img{
+        max-width: 400px;
+        width: 100%;
+        margin-bottom: 0px;
+    }
+    .empty-cart{
+        padding: 0px;
+    }
+
+    .empty-cart .btn:hover{
+        background-color: white;
+        font-weight:800;
+    }
+    .empty-cart .btn{
+        font-weight: 700;
+    }
+
+    
+
+</style>
 <main style="margin-top: 80px;">
-    <h4 class="about-heading">Cart <b class="text-uppercase text-success">Items</b></h4>
 
 <div class="container my-5">
-
+    <h4 class="about-heading">Cart <b class="text-uppercase text-success">Items</b></h4>
     <div class="row">
         
         <!-- Cart Items (Left Column) -->
-        <div class="col-lg-8" id="productSection">
+        <div class="col-lg-8 mb-5" id="productSection">
             <div class="empty-cart d-none" id="emptyCartMessage">
                 <img src="{% static 'images/empty-cart-image.png' %}" alt="Empty Cart Image">
                 <h4>Your cart is currently empty.</h4>
                 <p>Browse our products and add items to your cart!</p>
-                <a href="#" class="btn btn-primary">Continue Shopping</a>
+                <a href="#" class="btn btn-success ">Continue Shopping</a>
             </div>
 
             <div id="cartItems">
@@ -67,12 +87,11 @@ Cart page | {{website_name}}
         <!-- Cart Summary (Right Column) -->
         <div class="col-lg-4 mb-4">
             <div class="cart-summary">
-                <h4 class="summary-title">Cart Summary</h4>
+                <h4 class="about-heading">Cart <b class="text-uppercase text-success">Summary</b></h4>
                 <p>Subtotal: 
                 <span id="subtotal">
                     ₹{{cart_products | calculate_total_price}}
                 </span></p>
-                <p>Tax: <span id="tax">$0.00</span></p>
                 <p class="cart-total">
                     Total: 
                     <span id="total">
