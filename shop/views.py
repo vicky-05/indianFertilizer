@@ -3,16 +3,12 @@ from shop.models import *
 from django.db.models import Avg, Count
 import math
 from django.contrib import messages
-# from .models import productCollection
-# from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator
 from django.http import JsonResponse
 import json
 # from django.conf import settings
 # from django.core.mail import send_mail
-# from django.contrib.auth.models import User
-# import random
 # from .form import ForgotPasswordForm
-# from django.shortcuts import render, get_object_or_404
 
 def get_context_data(user=None):
     context = {
@@ -30,12 +26,14 @@ def get_context_data(user=None):
         context['cart_count'] = cart_products.count()
     return context
 
+
 def search_view(request):
     query = request.GET.get('query', '')
     products = Product.objects.filter(name__icontains=query)
     # products = Product.objects.filter(Q(name__icontains=query) | Q(brand__icontains=query))
     products_list = list(products.values('id', 'name', 'brand'))
     return JsonResponse({'products_list': products_list})
+
 
 def home(request):
     context = get_context_data(request.user)
@@ -58,9 +56,11 @@ def home(request):
     context['most_viewed_products'] = most_viewed_products
     return render(request, "shop/home.html", context=context)
 
+
 def about(request):
     context = get_context_data(request.user)
     return render(request,"shop/about.html",context=context)
+
 
 def add_to_cart(request, product_id=None):
     data = {}
@@ -86,7 +86,6 @@ def add_to_cart(request, product_id=None):
         return JsonResponse({'status': 'error', 'message' : 'Only post method.'}, status=200)
     
     return JsonResponse({'status' : 'error', 'message' : "Please Login.", 'url' : '/login/'}, status=200)
-
 
 
 def add_review(request, product_id=None):
@@ -122,14 +121,7 @@ def cart_page(request):
         return render(request, "shop/cart.html", context=context)
     else:
         messages.warning(request, "Login Required")
-        return redirect('login')
-
-# # def cart_count(request):
-# #     if request.user.is_authenticated:
-# #         cart_count = Cart.objects.filter(user=request.user).count()
-# #     else:
-# #         cart_count = 0
-# #     return {'cart_count': cart_count}   
+        return redirect('login') 
 
 
 def categories(request):
@@ -138,19 +130,24 @@ def categories(request):
     context['category'] = category
     return render(request, "shop/categories.html",context=context)
 
-# # def home(request):
-# #     topBrands = TopBrands.objects.filter(status=0)
-# #     return render(request, "shop/index.html",{'topBrands':topBrands})
 
-# def collections(request):
-#     return render(request, "shop/products/index.html")
+def products(request):
+    context = get_context_data(request.user)
+    products = Product.objects.filter(is_show=1)  # Replace Product with your model name
+    paginator = Paginator(products, 2)  # Show 10 products per page
 
-# def collectionsview(request,group_name):
-#     if(Category.objects.filter(product_title=group_name,status=0)):
-#         productcollection = productCollection.objects.filter(group_name=group_name)
-#         return render(request, "shop/products/index.html",{'productcollection':productcollection,'group_names':group_name})
-#     else:
-#         return redirect('collections')
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)  # Get the specific page requested
+
+    product_prices = products.values_list('selling_price')
+
+    context['categories'] = Category.objects.all()
+    context['brands'] = Brand.objects.all()
+    context['product_max_price'] = max(product_prices)
+    context['product_min_price'] = min(product_prices)
+    context['page_obj'] = page_obj
+    return render(request, 'shop/products.html', context=context)
+
 
 def product_details(request, product_id=None):
     if product_id:
@@ -168,35 +165,6 @@ def product_details(request, product_id=None):
         except Exception:
             context['cart_product'] = None
         return render(request, "shop/product_details.html", context=context)
-
-# def collections(request):
-#     # Retrieve distinct brand names
-#     distinct_brand_names = productCollection.objects.values('brand_name').distinct()
-
-#     # Pass the brand names to the template
-#     return render(request, 'collections.html', {'distinct_brand_names': distinct_brand_names})
-
-# def product_detail(request, product_id):
-#     product = productCollection.objects.get(id=product_id)
-#     return render(request, 'product_detail.html', {'product': product})
-
-# def product_detailss(request, pnme):
-#     if productCollection.objects.filter(name_product=pnme, status=0):
-#             products = productCollection.objects.filter(name_product=pnme, status=0).first()
-#             return render(request, "shop/products/products_details.html", {'products': products})
-#     else:
-#             return redirect('collections')
-
-
-
-
-# def user_profile(request):
-#     return render(request, 'shop/user_profile.html')
-
-# def remove_cart(request,cid):
-#     cartitem = Cart.objects.get(id=cid)
-#     cartitem.delete()
-#     return redirect('/cart')
 
 
 # def forgot_pass(request):
@@ -260,17 +228,6 @@ def product_details(request, product_id=None):
 #     return render(request, 'shop/products/reset_password.html')
 
 
-
-# def load_more_reviews(request):
-#     product_id = request.GET.get('product_id')
-#     offset = int(request.GET.get('offset', 3))
-#     limit = 3  # Number of reviews to load each time
-
-#     reviews = list(ProductReview.objects.filter(product_id=product_id)[offset:offset + limit].values())
-#     return JsonResponse({'reviews': reviews})
-
-
-
 def load_more_reviews(request):
     product_id = request.GET.get('product_id')
     offset = int(request.GET.get('offset', 3))
@@ -283,7 +240,6 @@ def load_more_reviews(request):
 
     # Fetch reviews with user details, using pagination
     reviews = ProductReview.objects.filter(product=product).select_related('user')[offset:offset + limit]
-    print(reviews)
     
     # Prepare the response data with specific user fields
     review_data = [
@@ -299,3 +255,96 @@ def load_more_reviews(request):
     ]
 
     return JsonResponse({'reviews': review_data})
+
+
+
+
+
+
+
+def get_products(request):
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        brand_ids = request.GET.getlist('brands[]', None)
+        # rating = request.GET.get('rating', None)
+        category = request.GET.get('category', None)
+        price_range = request.GET.get('price_range', None)
+        offset = int(request.GET.get('offset', 0))
+        limit = int(request.GET.get('limit', 2))  # Number of products to load each time
+
+        print(brand_ids, category, price_range)
+
+        products = Product.objects.filter(is_show=1)
+
+
+        if brand_ids:
+            products = products.filter(brand__id__in=brand_ids)
+
+        # if rating == '1':
+        #     products = products.filter(product__reviews__rating=1)
+        # elif rating == '2':
+        #     products = products.filter(product__reviews__rating=2)
+        # elif rating == '3':
+        #     products = products.filter(product__reviews__rating=3)
+        # elif rating == '4':
+        #     products = products.filter(product__reviews__rating=4)
+        # elif rating == '5':
+        #     products = products.filter(product__reviews__rating=5)
+
+        if category:
+            products = products.filter(category=category)
+        
+        if price_range == 'low':
+            products = products.filter(selling_price__lt=50)
+        elif price_range == 'medium':
+            products = products.filter(selling_price__range=(50, 100))
+        elif price_range == 'high':
+            products = products.filter(selling_price__gt=100)
+
+        # Apply pagination by slicing the queryset
+        products = products[offset:offset + limit]        
+
+        products_data = list(products.values('id', 'name', 'category__name', 'brand__name', 'image', 'discount_price', 'discount_percentage', 'mrp_price', 'selling_price'))
+
+        return JsonResponse({'products': products_data})
+
+
+
+
+def demo(request):
+    categories = Category.objects.all()
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        category_ids = request.GET.getlist('categories[]')
+        price_range = request.GET.get('price_range')
+        offset = int(request.GET.get('offset', 0))
+        limit = int(request.GET.get('limit', 2))  # Number of products to load each time
+
+        products = Product.objects.all()
+
+        if category_ids:
+            products = products.filter(category__id__in=category_ids)
+
+        if price_range == 'low':
+            products = products.filter(selling_price__lt=50)
+        elif price_range == 'medium':
+            products = products.filter(selling_price__range=(50, 100))
+        elif price_range == 'high':
+            products = products.filter(selling_price__gt=100)
+
+        # Apply pagination by slicing the queryset
+        products = products[offset:offset + limit]
+
+        # Prepare product data with categories included
+        products_data = []
+        for product in products:
+            products_data.append({
+                'name': product.name,
+                'description': product.description,
+                'price': product.selling_price,
+                # 'categories': [category.name for category in product.category.all()]
+            })
+
+        return JsonResponse({'products': products_data})
+    
+    return render(request, 'demo.html', {'categories': categories})

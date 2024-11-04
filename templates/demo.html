@@ -1,0 +1,93 @@
+<div id="filter-options">
+    <!-- Category checkboxes and price filter go here -->
+     <div>
+        <label><input type="checkbox" name="category" value="1"> Electronics</label>
+        <label><input type="checkbox" name="category" value="2"> Clothing</label>
+        <label><input type="checkbox" name="category" value="3"> Furniture</label>
+    </div>
+
+    <select id="price-filter">
+        <option value="">All Prices</option>
+        <option value="low">Below $50</option>
+        <option value="medium">$50 - $100</option>
+        <option value="high">Above $100</option>
+    </select>
+</div>
+
+<div id="product-container">
+    <!-- Filtered products will be loaded here -->
+</div>
+
+<button id="load-more-btn">Load More</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const categoryCheckboxes = document.querySelectorAll('input[name="category"]');
+        const priceFilter = document.getElementById('price-filter');
+        const productContainer = document.getElementById('product-container');
+        const loadMoreBtn = document.getElementById('load-more-btn');
+        let offset = 0;
+        const limit = 2;  // Number of products to load each time
+
+        categoryCheckboxes.forEach(checkbox => checkbox.addEventListener('change', resetAndLoadProducts));
+        priceFilter.addEventListener('change', resetAndLoadProducts);
+        loadMoreBtn.addEventListener('click', loadMoreProducts);
+
+        function resetAndLoadProducts() {
+            if(loadMoreBtn.style.display = 'none'){
+                loadMoreBtn.style.display = 'block';
+            }
+            offset = 0;  // Reset offset when filters change
+            productContainer.innerHTML = '';  // Clear previous products
+            loadMoreProducts();
+        }
+
+        async function loadMoreProducts() {
+            const selectedCategories = Array.from(categoryCheckboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value);
+
+            const price_range = priceFilter.value;
+
+            const url = new URL(window.location.origin + '/demo');
+            selectedCategories.forEach(category => url.searchParams.append('categories[]', category));
+            url.searchParams.set('price_range', price_range);
+            url.searchParams.set('offset', offset);
+            url.searchParams.set('limit', limit);
+
+            try {
+                const response = await fetch(url, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Data : ', data)  // Clear previous products
+                    
+                    if (data.products.length > 0) {
+                        data.products.forEach(product => {
+                            // const categoryList = product.categories.map(category => `<span class="category">${category}</span>`).join(', ');
+
+                            productContainer.innerHTML += `
+                                <div class="product">
+                                    <h2>${product.name}</h2>
+                                    <p>${product.description}</p>
+                                    <p>Price: $${product.price}</p>
+                                </div>
+                            `;
+                        });
+                        offset += limit;  // Update offset for next batch
+                    } else {
+                        loadMoreBtn.style.display = 'none';  // Hide button if no more products
+                    }
+                } else {
+                    console.error('Failed to fetch products:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Initial load
+        resetAndLoadProducts();
+    });
+</script>
