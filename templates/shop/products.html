@@ -68,7 +68,7 @@
         .original-price {
             text-decoration: line-through;
             color: #888;
-            margin-left: 8px;
+            /* margin-left: 8px; */
             font-size: 0.8rem;
         }
         .save-amount {
@@ -170,11 +170,11 @@
                         <div class="card-body">
                             <h5 class="card-title mb-0 ">{{product.name}}</h5>
                             <p class="card-text mb-1 text-muted">{{product.brand}}</p>
-                            <p class="card-price mb-2">
+                            <p class="card-price mb-0">
                                 <span class="current-price">₹{{product.selling_price}}</span>
-                                <span class="original-price">₹{{product.mrp_price}}</span>
                             </p>
-                            <p class="save-amount">You Save ₹{{product.discount_price}}</p>
+                            <span class="original-price">₹{{product.mrp_price}}</span>
+                            <p class="save-amount text-danger">Save ₹{{product.discount_price}}</p>
                             {% if product.id not in cart_product_ids  %}
                             <button class="btn btn-success w-100 mb-2" 
                                 onclick="addToCart(event.target)" 
