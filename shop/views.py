@@ -153,6 +153,18 @@ def product_details(request, product_id=None):
     if product_id:
         context = get_context_data(request.user)
         product = Product.objects.get(id=product_id)
+        
+        # FFor Incresing View Count
+        session_key = f'/product_details/{product_id}'
+
+        if not request.session.get(session_key):
+            # Increment the view count if the product hasn't been viewed
+            product.view_count += 1
+            product.save()
+
+            # Mark the product as viewed in the session
+            request.session[session_key] = True
+
         reviews = ProductReview.objects.filter(product=product_id)
         same_products = Product.objects.filter(name__iexact=product.name)
 
@@ -257,13 +269,8 @@ def load_more_reviews(request):
     return JsonResponse({'reviews': review_data})
 
 
-
-
-
-
-
 def get_products(request):
-
+    context = get_context_data(request.user)
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         brand_ids = request.GET.getlist('brands[]', None)
         rating = request.GET.get('rating', None)
@@ -308,4 +315,4 @@ def get_products(request):
         products = products[offset:offset + limit]    
 
         products_data = list(products.values('id', 'name', 'category__name', 'brand__name', 'image', 'discount_price', 'discount_percentage', 'mrp_price', 'selling_price', 'avg_rating', 'review_count'))
-        return JsonResponse({'products': products_data})
+        return JsonResponse({'products': products_data, 'cart_product_ids': list(context['cart_product_ids'])})
