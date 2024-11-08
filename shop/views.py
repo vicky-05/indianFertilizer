@@ -32,7 +32,7 @@ def search_view(request):
     query = request.GET.get('query', '')
     products = Product.objects.filter(name__icontains=query)
     # products = Product.objects.filter(Q(name__icontains=query) | Q(brand__icontains=query))
-    products_list = list(products.values('id', 'name', 'brand'))
+    products_list = list(products.values('id', 'name', 'brand', 'brand__name', 'weight', 'unit_of_messure__name'))
     return JsonResponse({'products_list': products_list})
 
 
@@ -125,16 +125,29 @@ def cart_page(request):
         return redirect('login') 
 
 
-def categories(request):
+def categories(request, category_id=None):
     context = get_context_data(request.user)
-    category = Category.objects.all()
-    context['category'] = category
+    categories = Category.objects.all()
+    if category_id:
+        categories = Category.objects.get(id=category_id)
+        categories = categories.get_children()
+        if not categories:
+            return redirect('products', category_id)
+
+    context['categories'] = categories
     return render(request, "shop/categories.html",context=context)
 
 
-def products(request):
+def products(request, category_id=None):
     context = get_context_data(request.user)
-    products = Product.objects.filter(is_show=1)[:2].annotate(
+    products = Product.objects.filter(is_show=1)
+    if category_id:
+        category = Category.objects.get(id=category_id)
+        products = products.filter(category=category)
+        context['category'] = category
+    print(products)
+
+    products = products[:2].annotate(
         avg_rating = Avg('reviews__rating'),
         review_count = Count('reviews')
         )
@@ -314,5 +327,5 @@ def get_products(request):
         # Apply pagination by slicing the queryset
         products = products[offset:offset + limit]    
 
-        products_data = list(products.values('id', 'name', 'category__name', 'brand__name', 'image', 'discount_price', 'discount_percentage', 'mrp_price', 'selling_price', 'avg_rating', 'review_count'))
+        products_data = list(products.values('id', 'name', 'category__name', 'brand__name', 'image', 'unit_of_messure__name', 'weight', 'discount_price', 'discount_percentage', 'mrp_price', 'selling_price', 'avg_rating', 'review_count'))
         return JsonResponse({'products': products_data, 'cart_product_ids': list(context['cart_product_ids'])})

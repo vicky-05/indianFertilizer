@@ -3,7 +3,7 @@
 {% block title %} Products page| {{website_name}} {% endblock title %} 
 {% block content %}
 <style>
-    
+    /*
         .form-range::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
@@ -19,9 +19,8 @@
             background-color: #004d00;
             border-radius: 50%;
             cursor: pointer;
-        }
+        }*/
         .card  {
-            /* overflow: hidden; */
             transition: transform 0.3s, box-shadow 0.3s;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
             overflow: visible;
@@ -39,17 +38,17 @@
             
         }
         .offer-badge {
-        position: absolute;
-        top: -10px; /* Positioning it above the image */
-        left: 15px; /* Adjust to your preference */
-        background-color: #ff5733;
-        color: #fff;
-        padding: 5px 10px; /* Padding for better fit */
-        font-size: 12px;
-        font-weight: bold;
-        border-radius: 12px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-        z-index: 20; /* Ensures the badge is above the image */
+            position: absolute;
+            top: -10px; /* Positioning it above the image */
+            left: 15px; /* Adjust to your preference */
+            background-color: #ff5733;
+            color: #fff;
+            padding: 5px 10px; /* Padding for better fit */
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            z-index: 20; /* Ensures the badge is above the image */
         }
         .card-title {
         white-space: nowrap; /* Prevents wrapping */
@@ -57,10 +56,9 @@
         text-overflow: ellipsis; /* Adds ellipsis */
         max-width: 100%; /* Ensures it doesn't exceed the card width */
         }
-       
 
         .current-price {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
         font-weight: bold;
         color: #28a745; /* Green color */
         }
@@ -77,7 +75,22 @@
             font-weight: 500;
         }
 
+        /*@media(max-width:767px){
+            #offcanvasFilter{
+                display: none !important;
+            }
+        }
+
+
+        @media(min-width:768px){
+            #offcanvasFilter{
+                display: block !important;
+                visibility:visible !important;
+                transform: translateX(0) !important;
+            }
+        }*/
 </style>
+
 <div class="container-lg container-fluid" style="margin-top: 5rem;">
     <div class="d-md-none text-end mb-3">
         <!-- Button to open off-canvas sidebar on mobile view -->
@@ -91,13 +104,8 @@
         <div class="col-md-3 d-none d-md-block p-3 bg-light shadow">
             <h5 class="text-center">Filter By</h5>
             <hr>
-            <!-- Price Filter -->
-            <!-- <h6>Price</h6>
-             <input type="range" class="form-range" min="{{product_min_price}}" max="{{product_max_price}}" 
-            id="priceRangeMobile">
-            <span>Under ₹500</span> -->
 
-            <!-- Additional Price Range Options -->
+            <!-- Price Filter -->
             <div class="mt-3">
                 <h6 class="mt-4">Price Range</h6>
                 <select class="form-select" id="price-filter">
@@ -107,6 +115,7 @@
                     <option value="high">Above $100</option>
                 </select>                  
             </div>
+            <!-- End Price Filter -->
 
              <!-- Rating Filter -->
              <h6 class="mt-4">Rating</h6>
@@ -123,8 +132,8 @@
                 </label>
              </div>
              {% endfor %}
+             <!-- End Rating Filter -->
  
-
             <!-- Brand Filter -->
             <h6 class="mt-4">Brand</h6>
             {% for brand in brands %}
@@ -134,83 +143,102 @@
                 <label for="brand{{brand.id}}">{{brand.name}}</label>
             </div>
             {% endfor %}
+            <!-- End Brand Filter -->
+
             <!-- Category Filter -->
             <h6 class="mt-4">Category</h6>
             <select class="form-select" id="category-filter">
-                <option value="" selected>All Categories</option>
-                {% for category in categories %}
-                <option value="{{category.id}}">{{category.name}}</option>
+                <option value="">All Categories</option>
+                {% for item in categories %}
+                <option 
+                    value="{{item.id}}"
+                    {% if category %}
+                    {% if category.id == item.id %}
+                    selected
+                    {% endif %}
+                    {% endif %}
+                    >{{item.name}}</option>
                 {% endfor %}
             </select>
+            <!-- End Category Filter -->
         </div>
+        <!-- End Sidebar Filters Column for Desktop View -->
 
         <!-- Products Column -->
         <div class="col-md-9 mb-3">
-            <div class="row" id="product-container">
-
-                <!-- Product Card -->
-                {% for product in products %}
-                <div class="col-6 col-md-4 mb-4">
-                    <div class="card position-relative">
-                        <div class="offer-badge">{{product.discount_percentage}}% OFF
-                        </div>
-                        <img src="{{product.image.url}}" class="card-img-top" alt="Product Image"
-                             onclick="redirect(`{% url 'product_details' product.id %}`)">
-                        <div class="card-body">
-                            <h5 class="card-title mb-0"
-                                onclick="redirect(`{% url 'product_details' product.id %}`)">{{product.name}}
-                            </h5>
-                            <p class="card-text mb-1 text-muted">{{product.brand}}</p>
-
-                            <div class="ratings">
-                              <span>{{product.avg_rating | floatformat:1}} &nbsp;</span>
-                              {% with product.avg_rating|floatformat:1 as rating %}
-                              {% for i in "12345" %}
-                              {% if rating|floatformat:1 >= i %}
-                              <span class="star">&#9733;</span>
-                              {% else %}
-                              <span class="star">&#9734;</span>
-                              {% endif %}
-                              {% endfor %}
-                              {% endwith %}
-                              <span>({{product.review_count}})</span>
-                            </div>
-                            <p class="card-price mb-2">
-                                <span class="current-price">₹{{product.selling_price}}</span>
-                                <span class="original-price">₹{{product.mrp_price}}</span>
-                            </p>
-                            <p class="save-amount text-danger">Save ₹{{product.discount_price}}</p>
-                            <!-- <p class="save-amount text-danger">Save ₹{{product.discount_price}}</p> -->
-                            {% if product.id not in cart_product_ids  %}
-                            <button class="btn btn-success w-100 " 
-                                onclick="addToCart(event.target)" 
-                                data-url="{% url 'add_to_cart' product.id %}">
-                                Add to Cart
-                            </button>
-                            <a href="{% url 'cart' %}" class="btn btn-success w-100 d-none">
-                                Go to Cart
-                            </a>
-                            {% else %}
-                            <a href="{% url 'cart' %}" class="btn btn-success w-100">
-                                Go to Cart
-                            </a>
-                            {% endif %}
-                        </div>
-                    </div> 
-                </div>
-                {% endfor %}
-                <!--  End Product Card -->
-
+            <div class="row justify-content-center justify-content-md-start" id="product-container">
+                <!-- Products Here -->
             </div>
-            <button type="button" class="btn btn-success" id="load-more-btn" onclick="loadMoreProducts()">
+            <button type="button" class="btn btn-success" id="load-more-btn" 
+                onclick="loadMoreProducts()">
                 Load More
             </button>
             <p id="no-more-products" style="display: none;">No More Products.</p>
         </div>
-        
+        <!-- End Products Column -->
     </div>
 </div>
 
+
+<!-- Off-canvas Filter Sidebar for Mobile View -->
+<div class="offcanvas offcanvas-start bg-light text-dark" tabindex="-1" 
+    id="offcanvasFilter">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Filter & Sort</h5>
+        <button type="button" class="btn-close d-block d-md-none" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <!-- Additional Price Range Options -->
+                <div class="mt-3">
+                    <h6 class="mt-4">Price Range</h6>
+                    <select class="form-select" id="price-filter">
+                        <option value="">All Prices</option>
+                        <option value="low">Below $50</option>
+                        <option value="medium">$50 - $100</option>
+                        <option value="high">Above $100</option>
+                    </select>                  
+                </div>
+
+                 <!-- Rating Filter -->
+                 <h6 class="mt-4">Rating</h6>
+                 {% for rating in products_common_ratings %}
+                 <div class="form-check">
+                     <input type="checkbox" class="form-check-input" id="rating-{{rating}}" value="{{rating}}" 
+                        name="rating" onchange="resetAndLoadProducts()">
+                     <label class="form-check-label" for="rating-{{rating}}">
+                        {% if rating == 5 %}
+                        {{rating}} Star only
+                        {% else %}
+                        {{rating}} Star & Above
+                        {% endif %}
+                    </label>
+                 </div>
+                 {% endfor %}
+                 <!-- End Rating Filter -->
+
+                <!-- Brand Filter -->
+                <h6 class="mt-4">Brand</h6>
+                {% for brand in brands %}
+                <div>
+                    <input type="checkbox" id="brand-{{brand.id}}" name="brand" value="{{brand.id}}" 
+                    onchange="resetAndLoadProducts()">
+                    <label for="brand-{{brand.id}}">{{brand.name}}</label>
+                </div>
+                {% endfor %}
+                <!-- End Brand Filter -->
+                
+                <!-- Category Filter -->
+                <h6 class="mt-4">Category</h6>
+                <select class="form-select" id="category-filter">
+                    <option value="" selected>All Categories</option>
+                    {% for category in categories %}
+                    <option value="{{category.id}}">{{category.name}}</option>
+                    {% endfor %}
+                </select>
+                <!-- End Category Filter -->
+
+    </div>
+</div>
 
 <script>
 
@@ -244,7 +272,7 @@
     async function loadMoreProducts() {
         const RatingFilter = document.querySelectorAll('input[name="rating"]:checked');
         console.log(RatingFilter[RatingFilter.length-1])
-            start_loading()
+            start_loading();
             const selectedBrands = Array.from(BrandFilter)
                 .filter(checkbox => checkbox.checked)
                 .map(checkbox => checkbox.value);
@@ -311,7 +339,7 @@
                             }
 
                             productContainer.innerHTML += `
-                                <div class="col-6 col-md-4 mb-4">
+                                <div class="col-11 col-md-4 mb-4">
                                     <div class="card position-relative">
                                         <div class="offer-badge">
                                             ${product.discount_percentage}% OFF
@@ -322,7 +350,13 @@
                                             <h5 class="card-title mb-0" onclick="redirect('/product_details/${product.id}')">
                                                 ${product.name}
                                             </h5>
-                                            <p class="card-text mb-1 text-muted">${product.brand__name}</p>
+                                            <p class="card-text mb-1 text-muted">
+                                                ${product.brand__name}
+                                                <span class="text-lowercase text-success"> 
+                                                    ${product.weight}${product.unit_of_messure__name}
+                                                </span>
+                                            </p>
+                                            
                                             <div class="rating">
                                                 <span>
                                                     ${product.avg_rating}
@@ -359,94 +393,10 @@
                 console.error('Error:', error);
             }
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        resetAndLoadProducts();
+    })
 </script>
-
-
-
-<!-- Off-canvas Filter Sidebar for Mobile View -->
-<div class="offcanvas offcanvas-start bg-light text-dark" tabindex="-1" id="offcanvasFilter">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Filter & Sort</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <div class="offcanvas-body">
-        
-        <!-- Price Filter -->
-        <h6>Price</h6>
-        <input type="range" class="form-range" min="{{product_min_price}}" max="{{product_max_price}}" 
-            id="priceRangeMobile">
-        <span>Under ₹500</span>
-        {{product_min_price}}
-        {{product_max_price}}
-        <!-- Additional Price Range Options -->
-        <div class="mt-3">
-            <h6 class="mt-4">Price Range</h6>
-            <div class="form-check">
-                <input type="radio" class="form-check-input" name="priceRange" id="range1" value="0-100">
-                <label class="form-check-label" for="range1">₹0 - ₹100</label>
-            </div>
-            <div class="form-check">
-                <input type="radio" class="form-check-input" name="priceRange" id="range2" value="100-250">
-                <label class="form-check-label" for="range2">₹100 - ₹250</label>
-            </div>
-            <div class="form-check">
-                <input type="radio" class="form-check-input" name="priceRange" id="range3" value="250-500">
-                <label class="form-check-label" for="range3">₹250 - ₹500</label>
-            </div>
-        </div>
-
-        <h6 class="mt-4">Rating</h6>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="rating1Mobile" value="1">
-            <label class="form-check-label" for="rating1Mobile">1 Star & Above</label>
-        </div>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="rating2Mobile" value="2">
-            <label class="form-check-label" for="rating2Mobile">2 Stars & Above</label>
-        </div>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="rating3Mobile" value="3">
-            <label class="form-check-label" for="rating3Mobile">3 Stars & Above</label>
-        </div>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="rating4Mobile" value="4">
-            <label class="form-check-label" for="rating4Mobile">4 Stars & Above</label>
-        </div>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="rating5Mobile" value="5">
-            <label class="form-check-label" for="rating5Mobile">5 Stars Only</label>
-        </div>
-
-        <!-- Brand Filter -->
-        <h6 class="mt-4">Brand</h6>
-        <div>
-            <input type="checkbox" id="brand1Mobile">
-            <label for="brand1Mobile">Brand A</label>
-        </div>
-        <div>
-            <input type="checkbox" id="brand2Mobile">
-            <label for="brand2Mobile">Brand B</label>
-        </div>
-
-        <!-- Brand Filter -->
-        <h6 class="mt-4">Brand</h6>
-        <div>
-            <input type="checkbox" id="brand1Mobile">
-            <label for="brand1Mobile">Brand A</label>
-        </div>
-        <div>
-            <input type="checkbox" id="brand2Mobile">
-            <label for="brand2Mobile">Brand B</label>
-        </div>
-
-        <!-- Category Filter -->
-        <h6 class="mt-4">Category</h6>
-        <select class="form-select">
-            <option selected>All Categories</option>
-            <option>Category 1</option>
-            <option>Category 2</option>
-        </select>
-    </div>
-</div>
 
 {% endblock content %}
