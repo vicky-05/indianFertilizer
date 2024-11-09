@@ -10,12 +10,6 @@ def getFilename(request, filename):
     new_filename = "%s%s" % (now_time, filename)
     return os.path.join('product_and_category_images/', new_filename)
 
-class Unit(models.Model):
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
-
 class Brand(models.Model):
     name = models.CharField(max_length=255)
 
@@ -26,7 +20,6 @@ class Category(MPTTModel):
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to=getFilename)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
-    decrption = models.TextField()
 
     class MPTTMeta:
         order_insertion_by = ['name']
@@ -35,13 +28,22 @@ class Category(MPTTModel):
         return self.name
 
 class Product(models.Model):
+    UNIT_CHOICES = [
+    ( 'KG', 'KiloGram' ),
+    ( 'G', 'Gram' ),
+    ( 'MG', 'MilliGram' ),
+    ( 'ML', 'MilliLiter' ),
+    ( 'L', 'Liter' ),
+    ( 'KL', 'KiloLiter' ),
+    ]
+
     name = models.CharField(max_length=255)
     description = models.TextField()
     image = models.ImageField(upload_to=getFilename)
     image1 =models.ImageField(upload_to=getFilename, null=True, blank=True)
     image2 = models.ImageField(upload_to=getFilename, null=True, blank=True)
     weight = models.IntegerField(default=0)
-    unit_of_messure = models.ForeignKey(Unit, on_delete=models.CASCADE)
+    unit_of_messure = models.CharField(max_length=20, choices=UNIT_CHOICES)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     is_show = models.BooleanField(default=True, help_text='0 = Not show, 1 = Default')
@@ -70,7 +72,6 @@ class Product(models.Model):
         # Calculate selling amount
         self.selling_price = self.mrp_price - self.discount_price
         super().save(*args, **kwargs)
-
 class ProductReview(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')

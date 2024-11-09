@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     # Third party apps
     'jazzmin',
     'mptt',
+    'import_export',
     # Bulid in apps
     'django.contrib.admin',
     'django.contrib.auth',

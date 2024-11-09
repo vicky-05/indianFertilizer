@@ -250,8 +250,8 @@
     const noMoreProducts = document.getElementById('no-more-products');
 
     
-    let offset = 2;
-    const limit = 2;  // Number of products to load each time
+    let offset = 0;
+    const limit = 10;  // Number of products to load each time
 
     // Attach event listeners to filters 
     categoryFilter.addEventListener('change', resetAndLoadProducts);
@@ -351,9 +351,9 @@
                                                 ${product.name}
                                             </h5>
                                             <p class="card-text mb-1 text-muted">
-                                                ${product.brand__name}
+                                                ${product.brand__name}<br>
                                                 <span class="text-lowercase text-success"> 
-                                                    ${product.weight}${product.unit_of_messure__name}
+                                                    ${product.weight}${product.unit_of_messure}
                                                 </span>
                                             </p>
                                             

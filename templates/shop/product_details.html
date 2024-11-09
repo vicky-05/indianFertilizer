@@ -502,10 +502,11 @@ Product details page | {{website_name}}
     {% include 'inc/google map modal.html' %}
 </main>
 
+<script src="{% static 'js/product_details.js' %}"></script>
 
 <script>
     // Sample data from your database (replace with actual data)
-    const descriptionParagraph = "{{ product.description }}"; // Product description
+    const descriptionParagraph = `{{ product.description }}`; // Product description
     const featuresParagraph = "{{ product.benifits_and_features }}"; // Features and benefits
     const recommendationsParagraph = "{{ product.recommandation }}"; // Recommendations
     
@@ -513,7 +514,7 @@ Product details page | {{website_name}}
     function populateList(paragraph, listId) {
         const items = paragraph.split('.'); // Split by newline character
         const listElement = document.getElementById(listId);
-    
+        console.log(items, descriptionParagraph)
         items.forEach(item => {
             if (item.trim() !== "") { // Check if the item is not empty
                 
@@ -577,6 +578,6 @@ Product details page | {{website_name}}
     });
 </script>
 
-<script src="{% static 'js/product_details.js' %}"></script>
+
 
 {% endblock content %}

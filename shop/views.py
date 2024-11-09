@@ -32,7 +32,7 @@ def search_view(request):
     query = request.GET.get('query', '')
     products = Product.objects.filter(name__icontains=query)
     # products = Product.objects.filter(Q(name__icontains=query) | Q(brand__icontains=query))
-    products_list = list(products.values('id', 'name', 'brand', 'brand__name', 'weight', 'unit_of_messure__name'))
+    products_list = list(products.values('id', 'name', 'brand', 'brand__name', 'weight', 'unit_of_messure'))
     return JsonResponse({'products_list': products_list})
 
 
@@ -290,7 +290,7 @@ def get_products(request):
         category = request.GET.get('category', None)
         price_range = request.GET.get('price_range', None)
         offset = int(request.GET.get('offset', 0))
-        limit = int(request.GET.get('limit', 2))  # Number of products to load each time
+        limit = int(request.GET.get('limit', 10))  # Number of products to load each time
 
         products = Product.objects.filter(is_show=1).annotate(
             avg_rating = Coalesce(Cast(Avg('reviews__rating'), IntegerField()), Value(0)),
@@ -327,5 +327,5 @@ def get_products(request):
         # Apply pagination by slicing the queryset
         products = products[offset:offset + limit]    
 
-        products_data = list(products.values('id', 'name', 'category__name', 'brand__name', 'image', 'unit_of_messure__name', 'weight', 'discount_price', 'discount_percentage', 'mrp_price', 'selling_price', 'avg_rating', 'review_count'))
+        products_data = list(products.values('id', 'name', 'category__name', 'brand__name', 'image', 'unit_of_messure', 'weight', 'discount_price', 'discount_percentage', 'mrp_price', 'selling_price', 'avg_rating', 'review_count'))
         return JsonResponse({'products': products_data, 'cart_product_ids': list(context['cart_product_ids'])})

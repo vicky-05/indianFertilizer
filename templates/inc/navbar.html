@@ -115,7 +115,7 @@
                         data.products_list.forEach(product => {
                             const resultItem = document.createElement('a');
                             resultItem.href = `/product_details/${product.id}`
-                            resultItem.textContent = `${product.name}(${product.weight}${product.unit_of_messure__name}) - ${product.brand__name}`;  // Replace 'name' with the relevant field
+                            resultItem.textContent = `${product.name}(${product.weight}${product.unit_of_messure}) - ${product.brand__name}`;  // Replace 'name' with the relevant field
                             // resultItem.textContent = product.name;  // Replace 'name' with the relevant field
                             resultsContainer.appendChild(resultItem);
                         });
