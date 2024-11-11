@@ -8,7 +8,6 @@
     position: absolute;
     top: 0;
     left: 0;
-    display: flex;
     flex-direction: column;
     width: 100%;
   }
@@ -91,10 +90,10 @@
 <script>
   let timer;
   
-  console.dir(document.querySelectorAll('#search-query:not(:focus)'))
-    document.getElementById('search-query').addEventListener('focus', () => {
-      console.log('hii..')
-    });
+  document.addEventListener('click', () => {
+    const resultsContainer = document.getElementById('search-results');
+    resultsContainer.style.display = 'none';
+  });
 
   function SearchProducts(e) {
     clearTimeout(timer);  // Clear any existing timer to prevent multiple requests
@@ -109,6 +108,7 @@
                 .then(data => {
                   console.log(data)
                     const resultsContainer = document.getElementById('search-results');
+                    resultsContainer.style.display = 'flex';
                     resultsContainer.innerHTML = '';  // Clear previous results
                     const noResultItem = document.createElement('a');
                     if (data.products_list.length > 0) {

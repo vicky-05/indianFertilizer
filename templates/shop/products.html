@@ -75,20 +75,26 @@
             font-weight: 500;
         }
 
-        /*@media(max-width:767px){
-            #offcanvasFilter{
-                display: none !important;
-            }
-        }
-
 
         @media(min-width:768px){
             #offcanvasFilter{
                 display: block !important;
                 visibility:visible !important;
                 transform: translateX(0) !important;
+                position: static !important;
+                z-index: 0 !important;
+                width: 25% !important;
             }
-        }*/
+            .offcanvas-start{
+                border: none !important;
+            }
+            .offcanvas-body{
+                padding-top: 0 !important;
+            }
+            .offcanvas-header{
+                padding-bottom: 0 !important;
+            }
+        }
 </style>
 
 <div class="container-lg container-fluid" style="margin-top: 5rem;">
@@ -100,27 +106,32 @@
     </div>
 
     <div class="row">
-        <!-- Sidebar Filters Column for Desktop View -->
-        <div class="col-md-3 d-none d-md-block p-3 bg-light shadow">
-            <h5 class="text-center">Filter By</h5>
-            <hr>
 
-            <!-- Price Filter -->
-            <div class="mt-3">
-                <h6 class="mt-4">Price Range</h6>
-                <select class="form-select" id="price-filter">
-                    <option value="">All Prices</option>
-                    <option value="low">Below $50</option>
-                    <option value="medium">$50 - $100</option>
-                    <option value="high">Above $100</option>
-                </select>                  
+        <!-- Off-canvas Filter -->
+        <div class="offcanvas offcanvas-start w-md-25 bg-light text-dark" tabindex="-1" 
+            id="offcanvasFilter">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title">Filter & Sort</h5>
+                <button type="button" class="btn-close d-block d-md-none" data-bs-dismiss="offcanvas"></button>
             </div>
-            <!-- End Price Filter -->
+            <div class="offcanvas-body">
 
-             <!-- Rating Filter -->
-             <h6 class="mt-4">Rating</h6>
-             {% for rating in products_common_ratings %}
-             <div class="form-check">
+                <!-- Price Filter -->
+                <div class="mt-3">
+                    <h6 class="mt-4">Price Range</h6>
+                    <select class="form-select" id="price-filter">
+                        <option value="">All Prices</option>
+                        <option value="low">Below $50</option>
+                        <option value="medium">$50 - $100</option>
+                        <option value="high">Above $100</option>
+                    </select>                  
+                </div>
+                <!-- End Price Filter -->
+
+                <!-- Rating Filter -->
+                <h6 class="mt-4">Rating</h6>
+                {% for rating in products_common_ratings %}
+                <div class="form-check">
                  <input type="checkbox" class="form-check-input" id="rating{{rating}}" value="{{rating}}" 
                     name="rating" onchange="resetAndLoadProducts()">
                  <label class="form-check-label" for="rating{{rating}}">
@@ -130,39 +141,41 @@
                     {{rating}} Star & Above
                     {% endif %}
                 </label>
-             </div>
-             {% endfor %}
-             <!-- End Rating Filter -->
- 
-            <!-- Brand Filter -->
-            <h6 class="mt-4">Brand</h6>
-            {% for brand in brands %}
-            <div>
-                <input type="checkbox" id="brand{{brand.id}}" name="brand" value="{{brand.id}}" 
-                onchange="resetAndLoadProducts()">
-                <label for="brand{{brand.id}}">{{brand.name}}</label>
-            </div>
-            {% endfor %}
-            <!-- End Brand Filter -->
-
-            <!-- Category Filter -->
-            <h6 class="mt-4">Category</h6>
-            <select class="form-select" id="category-filter">
-                <option value="">All Categories</option>
-                {% for item in categories %}
-                <option 
-                    value="{{item.id}}"
-                    {% if category %}
-                    {% if category.id == item.id %}
-                    selected
-                    {% endif %}
-                    {% endif %}
-                    >{{item.name}}</option>
+                </div>
                 {% endfor %}
-            </select>
-            <!-- End Category Filter -->
+                <!-- End Rating Filter -->
+
+                <!-- Brand Filter -->
+                <h6 class="mt-4">Brand</h6>
+                {% for brand in brands %}
+                <div>
+                    <input type="checkbox" id="brand{{brand.id}}" name="brand" value="{{brand.id}}" 
+                    onchange="resetAndLoadProducts()">
+                    <label for="brand{{brand.id}}">{{brand.name}}</label>
+                </div>
+                {% endfor %}
+                <!-- End Brand Filter -->
+                
+                <!-- Category Filter -->
+                <h6 class="mt-4">Category</h6>
+                <select class="form-select" id="category-filter">
+                    <option value="">All Categories</option>
+                    {% for item in categories %}
+                    <option 
+                        value="{{item.id}}"
+                        {% if category %}
+                        {% if category.id == item.id %}
+                        selected
+                        {% endif %}
+                        {% endif %}
+                        >{{item.name}}</option>
+                    {% endfor %}
+                </select>
+                <!-- End Category Filter -->
+
+            </div>
         </div>
-        <!-- End Sidebar Filters Column for Desktop View -->
+        <!-- End Off-canvas Filter -->
 
         <!-- Products Column -->
         <div class="col-md-9 mb-3">
@@ -180,65 +193,6 @@
 </div>
 
 
-<!-- Off-canvas Filter Sidebar for Mobile View -->
-<div class="offcanvas offcanvas-start bg-light text-dark" tabindex="-1" 
-    id="offcanvasFilter">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Filter & Sort</h5>
-        <button type="button" class="btn-close d-block d-md-none" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <div class="offcanvas-body">
-        <!-- Additional Price Range Options -->
-                <div class="mt-3">
-                    <h6 class="mt-4">Price Range</h6>
-                    <select class="form-select" id="price-filter">
-                        <option value="">All Prices</option>
-                        <option value="low">Below $50</option>
-                        <option value="medium">$50 - $100</option>
-                        <option value="high">Above $100</option>
-                    </select>                  
-                </div>
-
-                 <!-- Rating Filter -->
-                 <h6 class="mt-4">Rating</h6>
-                 {% for rating in products_common_ratings %}
-                 <div class="form-check">
-                     <input type="checkbox" class="form-check-input" id="rating-{{rating}}" value="{{rating}}" 
-                        name="rating" onchange="resetAndLoadProducts()">
-                     <label class="form-check-label" for="rating-{{rating}}">
-                        {% if rating == 5 %}
-                        {{rating}} Star only
-                        {% else %}
-                        {{rating}} Star & Above
-                        {% endif %}
-                    </label>
-                 </div>
-                 {% endfor %}
-                 <!-- End Rating Filter -->
-
-                <!-- Brand Filter -->
-                <h6 class="mt-4">Brand</h6>
-                {% for brand in brands %}
-                <div>
-                    <input type="checkbox" id="brand-{{brand.id}}" name="brand" value="{{brand.id}}" 
-                    onchange="resetAndLoadProducts()">
-                    <label for="brand-{{brand.id}}">{{brand.name}}</label>
-                </div>
-                {% endfor %}
-                <!-- End Brand Filter -->
-                
-                <!-- Category Filter -->
-                <h6 class="mt-4">Category</h6>
-                <select class="form-select" id="category-filter">
-                    <option value="" selected>All Categories</option>
-                    {% for category in categories %}
-                    <option value="{{category.id}}">{{category.name}}</option>
-                    {% endfor %}
-                </select>
-                <!-- End Category Filter -->
-
-    </div>
-</div>
 
 <script>
 
@@ -296,7 +250,7 @@
                     headers: { 'X-Requested-With': 'XMLHttpRequest' }
                 });
                 if (response.ok) {
-                    end_loading()
+                    end_loading();
                     const data = await response.json();
                     console.log('Data : ', data)  // Clear previous products
 

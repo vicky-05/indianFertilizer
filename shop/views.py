@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from shop.models import *
-from django.db.models import Avg, Count, IntegerField, Value
+from django.db.models import Avg, Count, IntegerField, Value, Q
 import math
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -30,8 +30,8 @@ def get_context_data(user=None):
 
 def search_view(request):
     query = request.GET.get('query', '')
-    products = Product.objects.filter(name__icontains=query)
-    # products = Product.objects.filter(Q(name__icontains=query) | Q(brand__icontains=query))
+    # products = Product.objects.filter(name__icontains=query)
+    products = Product.objects.filter(Q(name__icontains=query) | Q(brand__name__icontains=query))
     products_list = list(products.values('id', 'name', 'brand', 'brand__name', 'weight', 'unit_of_messure'))
     return JsonResponse({'products_list': products_list})
 
