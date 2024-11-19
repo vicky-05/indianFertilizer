@@ -42,7 +42,9 @@ Cart page | {{website_name}}
                 <img src="{% static 'images/empty-cart-image.png' %}" alt="Empty Cart Image">
                 <h4>Your cart is currently empty.</h4>
                 <p>Browse our products and add items to your cart!</p>
-                <a href="{% url 'products' %}" class="btn btn-success ">Continue Shopping</a>
+                <a href="{% url 'products' %}" class="btn btn-success">
+                    Continue Shopping
+                </a>
             </div>
 
             <div id="cartItems">

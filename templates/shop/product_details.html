@@ -23,10 +23,6 @@ Product details page | {{website_name}}
         font-weight: bold;
     }
 
-    body {
-        user-select: none;
-    }
-
     .mrp-prices {
         color: grey;
     }
@@ -215,43 +211,25 @@ Product details page | {{website_name}}
         height: 500px;
         object-fit: contain;
     }
-    .product-units .btn-success:hover, .btn-success:focus {
-        background-color: green; /* Reset to default button color */
-        color: white; /* Reset to default text color */
-        /* Remove box shadow if there is any */
-        box-shadow: none;
-        font-weight: 700;
-    }
-    .product-units .btn-success{
-        font-weight: 700;
-        
-    }
-    .product-units .btn-outline-success{
-        border: 2px solid grey;
-        color: grey;
-    }
+    
     .product-details {
-    margin: 1.5rem 0;
-}
+        margin: 1.5rem 0;
+    }
 
-.product-name {
-    font-size: 1.5rem; /* Adjust as needed */
-    font-weight: bold;
-}
-
-.badge {
-    margin-right: 0.5rem; /* Space between badges */
-}
-.brand-name {
-    font-weight: bold; /* Makes the brand name bold */
-    color: #333; /* Dark color for the brand */
-}
+    .product-name {
+        font-size: 1.5rem; /* Adjust as needed */
+        font-weight: bold;
+    }
+    .brand-name {
+        font-weight: bold; /* Makes the brand name bold */
+        color: #333; /* Dark color for the brand */
+    }
 
     @media (max-width: 576px) {
-    .breadcrumb-m {
-        display: none !important;
+        .breadcrumb-m {
+            display: none !important;
+        }
     }
-}
 
 
 </style>
@@ -321,7 +299,7 @@ Product details page | {{website_name}}
                                 {% if same_product.id == product.id %} 
                                 btn-success
                                 {% else %}
-                                btn-outline-success
+                                btn-outline-secondary
                                 {% endif %}
                                 "
                             >
@@ -372,36 +350,50 @@ Product details page | {{website_name}}
                 <!-- Scrollable Tab Titles -->
                 <div class="tab-scroll-container">
                     <ul class="nav nav-tabs" id="productTab" role="tablist">
+                        {% if product.description %}
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="description-tab" data-bs-toggle="tab"
                                 data-bs-target="#description" type="button" role="tab">Description</button>
                         </li>
+                        {% endif %}
+
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews"
                                 type="button" role="tab">Reviews</button>
                         </li>
+
+                        {% if product.demo_url %}
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="video-tab" data-bs-toggle="tab" data-bs-target="#video"
                                 type="button" role="tab">Demonstration Video</button>
                         </li>
+                        {% endif %}
+
+                        {% if product.benifits_and_features %}
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="features-tab" data-bs-toggle="tab" data-bs-target="#features"
                                 type="button" role="tab">Features & Benefits</button>
                         </li>
+                        {% endif %}
+
+                        {% if product.recommandation %}
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="recommendations-tab" data-bs-toggle="tab"
                                 data-bs-target="#recommendations" type="button" role="tab">Recommendations</button>
                         </li>
+                        {% endif %}
+
                     </ul>
                 </div>
 
                 <!-- Tab Content -->
                 <div class="tab-content mt-3" id="productTabContent">
-
+                    
                     <!-- Deccription Part -->
                     <div class="tab-pane fade show active" id="description" role="tabpanel"
                         aria-labelledby="description-tab">
-                        <h4 class="about-heading">Product <b class="text-uppercase text-success">Description</b></h4>
+                        <h4 class="about-heading">
+                            Product <b class="text-uppercase text-success">Description</b></h4>
                         <ul id="description-list">
 
                         </ul>
@@ -412,8 +404,7 @@ Product details page | {{website_name}}
                     <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
                         <div class="d-flex justify-content-between align-items-center">
                             <h4 class="about-heading">
-                                Customer 
-                                <b class="text-uppercase text-success">Reviews</b>
+                                Customer <b class="text-uppercase text-success">Reviews</b>
                             </h4>
 
                             {% if user.is_authenticated %}
@@ -452,113 +443,57 @@ Product details page | {{website_name}}
 
                         {% include 'inc/review modal.html' %}
 
-                        <div id="reviews-container mb-5">
+                        <div id="reviews-container">
                         </div>
                         {% if reviews %}
                         <button id="load-more-btn" class="btn btn-success rounded mt-3 mb-3">Load More</button>
                         <script>
-                            const productId = "{{ product.id }}";
-                            let offset = 3;  // Starting point after initial reviews
-
-                            document.getElementById('load-more-btn').addEventListener('click', function() {
-                                start_loading()
-                                fetch(`/load_more_reviews/?product_id=${productId}&offset=${offset}`)
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        end_loading()
-                                        if (data.reviews) {
-                                            data.reviews.forEach(review => {
-                                                let stars='';
-                                                for (var i=1 ; i<=5; i++) {
-                                                    if (i<=review.rating) {
-                                                        stars += '★'
-                                                    } else{
-                                                        stars += '☆'
-                                                    }
-                                                }
-
-                                                review_card = `<div class="review-card mt-2 rounded shadow px-4 pb-2 pt-3" id="review-card">
-                                                    <div class="review-head">
-                                                        <img src="${review.user.profile_image_url}" alt="Customer Image">
-                                                        <div>
-                                                            <h6 class="mb-0">${review.user.username}</h6>  
-                                                            <div class="star-rating"> 
-                                                            ${stars}             
-                                                            </div>
-                                                            <p>(${review.rating})</p>
-                                                        </div>
-                                                    </div>
-                                                    <p>"${review.review}"</p>
-                                                </div>`
-                                                document.getElementById('reviews-container').innerHTML += review_card
-                                            });
-                                            offset += data.reviews.length;
-                                            if (data.reviews.length < 3) {
-                                                document.getElementById('load-more-btn').style.display = 'none';
-                                            }
-                                        } else if (data.error) {
-                                            alert(data.error);
-                                        }
-                                    });
-                            });
+                            
                         </script>
                         {% else %}
                         <p>No Reviews</p>
                         {% endif %}
-
-
                     </div>
                     <!-- End Review Part -->
 
                     <!-- Product Demonstration Part -->
+                    {% if product.demo_url %}
                     <div class="tab-pane fade" id="video" role="tabpanel" aria-labelledby="video-tab">
-                        <h4 class="about-heading">Product <b class="text-uppercase text-success">Demonstration</b></h4>
+                        <h4 class="about-heading">
+                            Product <b class="text-uppercase text-success">Demonstration</b>
+                        </h4>
                         <div class="video-container mb-4">
                             <iframe src="{{ product.demo_url }}" frameborder="0"
                                 allowfullscreen></iframe>
                         </div>
                     </div>
+                    {% endif %}
                     <!-- End Product Demonstration Part -->
 
-                    <div class="tab-pane fade" id="features" role="tabpanel" aria-labelledby="features-tab">
-                        <h4 class="about-heading">Feature & <b class="text-uppercase text-success">Benefits</b></h4>
+                    <!-- Features and Benefits Part -->
+                    <div class="tab-pane fade" id="features" role="tabpanel" 
+                        aria-labelledby="features-tab">
+                        <h4 class="about-heading">
+                            Feature & <b class="text-uppercase text-success">Benefits</b>
+                        </h4>
                         <ul id="features-list">
                             
                         </ul>
                     </div>
+                    <!-- End Features and Benefits Part -->
+
+                    <!-- Recommendation Part -->
                     <div class="tab-pane fade" id="recommendations" role="tabpanel"
                         aria-labelledby="recommendations-tab">
-                        <h4 class="about-heading">Recommen<b class="text-uppercase text-success">dations</b></h4>
+                        <h4 class="about-heading">
+                            Recommen<b class="text-uppercase text-success">dations</b>
+                        </h4>
                         <ul id="recommendations-list">
                             
                         </ul>
                     </div>
-                    <script>
-                        // Sample data from your database (replace with actual data)
-                        const descriptionParagraph = "{{ product.description }}"; // Product description
-                        const featuresParagraph = "{{ product.benifits_and_features }}"; // Features and benefits
-                        const recommendationsParagraph = "{{ product.recommandation }}"; // Recommendations
-                        
-                        // Function to populate a list from a paragraph
-                        function populateList(paragraph, listId) {
-                            const items = paragraph.split('.'); // Split by newline character
-                            const listElement = document.getElementById(listId);
-                        
-                            items.forEach(item => {
-                                if (item.trim() !== "") { // Check if the item is not empty
-                                    
-                                    const listItem = document.createElement('li'); // Create a new list item
-                                    listItem.textContent = item.trim(); // Set the text of the list item
-                                    listElement.appendChild(listItem); // Append it to the list
-                                }
-                            });
-                        }
-                        
-                        // Populate each list with corresponding data
-                        populateList(descriptionParagraph, 'description-list');
-                        populateList(featuresParagraph, 'features-list');
-                        populateList(recommendationsParagraph, 'recommendations-list');
-                    </script>
+                    <!-- End Recommendation Part -->
+
                 </div>
             </div>
         </div>
@@ -567,6 +502,82 @@ Product details page | {{website_name}}
     {% include 'inc/google map modal.html' %}
 </main>
 
-    <script src="{% static 'js/product_details.js' %}"></script>
+<script src="{% static 'js/product_details.js' %}"></script>
+
+<script>
+    // Sample data from your database (replace with actual data)
+    const descriptionParagraph = `{{ product.description }}`; // Product description
+    const featuresParagraph = "{{ product.benifits_and_features }}"; // Features and benefits
+    const recommendationsParagraph = "{{ product.recommandation }}"; // Recommendations
+    
+    // Function to populate a list from a paragraph
+    function populateList(paragraph, listId) {
+        const items = paragraph.split('.'); // Split by newline character
+        const listElement = document.getElementById(listId);
+        console.log(items, descriptionParagraph)
+        items.forEach(item => {
+            if (item.trim() !== "") { // Check if the item is not empty
+                
+                const listItem = document.createElement('li'); // Create a new list item
+                listItem.textContent = item.trim(); // Set the text of the list item
+                listElement.appendChild(listItem); // Append it to the list
+            }
+        });
+    }
+    
+    // Populate each list with corresponding data
+    populateList(descriptionParagraph, 'description-list');
+    populateList(featuresParagraph, 'features-list');
+    populateList(recommendationsParagraph, 'recommendations-list');
+
+    const productId = "{{ product.id }}";
+    let offset = 3;  // Starting point after initial reviews
+
+    document.getElementById('load-more-btn').addEventListener('click', function() {
+        start_loading()
+        fetch(`/load_more_reviews/?product_id=${productId}&offset=${offset}`)
+            .then(response => response.json())
+            .then(data => {
+                end_loading()
+                if (data.reviews) {
+                    data.reviews.forEach(review => {
+                        let stars='';
+                        for (var i=1 ; i<=5; i++) {
+                            if (i<=review.rating) {
+                                stars += '★'
+                            } else{
+                                stars += '☆'
+                            }
+                        }
+
+                        review_card = `<div class="review-card mt-2 rounded shadow px-4 pb-2 pt-3" id="review-card">
+                            <div class="review-head">
+                                <img src="${review.user.profile_image_url}" alt="Customer Image">
+                                <div>
+                                    <h6 class="mb-0">${review.user.username}</h6>  
+                                    <div class="star-rating"> 
+                                    ${stars}             
+                                    </div>
+                                    <p>(${review.rating})</p>
+                                </div>
+                            </div>
+                            <p>"${review.review}"</p>
+                        </div>`
+
+                        document.getElementById('reviews-container').innerHTML += review_card
+                    });
+                    offset += data.reviews.length;
+                    if (data.reviews.length < 3) {
+                        document.getElementById('load-more-btn').style.display = 'none';
+                    }
+                } else if (data.error) {
+                    alert(data.error);
+                }
+            })
+            .catch(error => console.log('Error :', error));
+    });
+</script>
+
+
 
 {% endblock content %}
