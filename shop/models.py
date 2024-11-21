@@ -50,7 +50,6 @@ class Product(models.Model):
     is_trend = models.BooleanField(default=False, help_text='0 = Default, 1 = Trend')
     view_count = models.PositiveBigIntegerField(default=0, null=True, blank=True)
     stock_qty = models.IntegerField(default=0, blank=True)
-    price_per_unit = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
     mrp_price = models.DecimalField(default=0.0, max_digits=10, decimal_places=2)
     selling_price =  models.DecimalField(default=0.0, max_digits=10, decimal_places=2, editable=False)
     discount_price = models.DecimalField(default=0.0, max_digits=10, decimal_places=2, editable=False)

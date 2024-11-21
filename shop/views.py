@@ -55,7 +55,7 @@ def home(request):
     context['category_list'] = category_list
     context['trend_products'] = trend_produts
     context['most_viewed_products'] = most_viewed_products
-    return render(request, "shop/home.html", context=context)
+    return render(request, "shop/home.html",  context=context)
 
 
 def about(request):

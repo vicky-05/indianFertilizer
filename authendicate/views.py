@@ -3,6 +3,24 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from authendicate.forms import *
 from shop import views
+from shop.models import *
+
+def get_context_data(user=None):
+    context = {
+        'website_name' : 'indian fertilizer',
+        'header' : True,
+        'footer' : True,
+        'cart_products' : None,
+        'cart_count' : 0,
+        'cart_product_ids' : set()
+    }
+    if user.is_authenticated:
+        cart_products = Cart.objects.filter(user=user)
+        context['cart_products'] = cart_products
+        context['cart_product_ids'] = set(context['cart_products'].values_list('product', flat=True))
+        context['cart_count'] = cart_products.count()
+    return context
+
 
 def register(request):
     context = views.context_data()
@@ -38,3 +56,12 @@ def login_page(request):
             messages.warning(request, "Invalid Username or Password")
             return redirect('login')
      return render(request, "shop/login.html")
+
+def help_us(request):
+    context = get_context_data(request.user)
+    return render(request, "authendicate/help_us.html",context=context)
+
+
+def privacy_policy(request):
+    context = get_context_data(request.user)
+    return render(request, "authendicate/privacy_policy.html",context=context)
