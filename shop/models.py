@@ -2,6 +2,7 @@ from django.db import models
 from mptt.models import TreeForeignKey, MPTTModel
 from django.core.validators import MaxValueValidator
 from authendicate.models import User
+from django.utils.text import slugify
 import datetime
 import os
 
@@ -20,6 +21,7 @@ class Category(MPTTModel):
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to=getFilename)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    slug = models.SlugField()
 
     class MPTTMeta:
         order_insertion_by = ['name']
@@ -59,19 +61,12 @@ class Product(models.Model):
     discount_percentage = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    slug = models.SlugField()
+
 
     def __str__(self):
         return self.name
-    
-    def save(self, *args, **kwargs):
-        # Calculate discount price
-        if self.mrp_price > 0:
-            self.discount_price = self.mrp_price * self.discount_percentage // 100
-        else:
-            self.discount_price = 0
-        # Calculate selling amount
-        self.selling_price = self.mrp_price - self.discount_price
-        super().save(*args, **kwargs)
+
 class ProductReview(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')

@@ -18,6 +18,7 @@ DEBUG = True
 
 INSTALLED_APPS = [
     # Third party apps
+    # 'unfold',
     'jazzmin',
     'mptt',
     'import_export',

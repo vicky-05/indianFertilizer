@@ -57,6 +57,7 @@ def login_page(request):
             return redirect('login')
      return render(request, "shop/login.html")
 
+
 def help_us(request):
     context = get_context_data(request.user)
     return render(request, "authendicate/help_us.html",context=context)

@@ -287,23 +287,23 @@ Product details page | {{website_name}}
                 <div class="product-units">
                     <h6>Select Quantity:</h6>
                     <div class="row">
-                        {% for same_product in same_products %}
+                        {% for different_weight_product in different_weight_products %}
                         <form 
                             class="col-auto" 
                             method="GET" 
-                            action="{% url 'product_details' same_product.id %}"
+                            action="{% url 'product_details' different_weight_product.slug %}"
                         >
                             <button 
                                 type="submit"
                                 class="btn 
-                                {% if same_product.id == product.id %} 
+                                {% if different_weight_product.slug == product.slug %} 
                                 btn-success
                                 {% else %}
                                 btn-outline-secondary
                                 {% endif %}
                                 "
                             >
-                                {{same_product.weight}}{{same_product.unit_of_messure}}
+                                {{different_weight_product.weight}}{{different_weight_product.unit_of_messure}}
                             </button>
                         </form>
                         {% endfor %}
@@ -497,6 +497,39 @@ Product details page | {{website_name}}
                 </div>
             </div>
         </div>
+
+        {% if similar_products %}
+        <!-- Card Collection -->
+        <div class="mt-4 position-relative">
+          <div class="d-flex justify-content-between align-items-center">
+            <h3 class="about-heading">
+              Similar <b class="text-success">Products</b>
+            </h3>
+            
+          </div>
+
+          <button
+            class="d-none d-sm-block scroll-button left btn btn-success rounded-circle fade-in"
+            onclick="leftScroll('cardWrapper1')"
+          >
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <div class="card-wrapper" id="cardWrapper1">
+            {% for product in similar_products %} 
+            {% if product.is_show %}
+             {% include 'inc/card.html' %} 
+             {% endif %} 
+             {% endfor %}
+          </div>
+          <button
+            class="d-none d-sm-block scroll-button right btn btn-success rounded-circle fade-in"
+            onclick="rightScroll('cardWrapper1')"
+          >
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+        <!-- End Card Collection -->
+        {% endif %}
     </div>
 
     {% include 'inc/google map modal.html' %}
