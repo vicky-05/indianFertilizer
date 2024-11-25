@@ -30,56 +30,64 @@
     }
 </style>
 
-<section id="our-activities" class="py-5">
+<section id="our-activities" class="py-5" data-aos="fade-right">
     <div class="container">
-        <h3 class="about-heading text-uppercase">
+        <h3 class="about-heading text-uppercase" data-aos="fade-up">
             Our <b class="text-success">Activities</b>
         </h3>
         
         <!-- Bootstrap Carousel -->
-        <div id="activitiesCarousel" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
+        <div id="activitiesCarousel" class="carousel slide " data-bs-ride="carousel">
+            <div class="carousel-inner ">
+                <div class="carousel-item active" data-aos="fade-up">
                     <img src="{% static 'images/gallery-3.jpg' %}" class="d-block w-100" alt="Activity 1">
-                    <div class="carousel-caption d-none d-md-block">
+                    <div class="carousel-caption d-none d-md-block" data-aos="fade-left">
                         <h5>Engagement with Farmers at SPIC Training Program</h5>
                         <p>We had an insightful discussion with farmers during the SPIC company farmers training program, exchanging ideas to enhance agricultural practices.</p>
                     </div>
                 </div>
-                <div class="carousel-item">
+                <div class="carousel-item" data-aos="fade-up">
                     <img src="{% static 'images/gallery-1.jpg' %}" class="d-block w-100 " alt="Activity 1">
-                    <div class="carousel-caption d-none d-md-block">
+                    <div class="carousel-caption d-none d-md-block" data-aos="fade-left">
                         <h5>Honoring a Farmer with Shal</h5>
                         <p>Our founder honored a dedicated farmer with a shal, recognizing their hard work and commitment to farming excellence.</p>
                     </div>
                 </div>
-                <div class="carousel-item">
+                <div class="carousel-item" data-aos="fade-up">
                     <img src="{% static 'images/gallery-2.jpg' %}" class="d-block w-100" alt="Activity 2">
-                    <div class="carousel-caption d-none d-md-block">
+                    <div class="carousel-caption d-none d-md-block" data-aos="fade-left">
                         <h5>Training Program Kickoff with Candle Ceremony</h5>
                         <p>Our founder inaugurated the farmers' training program with a symbolic candle lighting ceremony, signifying hope and knowledge.</p>
                     </div>
                 </div>
                 
-                <div class="carousel-item ">
+                <div class="carousel-item" data-aos="fade-up">
                     <img src="{% static 'images/gallery-5.jpg' %}" class="d-block w-100" alt="Activity 1">
-                    <div class="carousel-caption d-none d-md-block">
+                    <div class="carousel-caption d-none d-md-block" data-aos="fade-left">
                         <h5>Memorable Gift Presented to Our Founder</h5>
                         <p>A company representative presented a memorable gift to our founder in appreciation of their vision and leadership.</p>
-                    
                     </div>
                 </div>
             </div>
 
             <!-- Carousel Controls -->
-            <button class="carousel-control-prev " type="button" data-bs-target="#activitiesCarousel" data-bs-slide="prev">
+            <button class="carousel-control-prev " type="button" data-bs-target="#activitiesCarousel" data-bs-slide="prev" data-aos="fade-right">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next " type="button" data-bs-target="#activitiesCarousel" data-bs-slide="next">
+            <button class="carousel-control-next " type="button" data-bs-target="#activitiesCarousel" data-bs-slide="next" data-aos="fade-left">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
     </div>
 </section>
+
+<script>
+    // Initialize AOS
+    AOS.init({
+        duration: 1000, // Animation duration in ms
+        offset: 100, // Offset (in px) from the original trigger point
+        once: true // Animation only happens once
+    });
+</script>

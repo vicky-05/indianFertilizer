@@ -225,11 +225,17 @@ Product details page | {{website_name}}
         color: #333; /* Dark color for the brand */
     }
 
+    .hidden {
+    opacity: 0; /* Start hidden */
+}
+
     @media (max-width: 576px) {
         .breadcrumb-m {
             display: none !important;
         }
     }
+
+
 
 
 </style>
@@ -420,7 +426,7 @@ Product details page | {{website_name}}
 
                         <!-- Review Card -->
                         {% for review in reviews %}
-                        <div class="review-card mt-2 rounded shadow px-4 pb-2 pt-3" id="review-card">
+                        <div class="review-card mt-2 rounded  shadow px-4 pb-2 pt-3" id="review-card">
                             <div class="review-head">
                                 <img src="{{review.user.profile_img.url}}" alt="Customer Image">
                                 <div>
@@ -612,6 +618,37 @@ Product details page | {{website_name}}
             })
             .catch(error => console.log('Error :', error));
     });
+
+
+
+    // Select all product cards
+const productCards = document.querySelectorAll('.product-card');
+
+// Callback function for IntersectionObserver
+const observerCallback = (entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const card = entry.target;
+            // Add animation classes when the card is visible
+            card.classList.remove('hidden');
+            card.classList.add('animate__fadeInUp');
+            observer.unobserve(card); // Stop observing once the animation is applied
+        }
+    });
+};
+
+// Create an IntersectionObserver instance
+const observerOptions = {
+    root: null, // Use the viewport as the container
+    rootMargin: '0px', // Trigger animation as soon as the card enters the viewport
+    threshold: 0.1 // Trigger when 10% of the card is visible
+};
+
+const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+// Observe each product card
+productCards.forEach(card => observer.observe(card));
+
 </script>
 
 
