@@ -26,7 +26,11 @@ Cart page | {{website_name}}
     .empty-cart .btn{
         font-weight: 700;
     }
-
+    .cart-item {
+            border-bottom: 2px solid #f0eeee;
+            padding: 10px 0;
+            cursor: pointer;
+    }
     
 
 </style>
@@ -50,12 +54,12 @@ Cart page | {{website_name}}
             <div id="cartItems">
                 {% for cart_product in cart_products %}
                 <form action="/cart" method="POST" class="row cart-item align-items-center">
-                    <div class="col-md-2">
+                    <div class="col-md-2 ">
                         <img src="{{ cart_product.product.image.url }}" alt="Product Image" 
-                            class="img-fluid">
+                            class="img-fluid" onclick="redirect(`{% url 'product_details' cart_product.product.id %}`)"> 
                     </div>
                     <div class="col-md-3">
-                        <h5>{{cart_product.product.name}}</h5>
+                        <h5 onclick="redirect(`{% url 'product_details' cart_product.product.id %}`)">{{cart_product.product.name}}</h5>
                         <p>{{cart_product.product.weight}}{{cart_product.product.unit_of_messure}}</p>
                         <p>₹{{cart_product.product.selling_price}}</p>
                     </div>
@@ -69,12 +73,12 @@ Cart page | {{website_name}}
                             <button type="button" class="btn btn-secondary input-group-text">+</button>
                         </div>
                     </div>
-                    <div class="col-md-2 text-center">
+                    <div class="col-md-2  text-center">
                         <span class="item-total">
                             ₹{{cart_product.product.selling_price |multiply:cart_product.qty}}
                         </span>
                     </div>
-                    <div class="col-md-2 text-center">
+                    <div class="col-md-2   text-center">
                         {% csrf_token %}
                         <button class="btn btn-danger btn-sm" type="submit">
                             <i class="fas fa-trash me-2"></i>
