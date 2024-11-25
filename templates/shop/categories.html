@@ -1,12 +1,8 @@
-{% extends 'shop/layouts/main.html' %}
+{% extends 'layouts/main.html' %}
 {% block styles %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/category.css' %}">
 {% endblock styles %}
 {% block content %}
-{% include 'shop/inc/category.html' %}
+{% include 'inc/category.html' %}
 {% endblock %}
-{% block scripts %}
-{% load static %}
-<script src="{% static 'jss/product_details.js' %}"></script>
-{% endblock scripts %}

@@ -26,23 +26,133 @@
     {% block styles %} {% endblock styles %}
   </head>
 
+  <style>
+    #spinner-container{
+      background-color: rgba(255, 255, 255, 0.5);
+      width: 100vw;
+      height: 100vh;
+      z-index: 5000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+
+    body {
+        user-select: none;
+    }
+
+    .btn-outline-success{
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+      background-color: var(--bg-color);
+    }
+
+    .btn-outline-success:hover{
+      background-color: var(--primary-color);
+      color: var(--primary-font-color);
+      border: 1px solid var(--primary-color);
+    }
+
+    .card-img-top:hover, .card-title:hover{
+      cursor: pointer;
+    }
+
+  </style>
+
   <body>
     {% if header %}
     <header>{% include 'inc/navbar.html' %}</header>
     {% endif %}
+
+
     
     {% block content %} 
     {% include 'inc/message.html' %} 
     {% endblock content %} 
     {% include 'inc/toast.html' %} 
+    <div class="d-none" id="spinner-container">
+      <div class="spinner-border text-success" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div> 
     
     {% if footer %}
     <footer>{% include 'inc/footer.html' %}</footer>
     {% endif %} 
+    <script type="text/javascript">
+
+      const start_loading = () => {
+        let spinnerContainer = document.getElementById('spinner-container');
+        spinnerContainer.classList.remove('d-none');
+      }
+
+      const end_loading = () => {
+        let spinnerContainer = document.getElementById('spinner-container');
+        spinnerContainer.classList.add('d-none');
+      }
+
+      const addToCart = (addBtn) => {
+        start_loading()
+        const myToast = document.getElementById("myToast");
+        const toast = new bootstrap.Toast(myToast);
+        const url = addBtn.dataset.url;
+        toast.hide()
+        fetch(url, {
+          method: "POST",
+          headers: {
+            'X-CSRFToken': '{{csrf_token}}'
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+            end_loading()
+            const cartCount = document.getElementById("cart-count");
+            const toastBody = myToast.querySelector(".toast-body");
+            if (data.status == "success") {
+              if (data.data) {
+                cartCount.innerText = data.data.count;
+              }
+              addBtn.classList.add("d-none");
+              addBtn.nextElementSibling.classList.remove("d-none");
+              }
+              toastBody.innerText = data.message
+              toast.show();
+              if (data.url) {
+                window.location = data.url;
+                return;
+              }
+            })
+        .catch(error => {
+          end_loading()
+          console.error('Error:', error);
+          });
+      };
+
+      const redirect = (url) => {
+        window.location = url;
+      }
+
+    const leftScroll = (id) => {
+      document.getElementById(id).scrollBy({
+        left: -294,
+        behavior: "smooth",
+      });
+    };
+
+    const rightScroll = (id) => {
+      document.getElementById(id).scrollBy({
+        left: 294,
+        behavior: "smooth",
+      });
+    };
+
+    </script>
+
     {% block scripts %}
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'js/index.js' %}"></script>
 
     {% endblock scripts %}

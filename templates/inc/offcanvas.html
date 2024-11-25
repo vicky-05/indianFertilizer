@@ -1,7 +1,8 @@
 {% load static %}
 
 <!-- Offcanvas -->
-<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" 
+    aria-labelledby="offcanvasNavbarLabel">
     <div class="offcanvas-header">
         <a href="{% url 'home' %}">
         <img src="{% static 'images/website name.png' %}" alt="india fertilizer" class="brand-img"></a>
@@ -13,10 +14,10 @@
                 <a class="nav-link active" href="{% url 'home' %}" aria-current="page">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Category</a>
+                <a class="nav-link" href="{% url 'categories' %}">Category</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Products</a>
+                <a class="nav-link" href="{% url 'products' %}">Products</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'about' %}">About</a>
