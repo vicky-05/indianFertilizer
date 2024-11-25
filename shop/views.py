@@ -29,7 +29,7 @@ def get_context_data(user=None):
 def search_products(request):
     query = request.GET.get('query', '')
     products = Product.objects.filter(Q(name__icontains=query) | Q(brand__name__icontains=query))
-    products_list = list(products.values('id', 'name', 'brand', 'brand__name', 'weight', 'unit_of_messure'))
+    products_list = list(products.values('slug', 'name', 'brand', 'brand__name', 'weight', 'unit_of_messure'))
     return JsonResponse({'products_list': products_list})
 
 
@@ -68,7 +68,8 @@ def add_to_cart(request, product_slug=None):
 
     # Not login.
     if not request.user.is_authenticated:
-        return JsonResponse({'status' : 'error', 'message' : "Please Login.", 'url' : '/login/'}, status=200)
+        messages.success(request, "Please Login.")
+        return JsonResponse({'messages' : 'Please login.'}, status=401)
 
     if request.method != 'POST':
         # Doesn't allow other methods like get, put and etc.
@@ -123,10 +124,10 @@ def cart_page(request):
     context['error_message'] = request.session.pop('error_message', None)
     if request.user.is_authenticated:
         if request.method == 'POST':
-            product_id = request.POST.get('product_id', None)
-            if product_id:
-                product = Product.objects.get(id=product_id)
-                cart_product = Cart.objects.get(user=request.user, product=product)
+            product_slug = request.POST.get('product_slug', None)
+            print(product_slug)
+            if product_slug:
+                cart_product = Cart.objects.get(user=request.user, product__slug=product_slug)
                 cart_product.delete()
                 return redirect('cart')
         return render(request, "shop/cart.html", context=context)
@@ -234,7 +235,7 @@ def get_products(request):
         category = request.GET.get('category', None)
         price_range = request.GET.get('price_range', None)
         offset = int(request.GET.get('offset', 0))   # Number of offset like page no
-        limit = int(request.GET.get('limit', 10))  # Number of products to load each time
+        limit = int(request.GET.get('limit', 9))  # Number of products to load each time
 
         products = Product.objects.order_by('name').filter(is_show=1).annotate(
             avg_rating = Coalesce(Cast(Avg('reviews__rating'), IntegerField()), Value(0)),

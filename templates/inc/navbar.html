@@ -24,7 +24,11 @@
     border: 1px solid var(--primary-font-color);
     border-radius: 4px;
   }
-
+  .brand-img{
+    height: 35px;
+    width: 120px;
+    object-fit: cover;
+  }
 </style>
 <!-- NavBar -->
 
@@ -53,9 +57,9 @@
         <a class="nav-link" href="{% url 'about' %}">About</a>
       </li>
     </ul>
-    <ul class="nav">
-      <li class="search-box">
-          <div name="search-form" class="d-none d-md-flex search-group">
+    {% if header %}
+    <div class="search-box order-2 order-md-1">
+          <div name="search-form" class="search-group">
             <i class="fas fa-magnifying-glass text-light search-icon"></i>
             <input type="text" name="search" class="search-input" id="search-query" 
               placeholder="Search products..." autocomplete=false oninput="SearchProducts(event)">
@@ -64,7 +68,8 @@
            <div id="search-results" class="shadow">
            </div>
          </div>
-      </li>
+    </div>
+    <ul class="nav order-1 order-md-2">
       <li class="nav-item">
         <a class="nav-link position-relative" href="{% url 'cart' %}" aria-current="page">
           <p class="badge cart-badge rounded-circle" id="cart-count">{{cart_count}}</p>
@@ -72,18 +77,23 @@
         </a>
       </li>
       <li class="nav-item">
+        {% if user.is_authenticated %}
         <a class="nav-link" href="#">
-          {% if user.is_authenticated %}
           <i class="fas fa-user"></i>
-          {% else %}
-          <i class="fas fa-user-plus"></i>
-          {% endif %}
         </a>
+        {% else %}
+        <a class="nav-link" href="{% url 'login' %}">
+          <i class="fas fa-user-plus" ></i>
+        </a>
+        {% endif %}
       </li>
     </ul>
+    {% endif %}
+  
     {% include 'inc/offcanvas.html' %}
 
   </div>
+
 </nav>
 <!-- End NavBar -->
 
@@ -114,7 +124,7 @@
                     if (data.products_list.length > 0) {
                         data.products_list.forEach(product => {
                             const resultItem = document.createElement('a');
-                            resultItem.href = `/product_details/${product.id}`
+                            resultItem.href = `/product_details/${product.slug}`
                             resultItem.textContent = `${product.name}(${product.weight}${product.unit_of_messure}) - ${product.brand__name}`;  // Replace 'name' with the relevant field
                             // resultItem.textContent = product.name;  // Replace 'name' with the relevant field
                             resultsContainer.appendChild(resultItem);
