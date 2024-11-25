@@ -1,0 +1,102 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .privacy-container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        
+
+        ul {
+            padding-left: 20px;
+        }
+        .about-heading {
+            color: #000;
+            font-size: 26px;
+            font-weight: 300;
+            text-align: center;
+            text-transform: uppercase;
+            position: relative;
+            /* margin: 45px; */
+        }
+
+        .about-heading b {
+            color: #ffc000;
+        }
+        .privacy-image {
+            max-width: 100%;
+            height: 40vh;
+            margin-bottom: 10px;
+        }
+    
+</style>
+<div class="container py-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="privacy-container">
+                <h4 class="about-heading">Privacy And<b class="text-uppercase text-success"> Policy</b></h4>
+                <p>
+                    Welcome to <strong>India Fertilizer</strong>. Your privacy is critically important to us. 
+                    This document outlines how we collect, use, and protect your personal information.
+                </p>
+                <img src="{% static 'images/privacy-policy.png' %}" alt="Privacy Policy" class="privacy-image mx-auto d-block">
+                <h4 class="about-heading">Information <b class="text-uppercase text-success">We Collect</b></h4>
+                <p>We may collect the following types of information when you use our website:</p>
+                <ul>
+                    <li><strong>Personal Identification Information:</strong> Name, email address, phone number, and address.</li>
+                    <li><strong>Non-Personal Identification Information:</strong> Browser type, operating system, and IP address.</li>
+                    <li><strong>Transaction Details:</strong> Products you purchase and payment information.</li>
+                </ul>
+
+                <h4 class="about-heading">How We Use <b class="text-uppercase text-success">Your Information</b></h4>
+                <p>Your data is used for the following purposes:</p>
+                <ul>
+                    <li>To process and fulfill your orders.</li>
+                    <li>To improve customer service and enhance user experience.</li>
+                    <li>To send order confirmations and updates.</li>
+                    <li>To provide promotional offers and discounts.</li>
+                </ul>
+
+                <h4 class="about-heading">How We Protect <b class="text-uppercase text-success">Your Information</b></h4>
+                <p>We adopt appropriate data collection, storage, and processing practices to safeguard your personal information:</p>
+                <ul>
+                    <li>Data encryption for sensitive transactions.</li>
+                    <li>Secure servers and firewall protection.</li>
+                    <li>Limited access to personal data by authorized personnel only.</li>
+                </ul>
+
+                <h4 class="about-heading">Coo<b class="text-uppercase text-success">kies</b></h4>
+                <p>
+                    Our website uses cookies to enhance user experience. Cookies are small files stored on your device to improve functionality.
+                    You can choose to disable cookies in your browser settings, but this may affect some features of our website.
+                </p>
+
+                <h4 class="about-heading">Sharing Yo<b class="text-uppercase text-success">ur Information</b></h4>
+                <p>
+                    We do not sell, trade, or rent your personal identification information to others. We may share generic aggregated data
+                    with trusted partners for analytics and service improvements.
+                </p>
+
+                <h4 class="about-heading">Changes To <b class="text-uppercase text-success">This Policy</b></h4>
+                <p>
+                    We reserve the right to update this privacy policy at any time. Updates will be posted on this page, and users are encouraged to check periodically.
+                </p>
+
+                <h4 class="about-heading">Contact <b class="text-uppercase text-success">Us</b></h4>
+                <p>If you have any questions about this Privacy and Policy, please contact us:</p>
+                <ul>
+                    <li><strong>Phone:</strong> +91 98765 43210</li>
+                    <li><strong>Email:</strong> indiafertilizer@gmail.com</li>
+                    <li><strong>Address:</strong>VAHS complex No 2,Vathalagundu,<br>TamilNadu 624202.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

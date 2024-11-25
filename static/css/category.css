@@ -24,6 +24,6 @@
     }
 
     .card-boxing:hover {
-        transform: scale(1.1);
+        transform: scale(0.6);
         transition: .1s;
     }

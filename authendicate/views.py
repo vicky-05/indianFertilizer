@@ -3,9 +3,24 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from authendicate.forms import *
 from shop import views
-# from django.conf import settings
-# from django.core.mail import send_mail
-# from .form import ForgotPasswordForm
+from shop.models import *
+
+def get_context_data(user=None):
+    context = {
+        'website_name' : 'indian fertilizer',
+        'header' : True,
+        'footer' : True,
+        'cart_products' : None,
+        'cart_count' : 0,
+        'cart_product_ids' : set()
+    }
+    if user.is_authenticated:
+        cart_products = Cart.objects.filter(user=user)
+        context['cart_products'] = cart_products
+        context['cart_product_ids'] = set(context['cart_products'].values_list('product', flat=True))
+        context['cart_count'] = cart_products.count()
+    return context
+
 
 def register(request):
     context = views.context_data()
@@ -43,62 +58,11 @@ def login_page(request):
      return render(request, "shop/login.html")
 
 
-# def forgot_pass(request):
-#      if request.method == 'POST':
-#         email = request.POST.get('email')
-#         otp = request.POST.get('otp')
+def help_us(request):
+    context = get_context_data(request.user)
+    return render(request, "authendicate/help_us.html",context=context)
 
-#         if email and not otp:
-#             # Email is provided, generate and send OTP
-#             form = ForgotPasswordForm(request.POST)
-#             if form.is_valid():
-#                 email = form.cleaned_data['email']
-#                 try:
-#                     user = User.objects.get(email=email)
-#                     otp = random.randint(100000, 999999)
-#                     request.session['otp'] = otp
-#                     request.session['email'] = email
 
-#                     # Send OTP via email
-#                     send_mail(
-#                         'Your OTP Code',
-#                         f'Your OTP code is {otp}',
-#                         settings.DEFAULT_FROM_EMAIL,
-#                         [email],
-#                     )
-#                     messages.success(request, 'OTP has been sent to your email.')
-#                 except User.DoesNotExist:
-#                     messages.error(request, 'No user is associated with this email.')
-#             form = ForgotPasswordForm()
-        
-#         elif otp:
-#             # OTP is provided, verify it
-#             entered_otp = request.POST.get('otp')
-#             if int(entered_otp) == request.session.get('otp'):
-#                 messages.success(request, 'OTP verified successfully. You can now reset your password.')
-#                 return redirect('reset_password')
-#             else:
-#                 messages.error(request, 'Invalid OTP. Please try again.')
-
-#         else:
-#             form = ForgotPasswordForm()
-
-#         return render(request, 'shop/products/forgot_pass.html', {'form': form, 'show_otp_field': 'otp' in request.POST})
-     
-# def reset_password(request):
-#     if request.method == 'POST':
-#         password = request.POST.get('password')
-#         email = request.session.get('email')
-#         if email:
-#             try:
-#                 user = User.objects.get(email=email)
-#                 user.set_password(password)
-#                 user.save()
-#                 messages.success(request, 'Your password has been reset successfully.')
-#                 return redirect('login')
-#             except User.DoesNotExist:
-#                 messages.error(request, 'Error resetting password. Please try again.')
-#         else:
-#             messages.error(request, 'Session expired. Please try the forgot password process again.')
-#             return redirect('forgot_pass')
-#     return render(request, 'shop/products/reset_password.html')sss
+def privacy_policy(request):
+    context = get_context_data(request.user)
+    return render(request, "authendicate/privacy_policy.html",context=context)
