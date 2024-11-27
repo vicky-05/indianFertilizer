@@ -47,6 +47,18 @@
   object-fit: contain;
 }
 
+/* Animation for fade-in when the element is scrolled into view */
+.fade-in-scroll {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.fade-in-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
   
 </style>
 <header>
@@ -135,7 +147,7 @@
 
     <!-- Category Slider -->
     {% if category_list %}
-    <div class="slider-container">
+    <div class="slider-container fade-in-scroll">
       <div>
         <h3 class="about-heading text-uppercase">
           Our <b class="text-success">Categories</b>
@@ -167,8 +179,7 @@
           data-bs-slide="prev"
         >
           <span class="btn btn-success rounded-circle fade-in"
-            ><i class="fas fa-arrow-left"></i
-          ></span>
+            ><i class="fas fa-arrow-left"></i></span>
           <span class="visually-hidden">Previous</span>
         </button>
         <button
@@ -177,14 +188,13 @@
           data-bs-target="#productCarousel"
           data-bs-slide="next"
         >
-          <!-- <i class="fas fa-arrow-right btn btn-success rounded-circle" aria-hidden="true"></i> -->
           <span class="btn btn-success rounded-circle fade-in"
-            ><i class="fas fa-arrow-right"></i
-          ></span>
+            ><i class="fas fa-arrow-right"></i></span>
           <span class="visually-hidden">Next</span>
         </button>
       </div>
     </div>
+    
     {% endif %}
     <!-- End Category Slider -->
 
@@ -309,6 +319,7 @@
 </main>
 
 <script>
+  
   // When the user scrolls down 20px from the top of the document, slide down the navbar
   // When the user scrolls to the top of the page, slide up the navbar (50px out of the top view)
   window.onscroll = function () {
@@ -327,6 +338,31 @@
         "transparent";
     }
   }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // Select the carousel container
+    const carousel = document.querySelector('.slider-container');
+
+    // Create an Intersection Observer to detect when the element enters the viewport
+    const observer = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // Add the 'visible' class to trigger the animation
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target); // Stop observing after the animation has triggered
+          }
+        });
+      },
+      {
+        threshold: 0.5 // When 50% of the element is visible in the viewport
+      }
+    );
+
+    // Start observing the carousel container
+    observer.observe(carousel);
+  });
+
 
 </script>
 
