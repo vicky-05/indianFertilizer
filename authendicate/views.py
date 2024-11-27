@@ -5,25 +5,9 @@ from authendicate.forms import *
 from shop import views
 from shop.models import *
 
-def get_context_data(user=None):
-    context = {
-        'website_name' : 'indian fertilizer',
-        'header' : True,
-        'footer' : True,
-        'cart_products' : None,
-        'cart_count' : 0,
-        'cart_product_ids' : set()
-    }
-    if user.is_authenticated:
-        cart_products = Cart.objects.filter(user=user)
-        context['cart_products'] = cart_products
-        context['cart_product_ids'] = set(context['cart_products'].values_list('product', flat=True))
-        context['cart_count'] = cart_products.count()
-    return context
-
-
 def register(request):
-    context = views.context_data()
+    context = views.get_context_data(request.user)
+    context['header'] = None
     form=RegisterForm()
     if request.method=="POST":
         form=RegisterForm(request.POST)
@@ -40,22 +24,22 @@ def logout_page(request):
     return redirect('home')
 
 def login_page(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    else:
-
-     if request.method=="POST":
-        name = request.POST.get('username')
-        pwd = request.POST.get('password')
-        user = authenticate(request, username=name, password=pwd)
-        if user is not None:
-            login(request, user)
-            messages.success(request, "Login Successfully")
-            return redirect('home')
-        else:
-            messages.warning(request, "Invalid Username or Password")
-            return redirect('login')
-     return render(request, "shop/login.html")
+    context = views.get_context_data(request.user) 
+    context['header'] = None      
+    form=LoginForm()     
+    if request.method=="POST":
+        form=LoginForm(request.POST)
+        print(form.errors)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user:
+                login(request, user)
+                messages.success(request, "Login Successfully")
+                return redirect('home')
+    context['form'] = form
+    return render(request, "authendicate/login.html", context=context)
 
 
 def help_us(request):

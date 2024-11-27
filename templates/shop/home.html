@@ -58,6 +58,7 @@
     >
   </div>
 </header>
+
 <main>
   <section class="container-fluid container-lg">
     <!-- Top Brands Sliding Animation -->
@@ -97,8 +98,8 @@
     </div>
     <!-- End Top Brands Sliding Animation -->
 
+    <!-- Trend Product Collection -->
     {% if trend_products %}
-    <!-- Card Collection -->
     <div class="mt-4 position-relative">
       <div class="d-flex justify-content-between align-items-center">
         <h3 class="about-heading">
@@ -129,8 +130,8 @@
         <i class="fas fa-arrow-right"></i>
       </button>
     </div>
-    <!-- End Card Collection -->
     {% endif %}
+    <!-- End Trend Products Collection -->
 
     <!-- Category Slider -->
     {% if category_list %}
@@ -189,9 +190,9 @@
 
     <!-- Gallery Carousel -->
     {% include 'inc/gallery_carousel.html' %}
+    <!-- End Gallery Carousel -->
 
-    <!-- Most Viewed Products -->
-
+    <!-- Most Viewed Products Collection -->
     {% if most_viewed_products %}
     <div class="mt-4 position-relative">
       <div class="d-flex justify-content-between align-items-center">
@@ -223,11 +224,12 @@
         <i class="fas fa-arrow-right"></i>
       </button>
     </div>
-    <!-- End Card Collection -->
     {% endif %}
+    <!-- End  Most Viewed Products Collection -->
 
 
     <!-- Signup Now Card -->
+    {% if not user.is_authenticated %}
     <div
       class="card mb-4 shadow fade-in"
       style="font-family: Poppins, sans-serif"
@@ -244,7 +246,7 @@
             <li class="mb-2">✅ Fertilizer That Makes a Difference!</li>
           </ul>
 
-          <a href="#" class="btn btn-success">Signup now</a>
+          <a href="{% url 'register' %}" class="btn btn-success">Signup now</a>
         </div>
 
         <!-- Card Image -->
@@ -261,6 +263,7 @@
         </div>
       </div>
     </div>
+    {% endif %}
     <!-- End Signup Now Card -->
     
 

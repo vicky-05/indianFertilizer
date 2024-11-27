@@ -2,154 +2,91 @@
 {% load static %}
 
 {% block content %}
-<style>
-  .section{
-    height: 90vh;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+<style type="text/css">
+
+  .form-control{
+    padding-left: 40px;
+    border: 1px solid var(--primary-color);
+    margin: 10px 0;
   }
+
+  .form-check{
+    margin: 10px 0;
+  }
+
+
+  .form-control::placeholder {
+    color: var(--primary-color);
+  }
+
+  .input-field {
+      width: 100%;
+      position: relative;
+  }
+
+  .input-field>i {
+    position: absolute;
+    top: 22px;
+    left: 12px;
+    color: var(--primary-color);
+  }
+
+  .errorlist>li{
+    list-style: none;
+  }
+  
+  main{
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+
+  .login-img{
+      object-fit: contain;
+  }
+
+  .login-form{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center; 
+      padding: 30px 20px;
+      border-radius: 6px;
+      border-top: 1px solid white ;
+      border-left: 1px solid white;
+      box-shadow:  .5rem 1rem .8rem var(--shadow);
+  }
+
+  .signup-form{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center; 
+      padding: 14px 16px;
+      border-top: 1px solid white ;
+      border-left: 1px solid white;
+      border-radius: 6px;
+  }
+
+  .content{
+      height: 90%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+  }
+
 </style>
-<section>
-  <div class="container">
-    <div class="row d-flex justify-content-center align-items-center">
-      <div class="col-lg-12 col-xl-12">
-        <div class="row justify-content-center">
-          <div class="col-md-10 col-lg-6 col-xl-5">
 
-            <p class="text-center h1 fw-bold mb-3 mx-1 mx-md-4 ">Sign Up</p>
-            {% include 'inc/message.html' %}
-            <form class="mx-1 mx-md-4" method="POST" action="#">
 
-              {% csrf_token %}
+<main>
 
-              <div class="d-flex flex-row align-items-center mb-4">
-                <i class="fas fa-user fa-lg me-2 mt-4 fa-fw"></i>
-                <div class="form-outline flex-fill mb-0">
-                  <div>
-                    <label class="form-label" for="form3Example1c">Enter Your Name</label>
-                  </div>
-                  <!-- <input type="text" id="form3Example1c" class="form-control" /> -->
-                  {{ form.username }}
-                  {% if form.username.errors %}
-                  <label class="text-danger">{{ form.username.errors }}</label>
-                  {% endif %}
-                </div>
-              </div>
-
-              <div class="d-flex flex-row align-items-center mb-4">
-                <i class="fas fa-envelope fa-lg me-2 fa-fw mt-4"></i>
-                <div class="form-outline flex-fill mb-0">
-                  <div>
-                    <label class="form-label" for="form3Example3c">Enter Your Email</label>
-                  </div>
-                  <!-- <input type="email" id="form3Example3c" class="form-control" /> -->
-                  {{ form.email }}
-                  {% if form.email.errors %}
-                  <label class="text-danger">{{ form.email.errors }}</label>
-                  {% endif %}
-                </div>
-              </div>
-
-              <div class="d-flex flex-row align-items-center mb-4">
-                <i class="fas fa-lock fa-lg me-2 fa-fw mt-4"></i>
-                <div class="form-outline flex-fill mb-0">
-                  <!-- <input type="password" id="form3Example4c" class="form-control" /> -->
-                  <div>
-                    <label class="form-label" for="form3Example4c">Enter Your Password</label>
-                  </div>
-                  {{ form.password1 }}
-                  {% if form.password1.errors %}
-                  <label class="text-danger">{{ form.password1.errors }}</label>
-                  {% endif %}
-                </div>
-              </div>
-
-              <div class="d-flex flex-row align-items-center mb-4">
-                <i class="fas fa-key fa-lg me-2 fa-fw mt-4"></i>
-                <div class="form-outline flex-fill mb-0">
-                  <!-- <input type="password" id="form3Example4cd" class="form-control" /> -->
-                  <div>
-                    <label class="form-label" for="form3Example4cd">Enter Confirm Password</label>
-                  </div>
-                  {{ form.password2 }}
-                  {% if form.password2.errors %}
-                  <label class="text-danger">{{ form.password2.errors }}</label>
-                  {% endif %}
-                </div>
-              </div>
-
-              <div class="form-check d-flex justify-content-center mb-3">
-                <input class="form-check-input me-2" type="checkbox" value="" id="termsCheckbox" />
-                <label id="agree-label" class="form-check-label" for="form2Example3">
-                  I agree all statements in <button type="button" class="link-button" data-bs-toggle="modal"
-                    data-bs-target="#staticBackdrop">Terms of service</button>
-                </label>
-
-              </div>
-
-              <span class="mb-1 text-center" id="checkbox-error" style="color: red; display: none;">You must Agree to
-                the terms and conditions.</span>
-              <div class="d-flex justify-content-center mx-2 mb-3 mb-lg-3">
-                <button type="submit" class="btn btn-primary btn-lg" id="reg-btn">Register</button>
-              </div>
-              <p class="text-center text-muted mb-5 text-decoration-none">Already have an account? <a
-                  href="#" class="text-decoration-none fw-bold ">Login Now</a></p>
-
-            </form>
-
-          </div>
-          <div class="col-md-10 col-lg-7 col-xl-7 d-flex align-items-center">
-
-            <img src="{%static 'images/register-new.png' %}" class="img-fluid d-none d-md-block" alt="Sample image"
-              style="border-radius: 15px; ">
-
-          </div>
-  <div class="container-fluid container-lg">
-    <div class="row section">
-      {% include 'inc/message.html' %}
-      <form class=" offset-md-1 offset-lg-0 col-sm-8 col-md-4" method="POST" action="#">
-        <h3 class="text-center" style="color: var(--bs-green);">Sign Up</h3>
-
+  <form name="signupForm" method="post"
+        class="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-12 signup-form shadow" novalidate>
+        <h1> <i class="fa-solid fa-user fs-4"></i> Signup</h1>
         {% csrf_token %}
-
-        <style>
-          form {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-evenly;
-            border: 1px solid var(--bs-green);
-          }
-
-          .form-control {
-            padding-left: 40px;
-            border: 2px solid var(--bs-green);
-            border-radius: 50px;
-          }
-
-          .form-control::placeholder {
-            color: var(--bs-green);
-          }
-
-          .input-field {
-            position: relative;
-          }
-
-          .input-field>i {
-            position: absolute;
-            top: 18px;
-            left: 16px;
-            /* color: rgb(150, 140, 140); */
-            color: var(--bs-green);
-          }
-
-          .errorlist>li::marker {
-            display: none;
-          }
-        </style>
-
         <div class="input-field">
-          <i class="fas fa-user fa-lg"></i>
+          <i class="fas fa-user"></i>
           {{ form.username }}
           {% if form.username.errors %}
           <label class="text-danger">{{ form.username.errors }}</label>
@@ -157,7 +94,7 @@
         </div>
 
         <div class="input-field">
-          <i class="fas fa-envelope fa-lg"></i>
+          <i class="fas fa-envelope"></i>
           {{ form.email }}
           {% if form.email.errors %}
           <label class="text-danger">{{ form.email.errors }}</label>
@@ -165,43 +102,33 @@
         </div>
 
         <div class="input-field">
-          <i class="fas fa-lock fa-lg"></i>
-          {{ form.password1 }}
-          {% if form.password1.errors %}
-          <label class="text-danger">{{ form.password1.errors }}</label>
-          {% endif %}
-        </div>
-
-        <div class="input-field">
-          <i class="fas fa-lock fa-lg"></i>
-          {{ form.password2 }}
-          {% if form.password2.errors %}
-          <label class="text-danger list-none">{{ form.password2.errors }}</label>
+          <i class="fas fa-lock"></i>
+          {{ form.password }}
+          {% if form.password.errors %}
+          <label class="text-danger">{{ form.password.errors }}</label>
           {% endif %}
         </div>
 
         <div class="form-check d-flex justify-content-center">
           <input class="form-check-input me-2" type="checkbox" value="" id="termsCheckbox" />
           <label class="form-check-label" for="termsCheckbox">
-            I agree all statements in <a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Terms of
-              service</a>
+              I agree all statements in <a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Terms of
+                service</a>
           </label>
         </div>
 
-        <span class="text-center" id="checkbox-error" style="color: red; display: none;">You must Agree to
-          the terms and conditions.</span>
-        <div class="d-flex justify-content-center">
-          <button type="submit" class="btn btn-success btn-lg" id="reg-btn">Register</button>
-        </div>
-        <p class="text-center text-muted text-decoration-none">Already have an account? <a href="#"
-            class="text-decoration-none fw-bold ">Login Now</a></p>
+        <span class="text-center" id="checkbox-error" style="color: red; display: none;">
+          You must Agree to the terms and conditions.
+        </span>
 
-      </form>
-      <img src="{%static 'images/register-new.png' %}" class="bg-success img-fluid d-none d-md-block col-md-7 col-lg-7"
-        alt="Sample image">
-    </div>
-  </div>
-</section>
+        <button type="submit" class="btn btn-success mt-1 w-100" id="reg-btn">Register</button>
+        <p class="my-2">Or</p>
+        <p>Already have an account<a href="{% url 'login' %}" class="ps-1">Login?</a></p>
+    </form>
+    <img src="{% static 'images/register-new.png' %}" alt="signup image..."
+        class="login-img col-lg-7 col-md-6 d-none d-md-block">
+</main>
+
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
   aria-labelledby="staticBackdropLabel" aria-hidden="true">

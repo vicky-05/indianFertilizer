@@ -85,8 +85,9 @@ Cart page | {{website_name}}
                             ₹{{cart_product.product.selling_price |multiply:cart_product.qty}}
                         </span>
                     </div>
-                    <form action="/cart" method="POST"  class="col-md-2 text-center">
+                    <form method="POST"  class="col-md-2 text-center">
                         {% csrf_token %}
+                        <input type="text" name="product_slug" class="d-none" value="{{cart_product.product.slug}}">
                         <button class="btn btn-danger btn-sm" type="submit">
                             Remove
                         </button>
