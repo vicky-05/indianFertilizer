@@ -41,25 +41,25 @@
 <nav class="navbar navbar-dark fixed-top ">
   <div class="container-fluid container-lg">
     <div class="navbar-head">
-      <a class="btn animate__animated" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-        aria-controls="offcanvasNavbar">
+      <a class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+         aria-controls="offcanvasNavbar">
         <span class="navbar-toggler-icon"></span>
       </a>
       <a href="{% url 'home' %}" class="brand">
-        <img src="{% static 'images/website name.png' %}" alt="india fertilizer" class="brand-img animate__animated animate__bounceIn">
+        <img src="{% static 'images/website name.png' %}" alt="india fertilizer" class="brand-img {% if request.path == '/' %}animate__animated animate__bounceIn{% endif %}">
       </a>
     </div>
     <ul class="d-none d-lg-flex nav">
-      <li class="nav-item animate__animated animate__fadeInUp animate__delay-1s">
+      <li class="nav-item {% if request.path == '/' %}animate__animated animate__fadeInUp animate__delay-1s{% endif %}">
         <a class="nav-link active" href="{% url 'home' %}" aria-current="page">Home</a>
       </li>
-      <li class="nav-item animate__animated animate__fadeInUp animate__delay-2s">
+      <li class="nav-item {% if request.path == '/' %}animate__animated animate__fadeInUp animate__delay-2s{% endif %}">
         <a class="nav-link" href="{% url 'categories' %}">Category</a>
       </li>
-      <li class="nav-item animate__animated animate__fadeInUp animate__delay-3s">
+      <li class="nav-item {% if request.path == '/' %}animate__animated animate__fadeInUp animate__delay-3s{% endif %}">
         <a class="nav-link" href="{% url 'products' %}">Products</a>
       </li>
-      <li class="nav-item animate__animated animate__fadeInUp animate__delay-4s">
+      <li class="nav-item {% if request.path == '/' %}animate__animated animate__fadeInUp animate__delay-4s{% endif %}">
         <a class="nav-link" href="{% url 'about' %}">About</a>
       </li>
     </ul>
@@ -67,13 +67,8 @@
     {% if header %}
     <div class="search-box order-2 order-md-1 animate__animated animate__fadeIn">
       <div name="search-form" class="search-group">
-        <i class="fas fa-magnifying-glass text-light search-icon animate__delay-1s animate__animated animate__fadeInLeft"></i>
-        <input type="text" name="search" 
-          class="search-input animate__animated animate__fadeInRight" 
-          id="search-query" 
-          placeholder="Search products..." 
-          autocomplete="false" 
-          oninput="SearchProducts(event)">
+        <i class="fas fa-magnifying-glass text-light search-icon  animate__delay-1s animate__animated animate__fadeInLeft"></i>
+        <input type="text" name="search" class="search-input animate__animated animate__fadeInRight" id="search-query" placeholder="Search products..." autocomplete="false" oninput="SearchProducts(event)">
       </div>
       <div class="result-box animate__animated animate__fadeInUp" id="result-box">
         <div id="search-results" class="shadow">
@@ -83,13 +78,13 @@
     </div>
     
     <ul class="nav order-1 order-md-2">
-      <li class="nav-item animate__animated animate__zoomIn">
+      <li class="nav-item {% if request.path == '/' %}animate__animated animate__zoomIn{% endif %}">
         <a class="nav-link position-relative" href="{% url 'cart' %}" aria-current="page">
           <p class="badge cart-badge rounded-circle" id="cart-count">{{cart_count}}</p>
           <i class="fas fa-shopping-cart"></i>
         </a>
       </li>
-      <li class="nav-item animate__animated animate__slideInDown animate__delay-1s">
+      <li class="nav-item {% if request.path == '/' %}animate__animated animate__slideInDown animate__delay-1s{% endif %}">
         {% if user.is_authenticated %}
         <a class="nav-link" href="#">
           <i class="fas fa-user"></i>
@@ -101,14 +96,10 @@
         {% endif %}
       </li>
     </ul>
-    
-    
     {% endif %}
   
     {% include 'inc/offcanvas.html' %}
-
   </div>
-
 </nav>
 <!-- End NavBar -->
 
