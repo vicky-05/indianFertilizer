@@ -3,101 +3,84 @@
 {% block title %} Products page| {{website_name}} {% endblock title %} 
 {% block content %}
 <style>
-    /*
-        .form-range::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 18px;
-            height: 18px;
-            background-color: #08d108;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-        .form-range::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
-            background-color: #004d00;
-            border-radius: 50%;
-            cursor: pointer;
-        }*/
-        .card  {
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: visible;
-        }
+    .card  {
+        transition: transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: visible;
+    }
 
     /* Hover effect: Scale and shadow increase */
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-        }
-        .card-img-top {
-            width: 100%;
-            height: 150px; /* Adjust height to your preference */
-            object-fit: contain;
-            
-        }
-        .offer-badge {
-            position: absolute;
-            top: -10px; /* Positioning it above the image */
-            left: 15px; /* Adjust to your preference */
-            background-color: #ff5733;
-            color: #fff;
-            padding: 5px 10px; /* Padding for better fit */
-            font-size: 12px;
-            font-weight: bold;
-            border-radius: 12px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-            z-index: 20; /* Ensures the badge is above the image */
-        }
-        .card-title {
-        white-space: nowrap; /* Prevents wrapping */
-        overflow: hidden; /* Hides overflow */
-        text-overflow: ellipsis; /* Adds ellipsis */
-        max-width: 100%; /* Ensures it doesn't exceed the card width */
-        }
-
-        .current-price {
-        font-size: 1.5rem;
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    .card-img-top {
+        width: 100%;
+        height: 150px; /* Adjust height to your preference */
+        object-fit: contain;
+        
+    }
+    .offer-badge {
+        position: absolute;
+        top: -10px; /* Positioning it above the image */
+        left: 15px; /* Adjust to your preference */
+        background-color: #ff5733;
+        color: #fff;
+        padding: 5px 10px; /* Padding for better fit */
+        font-size: 12px;
         font-weight: bold;
-        color: #28a745; /* Green color */
-        }
+        border-radius: 12px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        z-index: 20; /* Ensures the badge is above the image */
+    }
+    .card-title {
+    white-space: nowrap; /* Prevents wrapping */
+    overflow: hidden; /* Hides overflow */
+    text-overflow: ellipsis; /* Adds ellipsis */
+    max-width: 100%; /* Ensures it doesn't exceed the card width */
+    }
 
-        .original-price {
-            text-decoration: line-through;
-            color: #888;
-            /* margin-left: 8px; */
-            font-size: 0.8rem;
-        }
-        .save-amount {
-            color: #28a745;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
+    .current-price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #28a745; /* Green color */
+    }
+
+    .original-price {
+        text-decoration: line-through;
+        color: #888;
+        /* margin-left: 8px; */
+        font-size: 0.8rem;
+    }
+    .save-amount {
+        color: #28a745;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
 
 
-        @media(min-width:768px){
-            #offcanvasFilter{
-                display: block !important;
-                visibility:visible !important;
-                transform: translateX(0) !important;
-                position: static !important;
-                z-index: 0 !important;
-                width: 25% !important;
-            }
-            .offcanvas-start{
-                border: none !important;
-            }
-            .offcanvas-body{
-                padding-top: 0 !important;
-            }
-            .offcanvas-header{
-                padding-bottom: 0 !important;
-            }
+    @media(min-width:768px){
+        #offcanvasFilter{
+            display: block !important;
+            visibility:visible !important;
+            transform: translateX(0) !important;
+            position: static !important;
+            z-index: 0 !important;
+            width: 25% !important;
         }
+        .offcanvas-start{
+            border: none !important;
+        }
+        .offcanvas-body{
+            padding-top: 0 !important;
+        }
+        .offcanvas-header{
+            padding-bottom: 0 !important;
+        }
+    }
 </style>
 
-<div class="container-lg container-fluid" style="margin-top: 5rem;">
+<div class="container-lg container-fluid" style="margin-top: 8rem;">
     <div class="d-md-none text-end mb-3">
         <!-- Button to open off-canvas sidebar on mobile view -->
         <button class="btn btn-success" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFilter">
@@ -105,7 +88,7 @@
         </button>
     </div>
 
-    <div class="row animate__animated animate__fadeInLeft">
+    <div class="row">
 
         <!-- Off-canvas Filter -->
         <div class="offcanvas offcanvas-start w-md-25 bg-light text-dark " tabindex="-1" 
@@ -133,7 +116,7 @@
                 {% for rating in products_common_ratings %}
                 <div class="form-check">
                  <input type="checkbox" class="form-check-input" id="rating{{rating}}" value="{{rating}}" 
-                    name="rating" onchange="resetAndLoadProducts()">
+                    name="rating" onchange="closeAndResetAndLoadProducts()">
                  <label class="form-check-label" for="rating{{rating}}">
                     {% if rating == 5 %}
                     {{rating}} Star only
@@ -150,7 +133,7 @@
                 {% for brand in brands %}
                 <div>
                     <input type="checkbox" id="brand{{brand.id}}" name="brand" value="{{brand.id}}" 
-                    onchange="resetAndLoadProducts()">
+                    onchange="closeAndResetAndLoadProducts()">
                     <label for="brand{{brand.id}}">{{brand.name}}</label>
                 </div>
                 {% endfor %}
@@ -162,9 +145,9 @@
                     <option value="">All Categories</option>
                     {% for item in categories %}
                     <option 
-                        value="{{item.id}}"
+                        value="{{item.slug}}"
                         {% if category %}
-                        {% if category.id == item.id %}
+                        {% if category.slug == item.slug %}
                         selected
                         {% endif %}
                         {% endif %}
@@ -208,12 +191,23 @@
     const limit = 9;  // Number of products to load each time
 
     // Attach event listeners to filters 
-    categoryFilter.addEventListener('change', resetAndLoadProducts);
-    priceFilter.addEventListener('change', resetAndLoadProducts);
+    categoryFilter.addEventListener('change', closeAndResetAndLoadProducts);
+    priceFilter.addEventListener('change', closeAndResetAndLoadProducts);
+
+    function isMobile() {
+      return window.innerWidth <= 768; // Adjust breakpoint as needed (Bootstrap's default for mobile is 768px)
+    }
+
+    function closeAndResetAndLoadProducts(){
+        if (isMobile()) {
+          const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasFilter'));
+          offcanvas.hide();
+        }
+        resetAndLoadProducts();
+    }
 
 
     function resetAndLoadProducts() {
-
         if(loadMoreBtn.style.display = 'none'){
             loadMoreBtn.style.display = 'block';
             noMoreProducts.style.display = 'none';
@@ -225,132 +219,130 @@
 
     async function loadMoreProducts() {
         const RatingFilter = document.querySelectorAll('input[name="rating"]:checked');
-        console.log(RatingFilter[RatingFilter.length-1])
-            start_loading();
-            const selectedBrands = Array.from(BrandFilter)
-                .filter(checkbox => checkbox.checked)
-                .map(checkbox => checkbox.value);
+        start_loading();
+        const selectedBrands = Array.from(BrandFilter)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.value);
 
 
-            const category = categoryFilter.selectedOptions[0].value;
-            const price_range = priceFilter.value;
-            const rating = RatingFilter[0] ? RatingFilter[0].value : 'None';        
-            const url = new URL(window.location.origin + '/get_products');
+        const category = categoryFilter.selectedOptions[0].value;
+        const price_range = priceFilter.value;
+        const rating = RatingFilter[0] ? RatingFilter[0].value : 'None';        
+        const url = new URL(window.location.origin + '/get_products');
 
 
-            selectedBrands.forEach(brand => url.searchParams.append('brands[]', brand));
-            url.searchParams.append('rating', rating);
-            url.searchParams.set('category', category);
-            url.searchParams.set('price_range', price_range);
-            url.searchParams.set('offset', offset);
-            url.searchParams.set('limit', limit);
+        selectedBrands.forEach(brand => url.searchParams.append('brands[]', brand));
+        url.searchParams.append('rating', rating);
+        url.searchParams.set('category', category);
+        url.searchParams.set('price_range', price_range);
+        url.searchParams.set('offset', offset);
+        url.searchParams.set('limit', limit);
 
-            try {
-                const response = await fetch(url, {
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                });
-                if (response.ok) {
-                    end_loading();
-                    const data = await response.json();
-                    console.log('Data : ', data)  // Clear previous products
+        try {
+            const response = await fetch(url, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            if (response.ok) {
+                end_loading();
+                const data = await response.json();
+                console.log(data)
 
-                    function checking_products_in_cart(product_slug) {
-                        const goTOCartBtn = `<a href="/cart" 
-                                    class="btn btn-success w-100 d-none">
-                                    Go to Cart
-                                </a>`;
+                function checking_products_in_cart(product_slug) {
+                    const goTOCartBtn = `<a href="/cart" 
+                                class="btn btn-success w-100 d-none">
+                                Go to Cart
+                            </a>`;
 
-                        const addToCartBtn = `<button class="btn btn-success w-100" 
-                            onclick="addToCart(event.target)" 
-                            data-url="/add_to_cart/${product_slug}"
-                            >
-                            Add to Cart
-                        </button>`;
+                    const addToCartBtn = `<button class="btn btn-success w-100" 
+                        onclick="addToCart(event.target)" 
+                        data-url="/add_to_cart/${product_slug}"
+                        >
+                        Add to Cart
+                    </button>`;
 
-                        let cartBtn = addToCartBtn + goTOCartBtn;
+                    let cartBtn = addToCartBtn + goTOCartBtn;
 
-                        data.cart_product_slugs.forEach(cart_product_slug => {
-                            if(product_slug == cart_product_slug){
-                                cartBtn = `<a href="/cart" 
-                                    class="btn btn-success w-100">
-                                    Go to Cart
-                                </a>`;
-                            }
-                        })
-                        console.log(cartBtn.classList)
-                        return cartBtn;
-                    }
-
-                    if (data.products.length > 0) {
-                        data.products.forEach(product => {
-                            let stars='';
-                            for (var i=1 ; i<=5; i++) {
-                                if (i<=product.avg_rating) {
-                                    stars += '★';
-                                } else{
-                                    stars += '☆';
-                                }
-                            }
-
-                            productContainer.innerHTML += `
-                                <div class="col-11 col-md-4 mb-4">
-                                    <div class="card position-relative">
-                                        <div class="offer-badge">
-                                            ${product.discount_percentage}% OFF
-                                        </div>
-                                        <img src="/media/${product.image}" class="card-img-top" alt="Product Image"  
-                                            onclick="redirect('/product_details/${product.slug}')">
-                                        <div class="card-body">
-                                            <h5 class="card-title mb-0" onclick="redirect('/product_details/${product.slug}')">
-                                                ${product.name}
-                                            </h5>
-                                            <p class="card-text mb-1 text-muted">
-                                                ${product.brand__name}<br>
-                                                <span class="text-lowercase text-success"> 
-                                                    ${product.weight}${product.unit_of_messure}
-                                                </span>
-                                            </p>
-                                            
-                                            <div class="rating">
-                                                <span>
-                                                    ${product.avg_rating}
-                                                </span>
-                                                <span class='star'> ${stars}</span>
-                                                <span>(${product.review_count})</span>
-                                            </div>
-                                            <p class="card-price mb-2">
-                                                <span class="current-price">₹${product.selling_price}</span>
-                                                <span class="original-price">₹${product.mrp_price}</span>
-                                            </p>
-                                            <p class="save-amount text-danger">
-                                                Save ₹${product.discount_price}
-                                            </p>
-                                            ${checking_products_in_cart(product.slug)}
-                                        </div>
-                                    </div> 
-                                </div>
-                            `;
-                        });
-                        offset += data.products.length;
-                    }
-                    else {
-                        loadMoreBtn.style.display = 'none';  // Hide button if no more products
-                        noMoreProducts.style.display = 'block';
-
-                    }
-                } else {
-                    end_loading()
-                    console.error('Failed to fetch products:', response.statusText);
+                    data.cart_product_slugs.forEach(cart_product_slug => {
+                        if(product_slug == cart_product_slug){
+                            cartBtn = `<a href="/cart" 
+                                class="btn btn-success w-100">
+                                Go to Cart
+                            </a>`;
+                        }
+                    })
+                    return cartBtn;
                 }
-            } catch (error) {
+
+                if (data.products.length > 0) {
+                    data.products.forEach(product => {
+                        let stars='';
+                        for (var i=1 ; i<=5; i++) {
+                            if (i<=product.avg_rating) {
+                                stars += '★';
+                            } else{
+                                stars += '☆';
+                            }
+                        }
+
+                        productContainer.innerHTML += `
+                            <div class="col-11 col-md-4 mb-4">
+                                <div class="card position-relative">
+                                    <div class="offer-badge">
+                                        ${product.discount_percentage}% OFF
+                                    </div>
+                                    <img src="/media/${product.image}" class="card-img-top" alt="Product Image"  
+                                        onclick="redirect('/product_details/${product.slug}')">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-0" onclick="redirect('/product_details/${product.slug}')">
+                                            ${product.name}
+                                        </h5>
+                                        <p class="card-text mb-1 text-muted">
+                                            ${product.brand__name}<br>
+                                            <span class="text-lowercase text-success"> 
+                                                ${product.weight}${product.unit_of_messure}
+                                            </span>
+                                        </p>
+                                        
+                                        <div class="rating">
+                                            <span>
+                                                ${product.avg_rating}
+                                            </span>
+                                            <span class='star'> ${stars}</span>
+                                            <span>(${product.review_count})</span>
+                                        </div>
+                                        <p class="card-price mb-2">
+                                            <span class="current-price">₹${product.selling_price}</span>
+                                            <span class="original-price">₹${product.mrp_price}</span>
+                                        </p>
+                                        <p class="save-amount text-danger">
+                                            Save ₹${product.discount_price}
+                                        </p>
+                                        ${checking_products_in_cart(product.slug)}
+                                    </div>
+                                </div> 
+                            </div>
+                        `;
+                    });
+                    offset += data.products.length;
+                }
+                else {
+                    loadMoreBtn.style.display = 'none';  // Hide button if no more products
+                    noMoreProducts.style.display = 'block';
+                }
+            } else {
                 end_loading()
-                console.error('Error:', error);
+                console.error('Failed to fetch products:', response.statusText);
             }
+        } catch (error) {
+            end_loading()
+            console.error('Error:', error);
+        }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
         resetAndLoadProducts();
     })
+
 </script>
 
 {% endblock content %}

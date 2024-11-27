@@ -410,59 +410,7 @@ Product details page | {{website_name}}
                     <!-- End Deccription Part -->
 
                     <!-- Review Part -->
-                    <div class="tab-pane fade {% if not product.description %}show active{% endif %}" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h4 class="about-heading">
-                                Customer <b class="text-uppercase text-success">Reviews</b>
-                            </h4>
-
-                            {% if user.is_authenticated %}
-                            {% if has_review %}
-                            <button class="btn btn-success rate btn-sm" data-bs-toggle="modal"
-                                data-bs-target="#rateProductModal">Rate Product</button>
-                            {% endif %}
-                            {% endif %}
-                        </div>
-
-                        <!-- Review Card -->
-                        {% for review in reviews %}
-                        <div class="review-card mt-2 rounded  shadow px-4 pb-2 pt-3" id="review-card">
-                            <div class="review-head">
-                                <img src="{{review.user.profile_img.url}}" alt="Customer Image">
-                                <div>
-                                    <h6 class="mb-0">{{review.user.username}}</h6>  
-                                    <div class="star-rating">          
-                                        {% with review.rating|floatformat:1 as rating %}
-                                        {% for i in "12345" %}
-                                        {% if rating|floatformat:1 >= i %}
-                                         ★
-                                        {% else %}
-                                         ☆
-                                        {% endif %}
-                                        {% endfor %}
-                                        {% endwith %}     
-                                    </div>
-                                    <p>({{review.rating | floatformat:1}})</p>
-                                </div>
-                            </div>
-                            <p>"{{review.review}}"</p>
-                        </div>
-                        <!-- End Review Card -->
-                        {% endfor %}
-
-                        {% include 'inc/review modal.html' %}
-
-                        <div id="reviews-container">
-                        </div>
-                        {% if reviews %}
-                        <button id="load-more-btn" class="btn btn-success rounded mt-3 mb-3">Load More</button>
-                        <script>
-                            
-                        </script>
-                        {% else %}
-                        <p>No Reviews</p>
-                        {% endif %}
-                    </div>
+                    {% include 'inc/reviews.html' %}
                     <!-- End Review Part -->
 
                     <!-- Product Demonstration Part -->
@@ -507,8 +455,8 @@ Product details page | {{website_name}}
             </div>
         </div>
 
+        <!-- Similar Product Collection -->
         {% if similar_products %}
-        <!-- Card Collection -->
         <div class="mt-4 position-relative">
           <div class="d-flex justify-content-between align-items-center">
             <h3 class="about-heading">
@@ -525,10 +473,8 @@ Product details page | {{website_name}}
           </button>
           <div class="card-wrapper" id="cardWrapper1">
             {% for product in similar_products %} 
-            {% if product.is_show %}
              {% include 'inc/card.html' %} 
-             {% endif %} 
-             {% endfor %}
+            {% endfor %}
           </div>
           <button
             class="d-none d-sm-block scroll-button right btn btn-success rounded-circle fade-in"
@@ -537,8 +483,8 @@ Product details page | {{website_name}}
             <i class="fas fa-arrow-right"></i>
           </button>
         </div>
-        <!-- End Card Collection -->
         {% endif %}
+        <!-- End Similar Product Collection -->
     </div>
 
     {% include 'inc/google map modal.html' %}
@@ -556,7 +502,7 @@ Product details page | {{website_name}}
     function populateList(paragraph, listId) {
         const items = paragraph.split('.'); // Split by newline character
         const listElement = document.getElementById(listId);
-        console.log(items, descriptionParagraph)
+        
         items.forEach(item => {
             if (item.trim() !== "") { // Check if the item is not empty
                 
@@ -572,82 +518,34 @@ Product details page | {{website_name}}
     populateList(featuresParagraph, 'features-list');
     populateList(recommendationsParagraph, 'recommendations-list');
 
-    const productId = "{{ product.id }}";
-    let offset = 3;  // Starting point after initial reviews
-
-    document.getElementById('load-more-btn').addEventListener('click', function() {
-        start_loading()
-        fetch(`/load_more_reviews/?product_id=${productId}&offset=${offset}`)
-            .then(response => response.json())
-            .then(data => {
-                end_loading()
-                if (data.reviews) {
-                    data.reviews.forEach(review => {
-                        let stars='';
-                        for (var i=1 ; i<=5; i++) {
-                            if (i<=review.rating) {
-                                stars += '★'
-                            } else{
-                                stars += '☆'
-                            }
-                        }
-
-                        review_card = `<div class="review-card mt-2 rounded shadow px-4 pb-2 pt-3" id="review-card">
-                            <div class="review-head">
-                                <img src="${review.user.profile_image_url}" alt="Customer Image">
-                                <div>
-                                    <h6 class="mb-0">${review.user.username}</h6>  
-                                    <div class="star-rating"> 
-                                    ${stars}             
-                                    </div>
-                                    <p>(${review.rating})</p>
-                                </div>
-                            </div>
-                            <p>"${review.review}"</p>
-                        </div>`
-
-                        document.getElementById('reviews-container').innerHTML += review_card
-                    });
-                    offset += data.reviews.length;
-                    if (data.reviews.length < 3) {
-                        document.getElementById('load-more-btn').style.display = 'none';
-                    }
-                } else if (data.error) {
-                    alert(data.error);
-                }
-            })
-            .catch(error => console.log('Error :', error));
-    });
-
-
 
     // Select all product cards
-const productCards = document.querySelectorAll('.product-card');
+    const productCards = document.querySelectorAll('.product-card');
 
-// Callback function for IntersectionObserver
-const observerCallback = (entries, observer) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const card = entry.target;
-            // Add animation classes when the card is visible
-            card.classList.remove('hidden');
-            card.classList.add('animate__fadeInUp');
-            observer.unobserve(card); // Stop observing once the animation is applied
-        }
-    });
-};
+    // Callback function for IntersectionObserver
+    const observerCallback = (entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const card = entry.target;
+                // Add animation classes when the card is visible
+                card.classList.remove('hidden');
+                card.classList.add('animate__fadeInUp');
+                observer.unobserve(card); // Stop observing once the animation is applied
+            }
+        });
+    };
 
-// Create an IntersectionObserver instance
-const observerOptions = {
-    root: null, // Use the viewport as the container
-    rootMargin: '0px', // Trigger animation as soon as the card enters the viewport
-    threshold: 0.1 // Trigger when 10% of the card is visible
-};
+    // Create an IntersectionObserver instance
+    const observerOptions = {
+        root: null, // Use the viewport as the container
+        rootMargin: '0px', // Trigger animation as soon as the card enters the viewport
+        threshold: 0.1 // Trigger when 10% of the card is visible
+    };
 
-const observer = new IntersectionObserver(observerCallback, observerOptions);
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
 
-// Observe each product card
-productCards.forEach(card => observer.observe(card));
+    // Observe each product card
+    productCards.forEach(card => observer.observe(card));
 
 </script>
 

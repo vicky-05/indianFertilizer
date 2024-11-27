@@ -50,16 +50,19 @@ Cart page | {{website_name}}
                     Continue Shopping
                 </a>
             </div>
+            {{ cart_product.product.sug }}
 
             <div id="cartItems">
                 {% for cart_product in cart_products %}
                 <div class="row cart-item align-items-center">
                     <div class="col-md-2">
                         <img src="{{ cart_product.product.image.url }}" alt="Product Image" 
-                            class="img-fluid" onclick="redirect(`{% url 'product_details' cart_product.product.id %}`)"> 
+                            class="img-fluid" onclick="redirect(`{% url 'product_details' cart_product.product.slug %}`)"> 
                     </div>
                     <div class="col-md-3">
-                        <h5 onclick="redirect(`{% url 'product_details' cart_product.product.id %}`)">{{cart_product.product.name}}</h5>
+                        <h5 onclick="redirect(`{% url 'product_details' cart_product.product.slug %}`)">
+                            {{cart_product.product.name}}
+                        </h5>
                         <p>{{cart_product.product.weight}}{{cart_product.product.unit_of_messure}}</p>
                         <p>₹{{cart_product.product.selling_price}}</p>
                     </div>

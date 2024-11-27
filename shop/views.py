@@ -97,25 +97,25 @@ def add_to_cart(request, product_slug=None):
 
 
 # Adding reviews
-def add_review(request, product_id=None):
+def add_review(request, product_slug=None):
     if not request.user.is_authenticated:
         return redirect('login')
 
-    if not product_id:
+    if not product_slug:
         return redirect('home')
 
     if request.method == 'POST':
-        if ProductReview.objects.filter(user=request.user, product=product_id).count() == 0:
+        if ProductReview.objects.filter(user=request.user, product__slug=product_slug).count() == 0:
             feedback = request.POST.get('feedback', None)
             rating_value = request.POST.get('ratingValue', 0)
             if not rating_value:
                 rating_value = 0
-            product = Product.objects.get(id=product_id)
+            product = Product.objects.get(slug=product_slug)
             if feedback:
                 review, created = ProductReview.objects.get_or_create(user=request.user, product=product, review=feedback, rating=rating_value)
                 if created:
                     review.save()
-    return redirect('/product_details/' + str(product_id))
+    return redirect('/product_details/' + str(product_slug))
 
     
 
@@ -181,14 +181,14 @@ def product_details(request, product_slug=None):
 
         reviews = ProductReview.objects.filter(product__slug=product_slug)
         different_weight_products = Product.objects.filter(name__iexact=product.name)
-        similar_products = Product.objects.filter(Q(name__icontains=product.name) | Q(category__name__icontains=product.category.name))
+        similar_products = Product.objects.filter(is_show=1).filter(Q(name__icontains=product.name) | Q(category__name__icontains=product.category.name) | Q(brand__name__icontains=product.brand.name))
 
         context['product'] = product
         context['reviews'] = reviews[:3]
         context['similar_products'] = similar_products.annotate(
             avg_rating = Avg('reviews__rating'),
             review_count = Count('reviews')
-        )
+        )[:10]
         context['different_weight_products'] = different_weight_products.values('slug', 'weight', 'unit_of_messure')
         context['has_review'] = reviews.filter(user=request.user).count() == 0 if request.user.is_authenticated else False
         try:
@@ -262,7 +262,7 @@ def get_products(request):
 
         # Category Filtering
         if category:
-            products = products.filter(category=category)
+            products = products.filter(category__slug=category)
         
         # Price Range Filtering
         if price_range == 'low':
