@@ -10,7 +10,7 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="ratingForm" method="POST" action="/add_review/{{product.id}}/">
+                <form id="ratingForm" method="POST" action="{% url 'add_review' product.slug %}">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="starRating" class="form-label">Rating</label>
@@ -28,17 +28,10 @@
                         <textarea class="form-control" id="feedback" rows="3" name="feedback" 
                             required></textarea>
                     </div>
-                    <!-- <div class="mb-3">
-                        <label for="productImage" class="form-label">Upload an Image
-                            (optional)</label>
-                        <input type="file" class="form-control" id="productImage"
-                            accept="image/*">
-                    </div> -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary"
                             data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success text-uppercase fw-bold"
-                            onclick="submitRating(event)">Submit</button>
+                        <button type="submit" class="btn btn-success text-uppercase fw-bold">Submit</button>
                     </div>
                 </form>
             </div>

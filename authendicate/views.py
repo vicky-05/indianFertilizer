@@ -48,5 +48,5 @@ def help_us(request):
 
 
 def privacy_policy(request):
-    context = get_context_data(request.user)
+    context = views.get_context_data(request.user)
     return render(request, "authendicate/privacy_policy.html",context=context)
