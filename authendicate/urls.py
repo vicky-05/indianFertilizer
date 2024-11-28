@@ -8,7 +8,8 @@ urlpatterns = [
     path('privacy_policy',views.privacy_policy,name='privacy_policy'),
     path('logout', views.logout_page, name='logout'),
     path('terms_conditions', views.terms_conditions, name='terms_conditions'),
-    # path('user_profile', views.user_profile,name='user_profile'),
+    # path('user_profile', views.user_profile, name='user_profile'),
+    # path('profile/update/', views.update_profile, name='update_profile'),
     # path('forgot', views.forgot_pass,name='forgot'),
     # path('reset_password', views.reset_password, name='reset_password'),
 ]

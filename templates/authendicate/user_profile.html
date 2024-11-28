@@ -1,115 +1,169 @@
-{% extends 'shop/layouts/main.html' %}
+{% extends 'layouts/main.html' %}
 {% load static %}
-
 {% block content %}
-<section style="background-color: #eee; margin-top: 50px;">
-    <div class="container py-5">
-        <div class="row">
-            <div class="col">
-                <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-
-                        <li class="breadcrumb-item active" aria-current="page">User Profile</li>
-                    </ol>
-                </nav>
-            </div>
+<style>
+        .profile-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .edit-button {
+            text-align: center;
+        }
+        @media (max-width: 576px) {
+            .profile-image {
+                width: 100px;
+                height: 100px;
+            }
+        }
+        .about-heading {
+            color: #000;
+            font-size: 26px;
+            font-weight: 300;
+            text-align: center;
+            text-transform: uppercase;
+            position: relative;
+            /* margin: 45px; */
+        }
+</style>
+<section style="margin-top: 4.5rem;">
+<div class="container profile-container">
+    <h4 class="about-heading">User <b class="text-uppercase text-success">Profile</b></h4>
+    <form method="POST" action="{% url 'update_profile' %}" enctype="multipart/form-data">
+    <!-- Profile Image Section -->
+    <div class="text-center my-4">
+        <img 
+    src="{% if user.profile_img %}{{ user.profile_img.url }}{% else %}{% static 'images/OIP.jfif' %}{% endif %}" 
+    alt="Profile Image" 
+    class="profile-image mb-2" 
+    id="profileImage"> 
+        <div>
+            <input type="file" id="profileImageInput" name="profile_img" class="form-control d-inline-block w-auto" accept="image/*" onchange="updateProfileImage()" disabled>
         </div>
+    </div>
+    
 
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="card mb-4">
-                    <div class="card-body text-center">
-                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
-                            alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-                        <h5 class="my-3">{{request.user}}</h5>
-                        <div class="d-flex justify-content-center mb-2">
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary"
-                                id="editProfileButton">Edit
-                                Profile</button>
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init
-                                class="btn btn-primary ms-1">Upload Picture</button>
-                        </div>
-                    </div>
-                </div>
+    <!-- User Information Form -->
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="userName" class="form-label">Name</label>
+            <input type="text" class="form-control" id="userName" name="username" value="{{ user.username }} " disabled>
+        </div>
+    
+        <div class="mb-3">
+            <label for="userMobile" class="form-label">Mobile Number</label>
+            <input type="text" class="form-control" id="userMobile" name="mobile" value="{{ user.mobile_no|default:'' }}"  disabled>
+        </div>
+    
+        <div class="mb-3">
+            <label for="userEmail" class="form-label">Email ID</label>
+            <input type="email" class="form-control" id="userEmail" name="email" value="{{ user.email|default:'' }} " disabled>
+        </div>
+    
+        <div class="edit-button mb-3">
+            <button type="button" class="btn btn-primary" onclick="enableEdit()">Edit Profile</button>
+            <button type="submit" id="saveChangesButton" class="btn btn-success " disabled>Save Changes</button>
+            
+        </div>
+    </form>
+    
+</div>
 
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="col-lg-8">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Full Name</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control border-0" value="{{request.user}}" id="fullNameInput" disabled>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Email</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control border-0" value="{{user.email}}" id="emailInput"
-                                    disabled>
-                            </div>
-                        </div>
-                        <hr>
-
-
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Mobile</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control  border-0" value="7598549513" id="mobileInput" disabled>
-
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Address</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control border-0" "
-                                    value="VAHS complex No 2,Batlagundu,TamilNadu 624202." id="addressInput" disabled>
-                            </div>
-                        </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="mb-3">
+                        <label for="oldPassword" class="form-label">Old Password</label>
+                        <input type="password" class="form-control" id="oldPassword" required>
                     </div>
-                </div>
-
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="newPassword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="changePassword()">Change Password</button>
             </div>
         </div>
     </div>
+</div>
 </section>
+
 <script>
-    document.getElementById('editProfileButton').addEventListener('click', function () {
-        var inputs = [
-            document.getElementById('fullNameInput'),
-            document.getElementById('emailInput'),
-            document.getElementById('mobileInput'),
-            document.getElementById('addressInput')
-        ];
+        function enableEdit() {
+        document.getElementById('userName').disabled = false;
+        document.getElementById('userMobile').disabled = false;
+        document.getElementById('userEmail').disabled = false;
+        document.getElementById('profileImageInput').disabled = false;
+        document.getElementById('saveChangesButton').disabled = false;
+        document.getElementById('editProfileBtn').classList.add('d-none');
+        document.getElementById('saveProfileBtn').classList.remove('d-none');
+    }
 
-        var allDisabled = inputs.every(function (input) {
-            return input.disabled;
-        });
+    // Function to update profile image preview
+    function updateProfileImage() {
+        const fileInput = document.getElementById('profileImageInput');
+        const profileImage = document.getElementById('profileImage');
+        const file = fileInput.files[0];
 
-        inputs.forEach(function (input) {
-            input.disabled = !allDisabled;
-        });
-
-        if (allDisabled) {
-            this.classList.remove('btn-primary');
-            this.classList.add('btn-success');
-            this.textContent = 'Save Changes';
-        } else {
-            this.classList.remove('btn-success');
-            this.classList.add('btn-primary');
-            this.textContent = 'Edit Profile';
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                profileImage.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
         }
-    });
+    }
+
+    // Function to save profile changes (mock implementation)
+    function saveProfile() {
+        document.getElementById('userName').disabled = true;
+        document.getElementById('userMobile').disabled = true;
+        document.getElementById('userEmail').disabled = true;
+        document.getElementById('profileImageInput').disabled = true;
+        document.getElementById('saveChangesButton').disabled = true;
+        document.getElementById('editProfileBtn').classList.remove('d-none');
+        document.getElementById('saveProfileBtn').classList.add('d-none');
+
+    }
+
+    // Function to change password (mock implementation)
+    function changePassword() {
+        const oldPassword = document.getElementById('oldPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (newPassword !== confirmPassword) {
+            alert("New passwords do not match.");
+            return;
+        }
+
+        // Implement password change logic here
+
+        alert("Password changed successfully.");
+        // Close modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('changePasswordModal'));
+        modal.hide();
+        document.getElementById('changePasswordForm').reset();
+    }
 </script>
-{% endblock %}
+{% endblock content %}
