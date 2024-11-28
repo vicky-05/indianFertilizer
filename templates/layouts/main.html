@@ -63,31 +63,37 @@
     }
 
     #logo-spinner{
-      background-color:  rgba(33, 37, 41);
+      background-color:  #212529;
       z-index: 6000;
-      flex-direction: column;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+
+    .grow{
+      animation: 1s linear infinite growing;
+      opacity: 0;
+    }
+
+    @keyframes growing {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
     }
 
   </style>
 
   <body>
     <div id="logo-spinner">
-        <div class="logo d-flex align-items-center justify-content-center mb-2">
-            <h2 class="text-white">India</h2>
-            <h2 class="text-success ps-1">Fertilizer</h2>
-        </div>
-        <div class="loadinng">
-            <div class="spinner-grow text-white me-2" role="status">
-            </div>
-            <div class="spinner-grow text-success me-2" role="status">
-            </div>
-            <div class="spinner-grow text-white me-2" role="status">
-            </div>
-            <div class="spinner-grow text-success me-2" role="status">
-            </div>
-            <div class="spinner-grow text-white" role="status">
-            </div>
-        </div>
+      <img src="{% static 'images/Logo.png' %}" class="grow">
     </div>
  
     <header>{% include 'inc/navbar.html' %}</header>
