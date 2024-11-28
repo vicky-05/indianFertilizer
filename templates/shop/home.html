@@ -165,7 +165,9 @@
           <div class="carousel-item {% if forloop.first %}active{% endif %}" 
             onclick="redirect(`{% url 'categories' category.slug %}`)">
             <div class="image-container category-image">
+              {% if category.image %}
               <img class="rounded-3" src="{{ category.image.url }}" />
+              {% endif %}
             </div>
             <p class="product-title">{{ category.name }}</p>
           </div>

@@ -21,8 +21,10 @@
     <span class="trending-tag badge">Trending</span>
     {% endif %}
   </div>
+  {% if product.image %}
   <img class="card-img-top" onclick="redirect(`{% url 'product_details' product.slug %}`)"
    src="{{product.image.url}}" alt="Title" height="200" />
+  {% endif %}
   <div class="card-body">
     <h4 class="card-title" onclick="redirect(`{% url 'product_details' product.slug %}`)">{{product.name}}</h4>
     <span class="category badge">{{product.category}}</span>

@@ -252,7 +252,9 @@ Product details page | {{website_name}}
                         <li class="breadcrumb-item active" aria-current="page">Product</li>
                     </ol>
                 </nav>
+                {% if product.image %}
                 <img id="mainImage" src="{{product.image.url}}" class="img-fluid" alt="Product Image">
+                {% endif %}
                 <div class="mt-3 d-flex justify-content-center">
                     {% if product.image %}
                     <img src="{{product.image.url}}" class="img-thumbnail product-thumbnail me-2" 
@@ -495,8 +497,8 @@ Product details page | {{website_name}}
 <script>
     // Sample data from your database (replace with actual data)
     const descriptionParagraph = `{{ product.description }}`; // Product description
-    const featuresParagraph = "{{ product.benifits_and_features }}"; // Features and benefits
-    const recommendationsParagraph = "{{ product.recommandation }}"; // Recommendations
+    const featuresParagraph = `{{ product.benifits_and_features }}`; // Features and benefits
+    const recommendationsParagraph = `{{ product.recommandation }}`; // Recommendations
     
     // Function to populate a list from a paragraph
     function populateList(paragraph, listId) {

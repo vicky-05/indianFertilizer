@@ -44,7 +44,9 @@
                             <span>{{category.name}}</span> 
                         </div>
                         <div> 
+                            {% if category.image %}
                             <img src="{{category.image.url}}" alt="" height="120" width="120" /> 
+                            {% endif %}
                         </div>
                     </div>
                 </a>
