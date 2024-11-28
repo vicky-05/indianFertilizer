@@ -54,6 +54,10 @@
       width: 100%;
     }
   }
+  .dropdown-menu{
+    background-color: var(--bg-color);
+    color: var(--primary-font-color);
+  }
 
 </style>
 <!-- NavBar -->
@@ -106,21 +110,42 @@
           <i class="fas fa-shopping-cart"></i>
         </a>
       </li>
-      <li class="nav-item {% if request.path == '/' %}animate__animated animate__slideInDown animate__delay-1s{% endif %}">
+      <li class="nav-item dropdown 
+        {% if request.path == '/' %}animate__animated animate__slideInDown animate__delay-1s{% endif %}">
         {% if user.is_authenticated %}
-        <a class="nav-link" href="#">
+        <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-bs-toggle="dropdown">
           <i class="fas fa-user"></i>
         </a>
         {% else %}
-        <a class="nav-link" href="{% url 'login' %}">
+        <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-bs-toggle="dropdown">
           <i class="fas fa-user-plus"></i>
         </a>
         {% endif %}
+        <div class="dropdown-menu dropdown-menu-end shadow">
+          <div class="dropdown-container">
+            {% if user.is_authenticated %}
+              <a class="dropdown-item" href="{% url 'logout' %}">
+                <i class="fa-solid fa-arrow-right-to-bracket px-3"></i> 
+                Logout
+              </a>
+            {% else %}
+            <a class="dropdown-item" href="{% url 'register' %}">
+                <i class="fa-solid fa-arrow-right-to-bracket px-3"></i> 
+                Register
+            </a>
+            <a class="dropdown-item" href="{% url 'login' %}">
+                <i class="fa-solid fa-arrow-right-to-bracket px-3"></i> 
+                Login
+            </a>
+            {% endif %}
+          </div>
+        </div>
       </li>
     </ul>
     {% endif %}
   
     {% include 'inc/offcanvas.html' %}
+
   </div>
 
 </nav>
