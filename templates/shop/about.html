@@ -8,7 +8,17 @@ About Us | {{website_name}}
 {% endblock styles %}
 
 {% block content %}
-<main style="margin-top: 7rem;">
+<style>
+    main{
+        margin-top: 2rem;
+    }
+    @media (max-width: 576px) {
+        main{
+            margin-top: 6rem;
+        }
+    }
+</style>
+<main>
 
     <!-- About Us Section -->
     <section class="about-section text-center">

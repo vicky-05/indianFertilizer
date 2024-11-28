@@ -226,15 +226,60 @@ Product details page | {{website_name}}
     }
 
     .hidden {
-    opacity: 0; /* Start hidden */
-}
-
-    @media (max-width: 576px) {
-        .breadcrumb-m {
-            display: none !important;
-        }
+        opacity: 0; /* Start hidden */
     }
 
+        @media (max-width: 576px) {
+            .breadcrumb-m {
+                display: none !important;
+            }
+    }
+
+    .swipe-hint-container {
+    text-align: center;
+    margin-bottom: 3px;
+    position: relative;
+    }
+
+    .swipe-hint {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: #6c757d;
+    animation: swipe-animation 1.5s infinite ease-in-out;
+    }
+
+    .swipe-icon {
+    font-size: 1.5rem;
+    margin-left: 5px;
+    display: inline-block;
+    transform: translateX(0);
+    animation: slide-right 1.5s infinite ease-in-out;
+    }
+
+    /* Text fade-in-out animation */
+    @keyframes swipe-animation {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    }
+
+    /* Swipe icon slide animation */
+    @keyframes slide-right {
+    0% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(10px);
+    }
+    100% {
+        transform: translateX(0);
+    }
+    }
 
 
 
@@ -248,7 +293,7 @@ Product details page | {{website_name}}
                 <nav class="d-md-none" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
                     aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item "><a class="text-decoration-none text-success" href="#">Home</a></li>
+            <li class="breadcrumb-item "><a class="text-decoration-none text-success" href=" {% url 'home' %}">Home</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Product</li>
                     </ol>
                 </nav>
@@ -377,6 +422,11 @@ Product details page | {{website_name}}
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="video-tab" data-bs-toggle="tab" data-bs-target="#video"
                                 type="button" role="tab">Demonstration Video</button>
+                                <div class="swipe-hint-container d-sm-none d-block">
+                                    <div class="swipe-hint">
+                                      <span class="swipe-icon">&#8594;</span>
+                                    </div>
+                                </div>
                         </li>
                         {% endif %}
 
@@ -393,10 +443,11 @@ Product details page | {{website_name}}
                                 data-bs-target="#recommendations" type="button" role="tab">Recommendations</button>
                         </li>
                         {% endif %}
-
+                        
                     </ul>
+                    
                 </div>
-
+                
                 <!-- Tab Content -->
                 <div class="tab-content mt-3" id="productTabContent">
                     
@@ -455,6 +506,7 @@ Product details page | {{website_name}}
 
                 </div>
             </div>
+            
         </div>
 
         <!-- Similar Product Collection -->
@@ -466,7 +518,12 @@ Product details page | {{website_name}}
             </h3>
             
           </div>
-
+          <div class="swipe-hint-container">
+            <div class="swipe-hint">
+              <span class="swipe-text">Swipe for more</span>
+              <span class="swipe-icon">&#8594;</span>
+            </div>
+          </div>
           <button
             class="d-none d-sm-block scroll-button left btn btn-success rounded-circle fade-in"
             onclick="leftScroll('cardWrapper1')"
@@ -548,6 +605,19 @@ Product details page | {{website_name}}
 
     // Observe each product card
     productCards.forEach(card => observer.observe(card));
+
+    // Hide the swipe hint when a product card is clicked
+    document.addEventListener('DOMContentLoaded', () => {
+    const swipeHintContainer = document.querySelector('.swipe-hint-container');
+
+    document.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('touchcancel',  () => {
+        if (swipeHintContainer) {
+            swipeHintContainer.style.display = 'none';
+        }
+        });
+    });
+    });
 
 </script>
 

@@ -50,3 +50,7 @@ def help_us(request):
 def privacy_policy(request):
     context = views.get_context_data(request.user)
     return render(request, "authendicate/privacy_policy.html",context=context)
+
+def terms_conditions(request):
+    context = views.get_context_data(request.user)
+    return render(request, "authendicate/terms_conditions.html",context=context)
