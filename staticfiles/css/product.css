@@ -1,0 +1,157 @@
+        body {
+            user-select: none;
+        }
+        .mrp-prices{
+            color: grey;
+        }
+        
+        .in-stock{
+            font-size: 16px; margin: 10px 0px;
+        }
+        .qty-btn{
+            width: 100px; width: 150px !important;
+        }
+        .bi-geo-alt{
+            font-size: 2rem; color: #007bff;
+        }
+
+        .bi-person-check{
+            font-size: 2rem; color: #28a745;
+        }
+
+        .bi-tag{
+            font-size: 2rem; color: #ff9900;
+        }
+        .product-n{
+            font-family: Noto Sans, sans-serif;
+        }
+
+        .selling-price{
+            font-weight:bolder;
+        }
+        .size-box {
+            border: 2px solid green;
+            border-radius: 5px;
+            padding: 10px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            margin-bottom: 10px;
+            /* Space between boxes */
+        }
+
+        .size-box:hover {
+            background-color: green;
+            color: white;
+            font-weight: bold;
+            /* Light green background on hover */
+        }
+
+        .size-box.selected {
+            background-color: green;
+            /* Fill color for selected box */
+            color: #fff;
+            /* Text color for selected box */
+        }
+
+        .product-thumbnail {
+            cursor: pointer;
+            width: 80px;
+            height: 80px;
+            margin-right: 5px;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Make tabs scrollable horizontally on smaller screens */
+        .tab-scroll-container {
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .nav-tabs {
+            display: inline-flex;
+            flex-wrap: nowrap;
+        }
+
+        .nav-tabs .nav-item {
+            flex-shrink: 0;
+            /* Prevent tabs from shrinking in mobile view */
+        }
+
+        /* Optional: Add spacing and alignment */
+        .nav-tabs .nav-link {
+            margin-right: 5px;
+            color: black;
+        }
+
+        .nav-tabs .nav-link.active{
+            color: green;
+            background-color: transparent;
+            /* border-color: transparent; */
+            border-bottom: 2px solid green;
+            border-radius: 0;
+            font-weight: bold;
+        }
+
+        @media (min-width: 768px) {
+
+            /* On larger screens, display tabs normally without scrolling */
+            .tab-scroll-container {
+                overflow-x: visible;
+            }
+        }
+
+        .rate {
+            font-weight: bold;
+        }
+
+        /* Review Card Styling */
+        .review-card {
+            background-color: #f9f9f9;
+        }
+
+        /* Star Rating Styling */
+        .star-rating {
+            color: #ffc107;
+            /* Bootstrap's default warning color for stars */
+            font-size: 1.2em;
+            /* Increase star size */
+        }
+
+        .hidden-review {
+            display: none;
+        }
+
+        .star {
+            font-size: 2em;
+            /* Adjust size as needed */
+            color: #e4e5e9;
+            /* Gray color for unselected stars */
+            cursor: pointer;
+        }
+
+        .star:hover {
+            color: #ffc107;
+            /* Yellow color on hover */
+        }
+
+
+
+        #mainImage {
+            max-height: 500px;
+        }

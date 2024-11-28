@@ -1,0 +1,60 @@
+:root {
+    --label-index: #960796;
+
+}
+/* 
+body {
+    background-color: #eee
+} */
+
+
+
+.processor {
+    background-color: #fff;
+    margin-top: 5px;
+    border-bottom: 1px solid #eee
+}
+
+.brand {
+    background-color: #fff;
+    border-bottom: 1px solid #eee
+}
+
+.type {
+    background-color: #fff
+}
+
+.product-images:hover {
+    transform: scale(1.1);
+    transition: .2s;
+}
+
+.buy-content:hover {
+    background-color: #1ebd09;
+}
+
+.price-hp {
+    font-size: 13px;
+    font-weight: 500;
+    color: darkgray;
+}
+
+.label-top {
+    position: absolute;
+    background-color: rgb(255, 72, 0);
+    color: #fff;
+    top: 8px;
+    right: 8px;
+    padding: 5px 10px 5px 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: default;
+}
+
+.product-images {
+    width: 100%;
+    height: 170px;
+    object-fit: contain;
+    object-position: center;
+}
