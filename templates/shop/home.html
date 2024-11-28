@@ -59,7 +59,52 @@
   transform: translateY(0);
 }
 
-  
+.swipe-hint-container {
+  text-align: center;
+  margin-bottom: 3px;
+  position: relative;
+}
+
+.swipe-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: #6c757d;
+  animation: swipe-animation 1.5s infinite ease-in-out;
+}
+
+.swipe-icon {
+  font-size: 1.5rem;
+  margin-left: 5px;
+  display: inline-block;
+  transform: translateX(0);
+  animation: slide-right 1.5s infinite ease-in-out;
+}
+
+/* Text fade-in-out animation */
+@keyframes swipe-animation {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Swipe icon slide animation */
+@keyframes slide-right {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 </style>
 <header>
   {% include 'inc/carousel.html' %}
@@ -121,7 +166,12 @@
           >View all <i class="fas fa-angle-right"></i
         ></a>
       </div>
-
+      <div class="swipe-hint-container">
+        <div class="swipe-hint">
+          <span class="swipe-text">Swipe for more</span>
+          <span class="swipe-icon">&#8594;</span>
+        </div>
+      </div>
       <button
         class="d-none d-sm-block scroll-button left btn btn-success rounded-circle fade-in"
         onclick="leftScroll('cardWrapper1')"
@@ -210,13 +260,18 @@
     <div class="mt-4 position-relative">
       <div class="d-flex justify-content-between align-items-center">
         <h3 class="about-heading">
-          Most Vie<b class="text-success">wed Products</b>
+          Most Viewed<b class="text-success"> Products</b>
         </h3>
         <a href="#" class="text-success"
           >View all <i class="fas fa-angle-right"></i
         ></a>
       </div>
-
+      <div class="swipe-hint-container">
+        <div class="swipe-hint">
+          <span class="swipe-text">Swipe for more</span>
+          <span class="swipe-icon">&#8594;</span>
+        </div>
+       </div>
       <button
         class="d-none d-sm-block scroll-button left btn btn-success rounded-circle fade-in"
         onclick="leftScroll('cardWrapper2')"
@@ -324,77 +379,89 @@
 
 <script>
   
-  // When the user scrolls down 20px from the top of the document, slide down the navbar
-  // When the user scrolls to the top of the page, slide up the navbar (50px out of the top view)
-  window.onscroll = function () {
-    scrollFunction();
-  };
+      // When the user scrolls down 20px from the top of the document, slide down the navbar
+      // When the user scrolls to the top of the page, slide up the navbar (50px out of the top view)
+      window.onscroll = function () {
+        scrollFunction();
+      };
 
-  function scrollFunction() {
-    if (
-      document.body.scrollTop > 20 ||
-      document.documentElement.scrollTop > 20
-    ) {
-      document.getElementsByClassName("navbar")[0].style.backgroundColor =
-        "var(--primary-color)";
-    } else {
-      document.getElementsByClassName("navbar")[0].style.backgroundColor =
-        "transparent";
-    }
-  }
+      function scrollFunction() {
+        if (
+          document.body.scrollTop > 20 ||
+          document.documentElement.scrollTop > 20
+        ) {
+          document.getElementsByClassName("navbar")[0].style.backgroundColor =
+            "var(--primary-color)";
+        } else {
+          document.getElementsByClassName("navbar")[0].style.backgroundColor =
+            "transparent";
+        }
+      }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    // Select the carousel container
-    const carousel = document.querySelector('.slider-container');
+      document.addEventListener("DOMContentLoaded", () => {
+        // Select the carousel container
+        const carousel = document.querySelector('.slider-container');
 
-    // Create an Intersection Observer to detect when the element enters the viewport
-    const observer = new IntersectionObserver(
-      (entries, observer) => {
+        // Create an Intersection Observer to detect when the element enters the viewport
+        const observer = new IntersectionObserver(
+          (entries, observer) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                // Add the 'visible' class to trigger the animation
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target); // Stop observing after the animation has triggered
+              }
+            });
+          },
+          {
+            threshold: 0.5 // When 50% of the element is visible in the viewport
+          }
+        );
+
+        // Start observing the carousel container
+        observer.observe(carousel);
+      });
+
+      // Select all product cards
+    const productCards = document.querySelectorAll('.product-card');
+
+    // Callback function for IntersectionObserver
+    const observerCallback = (entries, observer) => {
         entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            // Add the 'visible' class to trigger the animation
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target); // Stop observing after the animation has triggered
+            if (entry.isIntersecting) {
+                const card = entry.target;
+                // Add animation classes when the card is visible
+                card.classList.remove('hidden');
+                card.classList.add('animate__fadeInUp');
+                observer.unobserve(card); // Stop observing once the animation is applied
+            }
+        });
+    };  
+
+    // Create an IntersectionObserver instance
+    const observerOptions = {
+        root: null, // Use the viewport as the container
+        rootMargin: '0px', // Trigger animation as soon as the card enters the viewport
+        threshold: 0.1 // Trigger when 10% of the card is visible
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    // Observe each product card
+    productCards.forEach(card => observer.observe(card));
+
+// Hide the swipe hint when a product card is clicked
+    document.addEventListener('DOMContentLoaded', () => {
+      const swipeHintContainer = document.querySelector('.swipe-hint-container');
+
+      document.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('touchcancel',  () => {
+          if (swipeHintContainer) {
+            swipeHintContainer.style.display = 'none';
           }
         });
-      },
-      {
-        threshold: 0.5 // When 50% of the element is visible in the viewport
-      }
-    );
-
-    // Start observing the carousel container
-    observer.observe(carousel);
-  });
-
-  // Select all product cards
-const productCards = document.querySelectorAll('.product-card');
-
-// Callback function for IntersectionObserver
-const observerCallback = (entries, observer) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const card = entry.target;
-            // Add animation classes when the card is visible
-            card.classList.remove('hidden');
-            card.classList.add('animate__fadeInUp');
-            observer.unobserve(card); // Stop observing once the animation is applied
-        }
+      });
     });
-};
-
-// Create an IntersectionObserver instance
-const observerOptions = {
-    root: null, // Use the viewport as the container
-    rootMargin: '0px', // Trigger animation as soon as the card enters the viewport
-    threshold: 0.1 // Trigger when 10% of the card is visible
-};
-
-const observer = new IntersectionObserver(observerCallback, observerOptions);
-
-// Observe each product card
-productCards.forEach(card => observer.observe(card));
-
 
 </script>
 

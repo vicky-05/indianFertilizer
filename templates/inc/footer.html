@@ -1,105 +1,125 @@
 {% load static %}
+<style>
+    .footer-social{
+      background-color: var(--primary-color);
+    }
+    .section-links li{
+      list-style: none;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+
+
+  .footer-social a {
+    font-size: 1.5rem;
+    transition: color 0.3s ease-in-out;
+  }
+
+    @media (max-width: 576px) {
+    .footer-social {
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+    }
+    .footer-social .me-5 {
+      margin-bottom: 15px;
+    }
+    .footer-social a {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+  }
+</style>
 <footer class=" text-lg-start text-dark mt-3" style="background-color: #eceff1">
   <!-- Section: Social media -->
-  <section class="d-flex justify-content-between p-4 text-white bg-success">
-    <!-- Left -->
+  <section class="d-flex justify-content-between align-items-center p-4 footer-social ">
+    <!-- Left: Social Networks Text -->
     <div class="me-5">
-      <span>Get connected with us on social networks:</span>
+      <span class="text-white">Get connected with us on social networks:</span>
     </div>
-    <!-- Left -->
 
-    <!-- Right -->
-    <div>
-      <a href="" class="text-white me-4 text-decoration-none">
+    <!-- Right: Social Media Icons -->
+    <div class="socio">
+      <a href="#" class="text-white me-4 text-decoration-none">
         <i class="fab fa-facebook-f"></i>
       </a>
-      <a href="" class="text-white me-4 text-decoration-none">
+      <a href="#" class="text-white me-4 text-decoration-none">
         <i class="fab fa-google"></i>
       </a>
+
     </div>
-    <!-- Right -->
   </section>
+
   <!-- Section: Social media -->
 
   <!-- Section: Links  -->
-  <section class="">
+  <section class="section-links">
     <div class="container-fluid text-center text-md-start mt-5">
       <!-- Grid row -->
 
-      <div class="row mt-3">
-        <!-- Grid column -->
-        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-          <!-- Content -->
-          <h6 class="text-uppercase fw-bold">Categories</h6>
-          <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
-          
-
+      <div class="row mt-3 text-center text-md-start">
+        <!-- Categories Column -->
+        <div class="col-12 col-md-6 col-lg-3 mb-4">
+          <h6 class="text-uppercase fw-bold text-align-center">Categories</h6>
+          <hr class="mb-2 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
+          <ul class="list-unstyled">
+            {% for category in category_list %}
+            <li class="my-2 align-items-center">
+              <a href="{% url 'categories' category.slug %}" class="text-dark">{{category.name}}</a>
+            </li>
+            {% endfor %}
+          </ul>
         </div>
-        <!-- Grid column -->
 
-        <!-- Grid column -->
-        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-          <!-- Links -->
+        <!-- Products Column -->
+        <div class="col-12 col-md-6 col-lg-2 mb-4">
           <h6 class="text-uppercase fw-bold">Products</h6>
           <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
-          <p>
-            <a href="#!" class="text-dark">MDBootstrap</a>
-          </p>
-          <p>
-            <a href="#!" class="text-dark">MDWordPress</a>
-          </p>
-          <p>
-            <a href="#!" class="text-dark">BrandFlow</a>
-          </p>
-          <p>
-            <a href="#!" class="text-dark">Bootstrap Angular</a>
-          </p>
+          <ul class="list-unstyled">
+            {% for product in filtered_products %}
+            <li class="my-2">
+              <a href="{% url 'product_details' product.slug %}" class="text-dark">{{product.name}}</a>
+            </li>
+            {% endfor %}
+          </ul>
         </div>
-        <!-- Grid column -->
 
-        <!-- Grid column -->
-        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-          <!-- Links -->
-          <h6 class="text-uppercase fw-bold">Useful links</h6>
+        <!-- Useful Links Column -->
+        <div class="col-12 col-md-6 col-lg-2 mb-4">
+          <h6 class="text-uppercase fw-bold">Useful Links</h6>
           <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
-          <p>
-            <a href="#!" class="text-dark">Your Account</a>
-          </p>
-          <p>
-            <a href="{% url 'about' %}" class="text-dark">About Us</a>
-          </p>
-          <p>
-            <a href="{% url 'help_us' %}" class="text-dark">Help Us</a>
-          </p>
-          <p>
-            <a href="{% url 'privacy_policy' %}" class="text-dark">Privacy And Policy</a>
-          </p>
-          
+          <ul class="list-unstyled">
+            {% if not user.is_authenticated %}
+            <li class="my-2"><a href="{% url 'login' %}" class="text-dark">Login</a></li>
+            <li class="my-2"><a href="{% url 'register' %}" class="text-dark">Register</a></li>
+            {% endif %}
+            <li class="my-2"><a href="{% url 'about' %}" class="text-dark">About Us</a></li>
+            <li class="my-2"><a href="{% url 'help_us' %}" class="text-dark">Contact Us</a></li>
+            <li class="my-2"><a href="{% url 'privacy_policy' %}" class="text-dark">Privacy And Policy</a></li>
+            <li class="my-2"><a href="{% url 'terms_conditions' %}" class="text-dark">Terms And Conditions</a></li>
+          </ul>
         </div>
-        <!-- Grid column -->
 
-        <!-- Grid column -->
-        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4 ">
-          <!-- Links -->
+        <!-- Contact Column -->
+        <div class="col-12 col-md-6 col-lg-3 mb-4">
           <h6 class="text-uppercase fw-bold">Contact</h6>
           <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
-          <p><i class="fas fa-home mr-3"></i> VAHS complex No 2,Vathalagundu,<br>TamilNadu 624202.</p>
+          <p><i class="fas fa-home mr-3"></i> VAHS complex No 2, Vathalagundu, TamilNadu 624202</p>
           <p><i class="fas fa-envelope mr-3"></i> indiafertilizer@gmail.com</p>
-          <p><i class="fas fa-phone mr-3"></i> + 01 234 567 88</p>
-          <p><i class="fas fa-print mr-3"></i> + 01 234 567 89</p>
-
-
-
+          <p><i class="fas fa-phone mr-3"></i> +01 234 567 88</p>
+          <p><i class="fas fa-print mr-3"></i> +01 234 567 89</p>
         </div>
 
       </div>
+
 
     </div>
   </section>
 
   <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
-    © 2020 Copyrights:
-    <a class="text-dark" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    © 2024 Designed By: SBV Pvt Ltd.
   </div>
 
 </footer>

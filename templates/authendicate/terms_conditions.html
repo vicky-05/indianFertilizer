@@ -1,0 +1,100 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .terms-container {
+      padding: 20px;
+      background-color: #f8f9fa;
+    }
+
+    .terms-container h6 {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+
+    .contact-info {
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .terms-container ul{
+      padding-left: 20px;
+    }
+
+    @media (max-width: 576px) {
+      .terms-container {
+        padding: 15px;
+      }
+    }
+</style>
+<section style="margin-top: 7rem;">
+    <div class="container terms-container my-4 mt-5" >
+        <h1 class="text-center mb-4">Terms and Conditions</h1>
+    
+        <div>
+            <h6>1. Acceptance of Terms:</h6>
+            <p>By accessing and using Indian Fertilizer's services, you agree to comply with and be bound by the following
+                terms and conditions. If you do not agree to these terms, please do not use our services.</p>
+    
+            <h6>2. Registration:</h6>
+            <p>To use certain features of our services, you may be required to register for an account. You agree to:</p>
+            <ul>
+                <li>Provide accurate, current, and complete information during the registration process.</li>
+                <li>Maintain and promptly update your account information.</li>
+                <li>Be responsible for safeguarding your password and for any activities or actions under your password.
+                </li>
+            </ul>
+    
+            <h6>3. Use of Services:</h6>
+            <p>You agree to use our services only for lawful purposes and in accordance with these terms. You are prohibited
+                from using our services:</p>
+            <ul>
+                <li>To impersonate any person or entity or misrepresent your affiliation with any person or entity.</li>
+                <li>To engage in any activity that interferes with or disrupts our services or the servers and networks that
+                    support our services.</li>
+            </ul>
+    
+            <h6>4. Privacy Policy:</h6>
+            <p>Your use of our services is also governed by our Privacy Policy, which describes how we collect, use, and
+                share
+                your personal information.</p>
+    
+            <h6>5. Intellectual Property:</h6>
+            <p>All content, trademarks, and data on our website, including but not limited to software, databases, text,
+                graphics, icons, hyperlinks, private information, designs, and agreements, are the property of or licensed
+                to
+                Indian Fertilizer and as such are protected from infringement by local and international legislation and
+                treaties.</p>
+    
+            <h6>6. Termination:</h6>
+            <p>We reserve the right to suspend or terminate your account and access to our services at our sole discretion,
+                without notice, if we determine that you have violated these terms.</p>
+    
+            <h6>7. Limitation of Liability:</h6>
+            <p>Indian Fertilizer will not be liable for any direct, indirect, incidental, special, consequential, or
+                exemplary
+                damages arising from your use of our services.</p>
+    
+            <h6>8. Governing Law:</h6>
+            <p>These terms and conditions are governed by and construed in accordance with the laws of [Your Jurisdiction].
+                Any
+                disputes relating to these terms will be subject to the exclusive jurisdiction of the courts of [Your
+                Jurisdiction].</p>
+    
+            <h6>9. Changes to Terms:</h6>
+            <p>We reserve the right to modify these terms at any time. Your continued use of our services after any such
+                changes constitutes your acceptance of the new terms.</p>
+    
+            <h6>10. Contact Information:</h6>
+            <p class="contact-info">Indian Fertilizer,<br>VAHS complex No 2, Batlagundu, TamilNadu 624202,<br>
+                indiafertilizer@gmail.com,<br>01 234 567 88.</p>
+    
+            <h6>Agreement:</h6>
+            <p>By clicking "I Agree," you acknowledge that you have read, understood, and agree to be bound by these terms
+                and
+                conditions.</p>
+        </div>
+    </div>
+</section>
+{% endblock content %}

@@ -47,10 +47,14 @@ def login_page(request):
 
 
 def help_us(request):
-    context = get_context_data(request.user)
+    context = views.get_context_data(request.user)
     return render(request, "authendicate/help_us.html",context=context)
 
 
 def privacy_policy(request):
     context = views.get_context_data(request.user)
     return render(request, "authendicate/privacy_policy.html",context=context)
+
+def terms_conditions(request):
+    context = views.get_context_data(request.user)
+    return render(request, "authendicate/terms_conditions.html",context=context)
