@@ -1,5 +1,5 @@
 {% extends 'layouts/main.html' %} {% load static %} 
-{% block title %} Home page| {{website_name}} {% endblock title %} 
+{% block title %} Home page | {{website_name}} {% endblock title %} 
 {% block content %}
 <style>
   .navbar {
@@ -320,6 +320,7 @@
     <!-- End Thirukural Card -->
   </section>
 </main>
+{% include 'inc/message_toast.html' %} 
 
 <script>
   
