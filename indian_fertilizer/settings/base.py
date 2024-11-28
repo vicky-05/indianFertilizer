@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Application definition
 
@@ -107,7 +107,7 @@ BASE_DIR1 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR1, 'staticfiles')
-STATICFILES_DIRS = [ BASE_DIR1 / 'static' ]
+# STATICFILES_DIRS = [ BASE_DIR / 'static' ]
 
 # Media Files
 MEDIA_URL = 'media/'
