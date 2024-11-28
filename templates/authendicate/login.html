@@ -1,70 +1,105 @@
-{% extends 'shop/layouts/main.html' %}
+{% extends 'layouts/main.html' %}
 {% load static %}
+{% block title %} Login page | {{website_name}} {% endblock title %} 
 
 {% block content %}
-<section>
-  <div class="container">
-    <div class="row d-flex justify-content-center align-items-center" style="margin-top: 60px;">
-      <div class="col-lg-12 col-xl-12">
-            <div class="row justify-content-center">
-              <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+<style type="text/css">
+  
+    .form-control{
+      padding-left: 40px;
+      border: 1px solid var(--primary-color);
+      margin: 10px 0;
+    }
 
-                <p class="text-center h1 fw-bold mb-3 mx-1 mx-md-4 mt-5">Log In</p>
-                {% include 'shop/inc/message.html' %}
-                <form class="mx-1 mx-md-4" method="POST" action="#">
+    .form-check{
+      margin: 10px 0;
+    }
 
-                  {% csrf_token %}
+    .form-control::placeholder {
+      color: var(--primary-color);
+    }
 
-                  <div class="d-flex flex-row align-items-center mb-4">
-                    <i class="fas fa-user fa-lg me-2 mt-4 fa-fw"></i>
-                    <div class="form-outline flex-fill mb-0">
-                      <div>
-                        <label class="form-label" for="form3Example1c">Enter Your Name</label>
-                      </div>
-                      <input type="text" id="form3Example1c" class="form-control" name="username" id="username" placeholder="Enter your Username" />
-                      
-                  
-                    </div>
-                  </div>
+    .input-field {
+        width: 100%;
+        position: relative;
+    }
 
-                  <div class="d-flex flex-row align-items-center mb-4">
-                    <i class="fas fa-lock fa-lg me-2 fa-fw mt-4"></i>
-                    <div class="form-outline flex-fill mb-0">
-                      <div>
-                        <label class="form-label" for="form3Example4c">Enter Your Password</label>
-                        </div>
-                      <input type="password" id="form3Example4c" class="form-control" name="password" id="password" placeholder="Enter your Password"/>
-                      
-                      
-                      
-                      
-                    </div>
-                  </div>
+    .input-field>i {
+      position: absolute;
+      top: 22px;
+      left: 12px;
+      color: var(--primary-color);
+    }
 
-                  
-                  
+    .errorlist>li{
+      list-style: none;
+    }
+    
+    main{
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-                  <div class="d-flex justify-content-center mx-2 mb-3 mb-lg-3">
-                    <button type="submit" class="btn btn-primary btn-lg">Login</button>
-                  </div>
-                  <p class="small  pb-lg-2"><a class="text-muted" href="{% url 'forgot' %}">Forgot password?</a></p>
-            <p class="text-center">Don't have an account? <a href="{% url 'register' %}" class="text-decoration-none fw-bold">Register here</a></p>
+    .login-img{
+        width: 500px;
+        height: 500px;
+        object-fit: contain;
+    }
 
-                </form>
+    /*.login-form{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; 
+        padding: 30px 20px;
+        border-radius: 6px;
+        border-top: 1px solid white ;
+        border-left: 1px solid white;
+    }*/
 
-              </div>
-              <div class="col-md-10 col-lg-7 col-xl-7  mb-5 d-flex align-items-center  order-1 order-lg-2">
+    .signup-form, .login-form{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; 
+        padding: 14px 16px;
+        border-top: 1px solid white ;
+        border-left: 1px solid white;
+        border-radius: 6px;
+    }
 
-                <img src="{% static 'images/Login-removebg-preview.png' %}" class="img-fluid  mt-lg-0" alt="Sample image"
-                  style="margin-top: 45px; border-radius: 15px; ">
-
-              </div>
+</style>
+<main>
+    <img src="{% static 'images/login-new.png' %}" alt="login image..."
+        class="login-img col-md-7 d-none d-md-block">
+    <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-11">
+        {% include 'inc/message.html' %}
+        <form name="login-form" action="{% url 'login' %}" method="post" class="login-form shadow" novalidate>
+            <h1>Login</h1>
+            {% csrf_token %}
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              {{ form.username }}
+              {% if form.username.errors %}
+              <label class="text-danger">{{ form.username.errors }}</label>
+              {% endif %}
             </div>
-          
-        
-      </div>
+
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              {{ form.password }}
+              {% if form.password.errors %}
+              <label class="text-danger">{{ form.password.errors }}</label>
+              {% endif %}
+            </div>
+            <button type="submit" class="btn btn-success mt-1 w-100">Login</button>
+            <p class="my-2">Or</p>
+            <p>Don't have an account<a href="{% url 'register' %}" class="ps-1">Signup?</a></p>
+        </form>
     </div>
-  </div>
-</section>
+
+</main>
 
 {% endblock %}

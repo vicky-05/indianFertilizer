@@ -1,11 +1,110 @@
 {% extends 'layouts/main.html' %} {% load static %} 
-{% block title %} Home page| {{website_name}} {% endblock title %} 
+{% block title %} Home page | {{website_name}} {% endblock title %} 
 {% block content %}
 <style>
   .navbar {
     background-color: transparent;
   }
-  
+  .category-image{
+    width: 100%;
+    object-fit: cover;
+
+  }
+  .slider {
+  width: 100%;
+  margin-top: 10px;
+  position: relative;
+  --width: 180px;
+  --height: 120px;
+  --quantity: 10;
+  --position: 1;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+
+
+}
+
+.slider .list {
+  max-width: calc(var(--width) * var(--quantity));
+  position: relative;
+}
+
+.slider .list .item {
+  position: absolute;
+  left: 100%;
+  width: var(--width); 
+  animation: autoRun 10s linear infinite;
+  transition: filter 0.5s;
+  animation-delay: calc(
+    (10s / var(--quantity)) * (var(--position) - 1) - 10s
+  ) !important;
+}
+
+.slider .list .item img {
+  width: 100%;
+  height: var(--height);
+  object-fit: contain;
+}
+
+/* Animation for fade-in when the element is scrolled into view */
+.fade-in-scroll {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.fade-in-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.swipe-hint-container {
+  text-align: center;
+  margin-bottom: 3px;
+  position: relative;
+}
+
+.swipe-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: #6c757d;
+  animation: swipe-animation 1.5s infinite ease-in-out;
+}
+
+.swipe-icon {
+  font-size: 1.5rem;
+  margin-left: 5px;
+  display: inline-block;
+  transform: translateX(0);
+  animation: slide-right 1.5s infinite ease-in-out;
+}
+
+/* Text fade-in-out animation */
+@keyframes swipe-animation {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Swipe icon slide animation */
+@keyframes slide-right {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 </style>
 <header>
   {% include 'inc/carousel.html' %}
@@ -16,16 +115,17 @@
     >
   </div>
 </header>
+
 <main>
   <section class="container-fluid container-lg">
     <!-- Top Brands Sliding Animation -->
     <div class="slider">
       <div class="list">
-        <div class="item" style="--position: 1">
-          <img src="{% static 'images/agtech.png' %}" alt="" />
+        <div class="item " style="--position: 1">
+          <img src="{% static 'images/ADVANTA-logo.png' %}" alt="" />
         </div>
         <div class="item" style="--position: 2">
-          <img src="{% static 'images/OIP.png' %}" alt="" />
+          <img src="{% static 'images/aspee-logo.png' %}" alt="" />
         </div>
         <div class="item" style="--position: 3">
           <img src="{% static 'images/tata-brand.png' %}" alt="" />
@@ -37,26 +137,26 @@
           <img src="{% static 'images/spic-brand.png' %}" alt="" />
         </div>
         <div class="item" style="--position: 6">
-          <img src="{% static 'images/agtech.png' %}" alt="" />
+          <img src="{% static 'images/COROMANDEL-logo.png' %}" alt="" />
         </div>
         <div class="item" style="--position: 7">
-          <img src="{% static 'images/OIP.png' %}" alt="" />
+          <img src="{% static 'images/INDOFIL-logo.png' %}" alt="" />
         </div>
         <div class="item" style="--position: 8">
-          <img src="{% static 'images/tata-brand.png' %}" alt="" />
+          <img src="{% static 'images/MONSANTO-logo.png' %}" alt="" />
         </div>
         <div class="item" style="--position: 9">
-          <img src="{% static 'images/rasi-brand.png' %}" alt="" />
+          <img src="{% static 'images/NAMADHARI LOGO.png' %}" alt="" />
         </div>
         <div class="item" style="--position: 10">
-          <img src="{% static 'images/spic-brand.png' %}" alt="" />
+          <img src="{% static 'images/Rallis-logo.png' %}" alt="" />
         </div>
       </div>
     </div>
     <!-- End Top Brands Sliding Animation -->
 
+    <!-- Trend Product Collection -->
     {% if trend_products %}
-    <!-- Card Collection -->
     <div class="mt-4 position-relative">
       <div class="d-flex justify-content-between align-items-center">
         <h3 class="about-heading">
@@ -66,7 +166,12 @@
           >View all <i class="fas fa-angle-right"></i
         ></a>
       </div>
-
+      <div class="swipe-hint-container">
+        <div class="swipe-hint">
+          <span class="swipe-text">Swipe for more</span>
+          <span class="swipe-icon">&#8594;</span>
+        </div>
+      </div>
       <button
         class="d-none d-sm-block scroll-button left btn btn-success rounded-circle fade-in"
         onclick="leftScroll('cardWrapper1')"
@@ -87,12 +192,12 @@
         <i class="fas fa-arrow-right"></i>
       </button>
     </div>
-    <!-- End Card Collection -->
     {% endif %}
+    <!-- End Trend Products Collection -->
 
     <!-- Category Slider -->
     {% if category_list %}
-    <div class="slider-container">
+    <div class="slider-container fade-in-scroll">
       <div>
         <h3 class="about-heading text-uppercase">
           Our <b class="text-success">Categories</b>
@@ -107,9 +212,12 @@
         <!-- The slideshow -->
         <div class="carousel-inner">
           {% for category in category_list %}
-          <div class="carousel-item {% if forloop.first %}active{% endif %}">
-            <div class="image-container">
-              <img src="{{ category.image.url }}" />
+          <div class="carousel-item {% if forloop.first %}active{% endif %}" 
+            onclick="redirect(`{% url 'categories' category.slug %}`)">
+            <div class="image-container category-image">
+              {% if category.image %}
+              <img class="rounded-3" src="{{ category.image.url }}" />
+              {% endif %}
             </div>
             <p class="product-title">{{ category.name }}</p>
           </div>
@@ -118,44 +226,52 @@
         
         <!-- Left and right controls inside the box -->
         <button
-          class="carousel-control-prev"
+          class="carousel-control-prev me-5 d-none d-md-block"
           type="button"
           data-bs-target="#productCarousel"
           data-bs-slide="prev"
         >
           <span class="btn btn-success rounded-circle fade-in"
-            ><i class="fas fa-arrow-left"></i
-          ></span>
+            ><i class="fas fa-arrow-left"></i></span>
           <span class="visually-hidden">Previous</span>
         </button>
         <button
-          class="carousel-control-next"
+          class="carousel-control-next ms-5 d-none d-md-block"
           type="button"
           data-bs-target="#productCarousel"
           data-bs-slide="next"
         >
-          <!-- <i class="fas fa-arrow-right btn btn-success rounded-circle" aria-hidden="true"></i> -->
           <span class="btn btn-success rounded-circle fade-in"
-            ><i class="fas fa-arrow-right"></i
-          ></span>
+            ><i class="fas fa-arrow-right"></i></span>
           <span class="visually-hidden">Next</span>
         </button>
       </div>
     </div>
+    
     {% endif %}
     <!-- End Category Slider -->
 
+    <!-- Gallery Carousel -->
+    {% include 'inc/gallery_carousel.html' %}
+    <!-- End Gallery Carousel -->
+
+    <!-- Most Viewed Products Collection -->
     {% if most_viewed_products %}
     <div class="mt-4 position-relative">
       <div class="d-flex justify-content-between align-items-center">
         <h3 class="about-heading">
-          Most Vie<b class="text-success">wed Products</b>
+          Most Viewed<b class="text-success"> Products</b>
         </h3>
         <a href="#" class="text-success"
           >View all <i class="fas fa-angle-right"></i
         ></a>
       </div>
-
+      <div class="swipe-hint-container">
+        <div class="swipe-hint">
+          <span class="swipe-text">Swipe for more</span>
+          <span class="swipe-icon">&#8594;</span>
+        </div>
+       </div>
       <button
         class="d-none d-sm-block scroll-button left btn btn-success rounded-circle fade-in"
         onclick="leftScroll('cardWrapper2')"
@@ -176,10 +292,12 @@
         <i class="fas fa-arrow-right"></i>
       </button>
     </div>
-    <!-- End Card Collection -->
     {% endif %}
+    <!-- End  Most Viewed Products Collection -->
+
 
     <!-- Signup Now Card -->
+    {% if not user.is_authenticated %}
     <div
       class="card mb-4 shadow fade-in"
       style="font-family: Poppins, sans-serif"
@@ -196,7 +314,7 @@
             <li class="mb-2">✅ Fertilizer That Makes a Difference!</li>
           </ul>
 
-          <a href="#" class="btn btn-success">Signup now</a>
+          <a href="{% url 'register' %}" class="btn btn-success">Signup now</a>
         </div>
 
         <!-- Card Image -->
@@ -213,7 +331,9 @@
         </div>
       </div>
     </div>
+    {% endif %}
     <!-- End Signup Now Card -->
+    
 
     <!-- Thirukural Card -->
     <div
@@ -255,26 +375,93 @@
     <!-- End Thirukural Card -->
   </section>
 </main>
+{% include 'inc/message_toast.html' %} 
 
 <script>
-  // When the user scrolls down 20px from the top of the document, slide down the navbar
-  // When the user scrolls to the top of the page, slide up the navbar (50px out of the top view)
-  window.onscroll = function () {
-    scrollFunction();
-  };
+  
+      // When the user scrolls down 20px from the top of the document, slide down the navbar
+      // When the user scrolls to the top of the page, slide up the navbar (50px out of the top view)
+      window.onscroll = function () {
+        scrollFunction();
+      };
 
-  function scrollFunction() {
-    if (
-      document.body.scrollTop > 20 ||
-      document.documentElement.scrollTop > 20
-    ) {
-      document.getElementsByClassName("navbar")[0].style.backgroundColor =
-        "var(--primary-color)";
-    } else {
-      document.getElementsByClassName("navbar")[0].style.backgroundColor =
-        "transparent";
-    }
-  }
+      function scrollFunction() {
+        if (
+          document.body.scrollTop > 20 ||
+          document.documentElement.scrollTop > 20
+        ) {
+          document.getElementsByClassName("navbar")[0].style.backgroundColor =
+            "var(--primary-color)";
+        } else {
+          document.getElementsByClassName("navbar")[0].style.backgroundColor =
+            "transparent";
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // Select the carousel container
+        const carousel = document.querySelector('.slider-container');
+
+        // Create an Intersection Observer to detect when the element enters the viewport
+        const observer = new IntersectionObserver(
+          (entries, observer) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                // Add the 'visible' class to trigger the animation
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target); // Stop observing after the animation has triggered
+              }
+            });
+          },
+          {
+            threshold: 0.5 // When 50% of the element is visible in the viewport
+          }
+        );
+
+        // Start observing the carousel container
+        observer.observe(carousel);
+      });
+
+      // Select all product cards
+    const productCards = document.querySelectorAll('.product-card');
+
+    // Callback function for IntersectionObserver
+    const observerCallback = (entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const card = entry.target;
+                // Add animation classes when the card is visible
+                card.classList.remove('hidden');
+                card.classList.add('animate__fadeInUp');
+                observer.unobserve(card); // Stop observing once the animation is applied
+            }
+        });
+    };  
+
+    // Create an IntersectionObserver instance
+    const observerOptions = {
+        root: null, // Use the viewport as the container
+        rootMargin: '0px', // Trigger animation as soon as the card enters the viewport
+        threshold: 0.1 // Trigger when 10% of the card is visible
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    // Observe each product card
+    productCards.forEach(card => observer.observe(card));
+
+// Hide the swipe hint when a product card is clicked
+    document.addEventListener('DOMContentLoaded', () => {
+      const swipeHintContainer = document.querySelector('.swipe-hint-container');
+
+      document.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('touchcancel',  () => {
+          if (swipeHintContainer) {
+            swipeHintContainer.style.display = 'none';
+          }
+        });
+      });
+    });
 
 </script>
 

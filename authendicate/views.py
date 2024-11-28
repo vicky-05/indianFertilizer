@@ -3,12 +3,13 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from authendicate.forms import *
 from shop import views
-# from django.conf import settings
-# from django.core.mail import send_mail
-# from .form import ForgotPasswordForm
+from shop.models import *
 
 def register(request):
-    context = views.context_data()
+    context = views.get_context_data(request.user)
+    if request.user.is_authenticated:
+        return redirect('home')
+    context['header'] = None
     form=RegisterForm()
     if request.method=="POST":
         form=RegisterForm(request.POST)
@@ -22,83 +23,38 @@ def register(request):
 def logout_page(request):
     logout(request)
     messages.success(request, "Logout Successfully")
-    return redirect('home')
+    return redirect('login')
 
 def login_page(request):
+    context = views.get_context_data(request.user)
     if request.user.is_authenticated:
         return redirect('home')
-    else:
+    context['header'] = None      
+    form=LoginForm()     
+    if request.method=="POST":
+        form=LoginForm(request.POST)
+        print(form.errors)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user:
+                login(request, user)
+                messages.success(request, "Login Successfully")
+                return redirect('home')
+    context['form'] = form
+    return render(request, "authendicate/login.html", context=context)
 
-     if request.method=="POST":
-        name = request.POST.get('username')
-        pwd = request.POST.get('password')
-        user = authenticate(request, username=name, password=pwd)
-        if user is not None:
-            login(request, user)
-            messages.success(request, "Login Successfully")
-            return redirect('home')
-        else:
-            messages.warning(request, "Invalid Username or Password")
-            return redirect('login')
-     return render(request, "shop/login.html")
+
+def help_us(request):
+    context = views.get_context_data(request.user)
+    return render(request, "authendicate/help_us.html",context=context)
 
 
-# def forgot_pass(request):
-#      if request.method == 'POST':
-#         email = request.POST.get('email')
-#         otp = request.POST.get('otp')
+def privacy_policy(request):
+    context = views.get_context_data(request.user)
+    return render(request, "authendicate/privacy_policy.html",context=context)
 
-#         if email and not otp:
-#             # Email is provided, generate and send OTP
-#             form = ForgotPasswordForm(request.POST)
-#             if form.is_valid():
-#                 email = form.cleaned_data['email']
-#                 try:
-#                     user = User.objects.get(email=email)
-#                     otp = random.randint(100000, 999999)
-#                     request.session['otp'] = otp
-#                     request.session['email'] = email
-
-#                     # Send OTP via email
-#                     send_mail(
-#                         'Your OTP Code',
-#                         f'Your OTP code is {otp}',
-#                         settings.DEFAULT_FROM_EMAIL,
-#                         [email],
-#                     )
-#                     messages.success(request, 'OTP has been sent to your email.')
-#                 except User.DoesNotExist:
-#                     messages.error(request, 'No user is associated with this email.')
-#             form = ForgotPasswordForm()
-        
-#         elif otp:
-#             # OTP is provided, verify it
-#             entered_otp = request.POST.get('otp')
-#             if int(entered_otp) == request.session.get('otp'):
-#                 messages.success(request, 'OTP verified successfully. You can now reset your password.')
-#                 return redirect('reset_password')
-#             else:
-#                 messages.error(request, 'Invalid OTP. Please try again.')
-
-#         else:
-#             form = ForgotPasswordForm()
-
-#         return render(request, 'shop/products/forgot_pass.html', {'form': form, 'show_otp_field': 'otp' in request.POST})
-     
-# def reset_password(request):
-#     if request.method == 'POST':
-#         password = request.POST.get('password')
-#         email = request.session.get('email')
-#         if email:
-#             try:
-#                 user = User.objects.get(email=email)
-#                 user.set_password(password)
-#                 user.save()
-#                 messages.success(request, 'Your password has been reset successfully.')
-#                 return redirect('login')
-#             except User.DoesNotExist:
-#                 messages.error(request, 'Error resetting password. Please try again.')
-#         else:
-#             messages.error(request, 'Session expired. Please try the forgot password process again.')
-#             return redirect('forgot_pass')
-#     return render(request, 'shop/products/reset_password.html')sss
+def terms_conditions(request):
+    context = views.get_context_data(request.user)
+    return render(request, "authendicate/terms_conditions.html",context=context)

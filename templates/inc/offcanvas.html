@@ -1,25 +1,24 @@
 {% load static %}
-
 <!-- Offcanvas -->
 <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" 
     aria-labelledby="offcanvasNavbarLabel">
     <div class="offcanvas-header">
         <a href="{% url 'home' %}">
-        <img src="{% static 'images/website name.png' %}" alt="india fertilizer" class="brand-img"></a>
+        <img src="{% static 'images/website name.png' %}" alt="india fertilizer" class="brand-img  {% if request.path == '/' %}animate__animated animate__bounceIn{% endif %}"></a>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-            <li class="nav-item">
+            <li class="nav-item {% if request.path == '/' %}animate__animated animate__fadeInUp animate__delay-1s{% endif %}">
                 <a class="nav-link active" href="{% url 'home' %}" aria-current="page">Home</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item {% if request.path == '/' %}animate__animated animate__fadeInUp animate__delay-2s{% endif %}">
                 <a class="nav-link" href="{% url 'categories' %}">Category</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item {% if request.path == '/' %}animate__animated animate__fadeInUp animate__delay-3s{% endif %}">
                 <a class="nav-link" href="{% url 'products' %}">Products</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item {% if request.path == '/' %}animate__animated animate__fadeInUp animate__delay-4s{% endif %}">
                 <a class="nav-link" href="{% url 'about' %}">About</a>
             </li>
             {% if not user.is_authenticated %}
@@ -31,12 +30,6 @@
             </li>
             {% endif %}
         </ul>
-        <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-            <button class="btn btn-secondary" type="submit">
-                Search
-            </button>
-        </form>
     </div>
 </div>
 <!-- End Offcanvas -->

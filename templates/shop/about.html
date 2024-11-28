@@ -1,14 +1,23 @@
 {% extends 'layouts/main.html' %} 
 {% load static %} 
-{% block title %} 
-About Us | {{website_name}} 
+{% block title %} About Us | {{website_name}} 
 {% endblock title %} 
 {% block styles %} 
     <link rel="stylesheet" href="{% static 'css/about.css' %}">
 {% endblock styles %}
 
 {% block content %}
-<main class="mt-4">
+<style>
+    main{
+        margin-top: 2rem;
+    }
+    @media (max-width: 576px) {
+        main{
+            margin-top: 6rem;
+        }
+    }
+</style>
+<main>
 
     <!-- About Us Section -->
     <section class="about-section text-center">
@@ -19,7 +28,7 @@ About Us | {{website_name}}
         </div>
     </section>
     <!-- Mission and Vision Section -->
-    <section class="mission-vision-section">
+    <section class="mission-vision-section ">
         <div class="container">
             <div class="row">
                 <!-- Mission -->

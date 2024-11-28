@@ -1,13 +1,19 @@
 <!-- Card -->
  <style>
-  .card-title{
-    white-space: nowrap; /* Prevents wrapping */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Adds ellipsis */
-    max-width: 100%;
+    .card-title{
+      white-space: nowrap; /* Prevents wrapping */
+      overflow: hidden;
+      text-overflow: ellipsis; /* Adds ellipsis */
+      max-width: 100%;
+    }
+
+    .hidden {
+      opacity: 0; /* Start hidden */
   }
+
  </style>
-<div class="product-card m-1 mb-4 card col-11 col-sm-4 col-md-3 shadow fade-in">
+
+<div class="product-card m-1 mb-4 card col-11 col-sm-4 col-md-3 shadow animate__animated hidden">
   <div class="tags m-2">
     {% if product.discount_percentage != 0 %}
     <span class="discount-tag">{{product.discount_percentage}}% OFF</span>
@@ -16,8 +22,10 @@
     <span class="trending-tag badge">Trending</span>
     {% endif %}
   </div>
+  {% if product.image %}
   <img class="card-img-top" onclick="redirect(`{% url 'product_details' product.slug %}`)"
    src="{{product.image.url}}" alt="Title" height="200" />
+  {% endif %}
   <div class="card-body">
     <h4 class="card-title" onclick="redirect(`{% url 'product_details' product.slug %}`)">{{product.name}}</h4>
     <span class="category badge">{{product.category}}</span>

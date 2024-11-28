@@ -19,6 +19,8 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <!--Css Animation -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <!-- Custom css files -->
     <link rel="stylesheet" href="{% static 'css/index.css' %}" />
     <title>{% block title %}{% endblock title %}</title>
@@ -27,7 +29,7 @@
   </head>
 
   <style>
-    #spinner-container{
+    #spinner-container, #logo-spinner{
       background-color: rgba(255, 255, 255, 0.5);
       width: 100vw;
       height: 100vh;
@@ -60,29 +62,67 @@
       cursor: pointer;
     }
 
+    #logo-spinner{
+      background-color:  rgba(33, 37, 41);
+      z-index: 6000;
+      flex-direction: column;
+    }
+
   </style>
 
   <body>
-    {% if header %}
+    <div id="logo-spinner">
+        <div class="logo d-flex align-items-center justify-content-center mb-2">
+            <h2 class="text-white">India</h2>
+            <h2 class="text-success ps-1">Fertilizer</h2>
+        </div>
+        <div class="loadinng">
+            <div class="spinner-grow text-white me-2" role="status">
+            </div>
+            <div class="spinner-grow text-success me-2" role="status">
+            </div>
+            <div class="spinner-grow text-white me-2" role="status">
+            </div>
+            <div class="spinner-grow text-success me-2" role="status">
+            </div>
+            <div class="spinner-grow text-white" role="status">
+            </div>
+        </div>
+    </div>
+ 
     <header>{% include 'inc/navbar.html' %}</header>
-    {% endif %}
 
-
-    
     {% block content %} 
-    {% include 'inc/message.html' %} 
     {% endblock content %} 
     {% include 'inc/toast.html' %} 
+
     <div class="d-none" id="spinner-container">
       <div class="spinner-border text-success" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
     </div> 
-    
+
     {% if footer %}
     <footer>{% include 'inc/footer.html' %}</footer>
     {% endif %} 
+
+    {% block scripts %}
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/index.js' %}"></script>
+    
+
+    {% endblock scripts %}
     <script type="text/javascript">
+
+      const start_logo_loading = () => {
+        let spinnerContainer = document.getElementById('logo-spinner');
+        spinnerContainer.classList.remove('d-none');
+      }
+
+      const end_logo_loading = () => {
+        let spinnerContainer = document.getElementById('logo-spinner');
+        spinnerContainer.classList.add('d-none');
+      }
 
       const start_loading = () => {
         let spinnerContainer = document.getElementById('spinner-container');
@@ -93,6 +133,7 @@
         let spinnerContainer = document.getElementById('spinner-container');
         spinnerContainer.classList.add('d-none');
       }
+
 
       const addToCart = (addBtn) => {
         start_loading()
@@ -106,7 +147,15 @@
             'X-CSRFToken': '{{csrf_token}}'
           }
         })
-        .then(response => response.json())
+        .then(response => { 
+          if (response.status === 200) {
+            return response.json();
+          } else if(response.status === 401 ){
+            throw new Error('Unauthorized: Please login.');
+          } else {
+            throw new Error(`Unexpected status: ${response.status}`);
+          }
+        })
         .then(data => {
             end_loading()
             const cartCount = document.getElementById("cart-count");
@@ -120,15 +169,15 @@
               }
               toastBody.innerText = data.message
               toast.show();
-              if (data.url) {
-                window.location = data.url;
-                return;
-              }
             })
         .catch(error => {
           end_loading()
-          console.error('Error:', error);
-          });
+          console.error('Error : ', error);
+          if (error.message.includes('Unauthorized')) {
+            start_logo_loading();
+            window.location.href = '/auth/login'
+          }
+        });
       };
 
       const redirect = (url) => {
@@ -149,12 +198,10 @@
       });
     };
 
+    window.addEventListener('load', () => {
+      end_logo_loading();
+    })
+
     </script>
-
-    {% block scripts %}
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/index.js' %}"></script>
-
-    {% endblock scripts %}
   </body>
 </html>

@@ -12,9 +12,18 @@
     .about-heading b {
         color: #ffc000;
     }
+
+    img {
+        border-radius: 10px;
+    }
+
+    .card-boxing:hover {
+        transform: scale(1);
+        transition: .1s;
+    }
         
 </style>
-<div class="container mb-5" style="margin-top: 90px; ">
+<div class="container mb-5" style="margin-top: 7rem; ">
     <div class=" d-flex justify-content-center align-items-center mt-5">
         <h4 class="about-heading">
             Our <b class="text-uppercase text-success">Categories</b>
@@ -24,7 +33,7 @@
         Finding Best Products Now<br> In Your Fingertips</span> 
     </div>
 
-    <div class="row mt-2 g-4">
+    <div class="row mt-2 g-4 animate__animated animate__slideInLeft">
         {% for category in categories %}
         <div class="col-md-4 col-lg-3 card-boxing" 
             onclick="redirect(`{% url 'categories' category.slug %}`)">
@@ -35,7 +44,9 @@
                             <span>{{category.name}}</span> 
                         </div>
                         <div> 
+                            {% if category.image %}
                             <img src="{{category.image.url}}" alt="" height="120" width="120" /> 
+                            {% endif %}
                         </div>
                     </div>
                 </a>
