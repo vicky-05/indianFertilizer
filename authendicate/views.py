@@ -58,3 +58,24 @@ def privacy_policy(request):
 def terms_conditions(request):
     context = views.get_context_data(request.user)
     return render(request, "authendicate/terms_conditions.html",context=context)
+
+def user_profile(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    context = views.get_context_data(request.user)
+    return render(request, "authendicate/user_profile.html",context=context)
+
+# def update_profile(request):
+#     user = request.user  # Assuming the user is authenticated
+#     if request.method == 'POST':
+#         user.username = request.POST.get('username', user.username)
+#         user.email = request.POST.get('email', user.email)
+        
+#         mobile = request.POST.get('mobile', '').strip()
+#         user.mobile_no = mobile if mobile else None
+#         if 'profile_img' in request.FILES:
+#             user.profile_img = request.FILES['profile_img']
+#         user.save()
+#         return redirect('user_profile')  # Redirect to the profile page
+
+#     return render(request, 'user_profile.html', {'user': user})

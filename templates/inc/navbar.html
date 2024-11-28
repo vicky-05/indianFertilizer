@@ -88,6 +88,8 @@
       <li class="nav-item {% if request.path == '/' %}animate__animated animate__fadeInUp animate__delay-4s{% endif %}">
         <a class="nav-link" href="{% url 'about' %}">About</a>
       </li>
+      
+
     </ul>
     
     {% if header %}
@@ -123,13 +125,16 @@
           <i class="fas fa-user-plus"></i>
         </a>
         {% endif %}
-        <div class="dropdown-menu dropdown-menu-end shadow">
+        <div class="dropdown-menu dropdown-menu-end shadow mt-lg-2">
           <div class="dropdown-container">
             {% if user.is_authenticated %}
-              <a class="dropdown-item" href="{% url 'logout' %}">
-                <i class="fa-solid fa-arrow-right-to-bracket px-3"></i> 
+            
+          
+              <a class="dropdown-item " href="{% url 'logout' %}">
+                <i class="fa-solid fa-arrow-right-to-bracket px-2"></i> 
                 Logout
               </a>
+
             {% else %}
             <a class="dropdown-item" href="{% url 'register' %}">
                 <i class="fa-solid fa-arrow-right-to-bracket px-3"></i> 
