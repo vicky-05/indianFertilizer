@@ -28,7 +28,7 @@ def get_context_data(user=None):
 # Searching the Products based on it's name annd brand
 def search_products(request):
     query = request.GET.get('query', '')
-    products = Product.objects.filter(Q(name__icontains=query) | Q(brand__name__icontains=query))
+    products = Product.objects.filter(Q(name__icontains=query) | Q(brand__name__icontains=query) | Q(category__name__icontains=query))
     products_list = list(products.values('slug', 'name', 'brand', 'brand__name', 'weight', 'unit_of_messure'))
     return JsonResponse({'products_list': products_list})
 

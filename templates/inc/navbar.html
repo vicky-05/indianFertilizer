@@ -180,7 +180,6 @@
             fetch(`/search/?query=${query}`)
                 .then(response => response.json())
                 .then(data => {
-                  console.log(data)
                     const resultsContainer = document.getElementById('search-results');
                     resultsContainer.style.display = 'flex';
                     resultsContainer.innerHTML = '';  // Clear previous results

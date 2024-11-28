@@ -1,19 +1,20 @@
+{% for msg in messages %}
 <div
   class="toast-container position-fixed bottom-0 start-50 translate-middle-x mb-2"
   style="z-index: 300"
 >
   <div
-    class="toast text-light"
+    class="toast text-light fade show"
     style="background-color: var(--primary-color)"
-    id="myToast"
+    id="messageToast"
     role="alert"
-    data-bs-animation="true"
-    data-bs-delay="5000"
     aria-live="assertive"
     aria-atomic="true"
   >
     <div class="d-flex">
-      <div class="toast-body" style="font-size: 1rem"></div>
+      <div class="toast-body" style="font-size: 1rem">
+        {{msg}}
+      </div>
       <button
         type="button"
         class="btn-close me-2 text-light m-auto"
@@ -23,3 +24,4 @@
     </div>
   </div>
 </div>
+{% endfor %}

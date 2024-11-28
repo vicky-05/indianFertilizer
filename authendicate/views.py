@@ -7,6 +7,8 @@ from shop.models import *
 
 def register(request):
     context = views.get_context_data(request.user)
+    if request.user.is_authenticated:
+        return redirect('home')
     context['header'] = None
     form=RegisterForm()
     if request.method=="POST":
@@ -21,10 +23,12 @@ def register(request):
 def logout_page(request):
     logout(request)
     messages.success(request, "Logout Successfully")
-    return redirect('home')
+    return redirect('login')
 
 def login_page(request):
-    context = views.get_context_data(request.user) 
+    context = views.get_context_data(request.user)
+    if request.user.is_authenticated:
+        return redirect('home')
     context['header'] = None      
     form=LoginForm()     
     if request.method=="POST":
